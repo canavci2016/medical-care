@@ -30,10 +30,10 @@ export class HospitalHairResultController {
     @Query('doctorId') doctorId?: string,
   ) {
     if (hospitalId) {
-      return this.hospitalHairResultService.findByHospital(hospitalId);
+      return this.hospitalHairResultService.findBy({ hospitalId });
     }
     if (doctorId) {
-      return this.hospitalHairResultService.findByDoctor(doctorId);
+      return this.hospitalHairResultService.findBy({ doctorId });
     }
     return this.hospitalHairResultService.findAll();
   }

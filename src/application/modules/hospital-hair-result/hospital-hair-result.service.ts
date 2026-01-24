@@ -40,17 +40,11 @@ export class HospitalHairResultService {
     return result;
   }
 
-  async findByHospital(hospitalId: string): Promise<HospitalHairResult[]> {
+  async findBy(
+    criteria: Partial<Pick<HospitalHairResult, 'doctorId' | 'hospitalId'>>,
+  ): Promise<HospitalHairResult[]> {
     return this.hospitalHairResultRepository.find({
-      where: { hospitalId },
-      relations: ['hospital', 'doctor'],
-    });
-  }
-
-  async findByDoctor(doctorId: string): Promise<HospitalHairResult[]> {
-    return this.hospitalHairResultRepository.find({
-      where: { doctorId },
-      relations: ['hospital', 'doctor'],
+      where: criteria,
     });
   }
 

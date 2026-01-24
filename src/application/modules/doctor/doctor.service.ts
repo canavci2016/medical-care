@@ -10,7 +10,7 @@ export class DoctorService {
   constructor(
     @InjectRepository(Doctor)
     private readonly doctorRepository: Repository<Doctor>,
-  ) {}
+  ) { }
 
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
     const doctor = this.doctorRepository.create(createDoctorDto);
@@ -18,13 +18,12 @@ export class DoctorService {
   }
 
   async findAll(): Promise<Doctor[]> {
-    return this.doctorRepository.find({ relations: ['hospital'] });
+    return this.doctorRepository.find();
   }
 
   async findOne(id: string): Promise<Doctor> {
     const doctor = await this.doctorRepository.findOne({
       where: { id },
-      relations: ['hospital'],
     });
     if (!doctor) {
       throw new NotFoundException(`Doctor with ID "${id}" not found`);
@@ -35,7 +34,6 @@ export class DoctorService {
   async findByHospital(hospitalId: string): Promise<Doctor[]> {
     return this.doctorRepository.find({
       where: { hospitalId },
-      relations: ['hospital'],
     });
   }
 
