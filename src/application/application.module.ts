@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
+import { HospitalHairResultModule } from './modules/hospital-hair-result/hospital-hair-result.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { DoctorModule } from './modules/doctor/doctor.module';
     }),
     HospitalModule,
     DoctorModule,
+    HospitalHairResultModule,
   ],
 
   controllers: [ApplicationController],
