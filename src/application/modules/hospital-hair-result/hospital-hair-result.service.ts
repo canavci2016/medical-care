@@ -22,9 +22,7 @@ export class HospitalHairResultService {
   }
 
   async findAll(): Promise<HospitalHairResult[]> {
-    return this.hospitalHairResultRepository.find({
-      relations: ['hospital', 'doctor'],
-    });
+    return this.hospitalHairResultRepository.find({});
   }
 
   async findOne(id: string): Promise<HospitalHairResult> {

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ApplicationController } from './application.controller';
-import { ApplicationService } from './application.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { HospitalHairResultModule } from './modules/hospital-hair-result/hospital-hair-result.module';
+import { HomeModule } from './modules/home/home.module';
 
 @Module({
   imports: [
@@ -34,9 +33,10 @@ import { HospitalHairResultModule } from './modules/hospital-hair-result/hospita
     HospitalModule,
     DoctorModule,
     HospitalHairResultModule,
+    HomeModule,
   ],
 
-  controllers: [ApplicationController],
-  providers: [ApplicationService],
+  controllers: [],
+  providers: [],
 })
 export class ApplicationModule {}
