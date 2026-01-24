@@ -3,6 +3,7 @@ import { ApplicationController } from './application.controller';
 import { ApplicationService } from './application.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { HospitalModule } from './modules/hospital/hospital.module';
 
 @Module({
   imports: [
@@ -28,9 +29,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
       inject: [ConfigService],
     }),
+    HospitalModule,
   ],
 
   controllers: [ApplicationController],
   providers: [ApplicationService],
 })
-export class ApplicationModule { }
+export class ApplicationModule {}
