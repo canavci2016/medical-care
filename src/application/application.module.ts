@@ -5,6 +5,7 @@ import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { HospitalHairResultModule } from './modules/hospital-hair-result/hospital-hair-result.module';
 import { HomeModule } from './modules/home/home.module';
+import { SeederModule } from './shared/seeder/seeder.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { HomeModule } from './modules/home/home.module';
     DoctorModule,
     HospitalHairResultModule,
     HomeModule,
+    SeederModule,
   ],
 
   controllers: [],

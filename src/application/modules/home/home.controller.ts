@@ -8,10 +8,10 @@ export class HomeController {
 
   @Get()
   async getHomeData(@Res() res: Response) {
-    const latestResults = await this.homeService.getLatestHairResults();
+    const latestHairResults = await this.homeService.getLatestHairResults();
 
     return res.render('application/modules/home/views/index', {
-      latestResults,
+      latestHairResults,
     });
   }
 

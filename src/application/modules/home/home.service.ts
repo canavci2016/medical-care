@@ -12,6 +12,6 @@ export class HomeService {
   ) { }
 
   async getLatestHairResults() {
-    return this.hospitalHairResultService.findAll();
+    return this.hospitalHairResultService.findAll({ skip: 0, take: 10 });
   }
 }

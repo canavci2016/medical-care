@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
 import { HospitalHairResult } from './entities/hospital-hair-result.entity';
@@ -21,14 +21,29 @@ export class HospitalHairResultService {
     return this.hospitalHairResultRepository.save(result);
   }
 
-  async findAll(): Promise<HospitalHairResult[]> {
-    return this.hospitalHairResultRepository.find({});
+  async findAll(
+    options: Partial<
+      Pick<FindManyOptions<HospitalHairResult>, 'skip' | 'take'>
+    > = {},
+  ): Promise<HospitalHairResult[]> {
+    const queryBuilder = this.hospitalHairResultRepository
+      .createQueryBuilder('hos_res')
+      .leftJoinAndSelect('hospitals', 'hos', 'hos.id = hos_res.hospitalId');
+
+    if (options.skip !== undefined) {
+      queryBuilder.skip(options.skip);
+    }
+
+    if (options.take !== undefined) {
+      queryBuilder.take(options.take);
+    }
+
+    return queryBuilder.getRawMany();
   }
 
   async findOne(id: string): Promise<HospitalHairResult> {
     const result = await this.hospitalHairResultRepository.findOne({
       where: { id },
-      relations: ['hospital', 'doctor'],
     });
     if (!result) {
       throw new NotFoundException(

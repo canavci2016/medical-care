@@ -2,13 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { Doctor } from '../../doctor/entities/doctor.entity';
 import { HospitalHairResultImage } from './hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 
@@ -28,10 +26,10 @@ export class HospitalHairResult {
      RELATIONS
   =============================== */
 
-  @Column()
+  @Column({ type: 'uuid', nullable: true })
   hospitalId: string;
 
-  @ManyToOne(() => Doctor, { nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   doctorId?: string;
 
   @OneToMany(() => HospitalHairResultImage, (image) => image.result, {
