@@ -28,7 +28,8 @@ export class HospitalHairResultService {
   ): Promise<HospitalHairResult[]> {
     const queryBuilder = this.hospitalHairResultRepository
       .createQueryBuilder('hos_res')
-      .leftJoinAndSelect('hospitals', 'hos', 'hos.id = hos_res.hospitalId');
+      .leftJoinAndSelect('hospitals', 'hos', 'hos.id = hos_res.hospitalId')
+      .leftJoinAndSelect('doctors', 'doc', 'doc.id = hos_res.doctorId');
 
     if (options.skip !== undefined) {
       queryBuilder.skip(options.skip);
