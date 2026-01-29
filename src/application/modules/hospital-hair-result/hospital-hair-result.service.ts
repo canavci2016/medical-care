@@ -1,15 +1,38 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, In, Repository, MoreThan, MoreThanOrEqual } from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
-import { HospitalHairResult } from './entities/hospital-hair-result.entity';
+import {
+  HairProcedureType,
+  HospitalHairResult,
+} from './entities/hospital-hair-result.entity';
+import { HospitalHairResultImage } from './entities/hospital-hair-result-image.entity';
+import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+
+export interface Filter {
+  gt?: number;
+
+  gte?: number;
+
+  lt?: number;
+
+  lte?: number;
+}
+
+export interface Pagination {
+  page: number;
+  limit: number;
+}
+
 
 @Injectable()
 export class HospitalHairResultService {
   constructor(
     @InjectRepository(HospitalHairResult)
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
+    @InjectRepository(HospitalHairResultImage)
+    private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
   ) { }
 
   async create(
@@ -22,24 +45,107 @@ export class HospitalHairResultService {
   }
 
   async findAll(
-    options: Partial<
-      Pick<FindManyOptions<HospitalHairResult>, 'skip' | 'take'>
-    > = {},
-  ): Promise<HospitalHairResult[]> {
-    const queryBuilder = this.hospitalHairResultRepository
-      .createQueryBuilder('hos_res')
-      .leftJoinAndSelect('hospitals', 'hos', 'hos.id = hos_res.hospitalId')
-      .leftJoinAndSelect('doctors', 'doc', 'doc.id = hos_res.doctorId');
+    options: Partial<{
+      procedureType: string | Filter;
+      technique: string | Filter;
+      graftCount: Pick<Filter, 'gte'>;
+      verified?: boolean;
+      page: Pagination;
+      orderBy: string;
+      orderDirection: 'asc' | 'desc';
+      ageRange: string;
+    }> = {},
+  ) {
+    const optionsTyped: FindManyOptions<HospitalHairResult> = {
+      where: {},
+    };
 
-    if (options.skip !== undefined) {
-      queryBuilder.skip(options.skip);
+    if (options.procedureType) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        procedureType: options.procedureType as HairProcedureType,
+      };
+    }
+    if (options.technique) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        technique: options.technique as HairTransplantTechnique,
+      };
     }
 
-    if (options.take !== undefined) {
-      queryBuilder.take(options.take);
+    if (options.verified !== undefined) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        verified: options.verified,
+      };
     }
 
-    return queryBuilder.getRawMany();
+    if (options.graftCount?.gte) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        graftCount: MoreThanOrEqual(options.graftCount.gte),
+      };
+    }
+
+    if (options.ageRange) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        patientAgeRange: options.ageRange,
+      };
+    }
+
+    const page = options.page?.page || 1;
+    const limit = options.page?.limit || 10;
+
+    optionsTyped.skip = (page - 1) * limit;
+    optionsTyped.take = limit;
+
+    if (options.orderBy) {
+      optionsTyped.order = {
+        [options.orderBy]: options.orderDirection || 'ASC',
+      };
+    }
+
+    const [results, total] =
+      await this.hospitalHairResultRepository.findAndCount({
+        ...optionsTyped,
+      });
+
+    const images = await this.hospitalHairResultImageRepository.find({
+      where: { resultId: In(results.map((r) => r.id)) },
+    });
+
+    const items = results.map((result) => ({
+      ...result,
+      images: images.filter((img) => img.resultId === result.id),
+    }));
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: items,
+      pagination: {
+        total,
+        page: page,
+        limit: limit,
+        totalPages: totalPages,
+        hasPrev: page > 1,
+        hasNext: page < totalPages,
+        prevPage: page - 1,
+        nextPage: page + 1,
+      },
+    };
+  }
+
+  async getAgeRanges() {
+    const result: { ageRange: string; count: number }[] =
+      await this.hospitalHairResultRepository
+        .createQueryBuilder('hr')
+        .select('hr.patientAgeRange', 'ageRange')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('hr.patientAgeRange')
+        .getRawMany();
+    return result;
   }
 
   async findOne(id: string): Promise<HospitalHairResult> {

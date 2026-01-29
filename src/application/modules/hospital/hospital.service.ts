@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, In, Repository } from 'typeorm';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
@@ -10,15 +10,28 @@ export class HospitalService {
   constructor(
     @InjectRepository(Hospital)
     private readonly hospitalRepository: Repository<Hospital>,
-  ) {}
+  ) { }
 
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
     const hospital = this.hospitalRepository.create(createHospitalDto);
     return this.hospitalRepository.save(hospital);
   }
 
-  async findAll(): Promise<Hospital[]> {
-    return this.hospitalRepository.find();
+  async findAll(
+    params: Partial<{ skip: number; take: number; id: string | string[] }> = {},
+  ): Promise<Hospital[]> {
+    const payload = {};
+
+    if (params.id) {
+      const idAttr = Array.isArray(params.id) ? params.id : [params.id];
+      payload['id'] = In(idAttr);
+    }
+
+    return this.hospitalRepository.find({
+      where: payload,
+      skip: params.skip || 0,
+      take: params.take || 10,
+    });
   }
 
   async findOne(id: string): Promise<Hospital> {

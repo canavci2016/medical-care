@@ -1,6 +1,7 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { HomeService } from './home.service';
 import type { Response } from 'express';
+import { formatDistanceToNow } from 'date-fns';
 
 @Controller('/')
 export class HomeController {
@@ -10,8 +11,20 @@ export class HomeController {
   async getHomeData(@Res() res: Response) {
     const latestHairResults = await this.homeService.getLatestHairResults();
 
+    const results = latestHairResults.map((result) => ({
+      hospital: result.hospital,
+      verified: result.verified,
+      graftCount: result.graftCount,
+      operationDateRelative: result.operationDate
+        ? formatDistanceToNow(new Date(result.operationDate), {
+          addSuffix: true,
+        })
+        : '',
+      image: result?.images[0]?.imageUrl || null,
+    }));
+
     return res.render('application/modules/home/views/index', {
-      latestHairResults,
+      results,
     });
   }
 

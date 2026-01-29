@@ -1,0 +1,388 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>Hair Transplant Results</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --bg: #f8fafc;
+        --border: #e5e7eb;
+        --text: #0f172a;
+        --muted: #64748b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        font-weight: 600;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 32px auto;
+        padding: 0 16px;
+      }
+
+      h1 {
+        margin-bottom: 4px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+        margin-top: 32px;
+      }
+
+      aside {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+
+      aside label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      aside select,
+      aside button {
+        width: 100%;
+        margin-top: 6px;
+        padding: 8px;
+      }
+
+      aside button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+      }
+
+      .card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .card img {
+        width: 100%;
+        display: block;
+      }
+
+      .card-body {
+        padding: 12px;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #16a34a;
+        color: white;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        margin-left: 6px;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+      }
+
+      .actions button {
+        border: none;
+        background: none;
+        color: var(--primary);
+        cursor: pointer;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 32px;
+      }
+
+      .pagination a {
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        background: white;
+        cursor: pointer;
+       text-decoration: none;
+      }
+
+      .pagination .active {
+        background: var(--primary);
+        color: white;
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* HEADER */
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .header-inner {
+        max-width: 1200px;
+        margin: auto;
+        padding: 12px 32px;
+        display: grid;
+        grid-template-columns: auto 1fr 2fr auto;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .logo {
+        font-size: 22px;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .logo span {
+        color: var(--primary);
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: var(--text);
+        font-size: 15px;
+      }
+
+      .nav a:hover {
+        color: var(--primary);
+      }
+
+      .header-search input {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 14px;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .actions .login {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      /* Mobile */
+      @media (max-width: 900px) {
+        .header-inner {
+          grid-template-columns: 1fr auto;
+        }
+
+        .nav,
+        .header-search {
+          display: none;
+        }
+      }
+
+      /* HEADER -- END */
+    </style>
+  </head>
+  <body>
+
+    <header class='site-header'>
+      <div class='header-inner'>
+
+        <!-- Logo -->
+        <a href='/' class='logo'>
+          Hair<span>Results</span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav class='nav'>
+          <a href='/results'>Results</a>
+          <a href='/hospitals'>Hospitals</a>
+          <a href='/blog'>Blog</a>
+          <a href='/about'>About</a>
+        </nav>
+
+        <!-- Search -->
+        <form class='header-search'>
+          <input
+            type='search'
+            placeholder='Search hospitals or results...'
+            aria-label='Search'
+          />
+        </form>
+
+        <!-- Actions -->
+        <div class='actions'>
+          <a href='/login' class='login'>Login</a>
+          <a href='/submit' class='btn'>Submit Result</a>
+        </div>
+
+      </div>
+    </header>
+
+    <div class='container'>
+
+      <h1>Hair Transplant Results</h1>
+      <p class='muted'>Browse verified patient results from trusted hospitals.</p>
+
+      <div class='layout'>
+
+        <aside>
+          <h3>Filters</h3>
+
+          <form action="">
+
+
+          <label>Procedure
+            <select name="procedure">
+              <option value=''>All</option>
+              {{#each filters.procedures}}
+                <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+
+          <label>Technique
+            <select name="technique">
+              <option value=''>All</option>
+              {{#each filters.techniques}}
+                <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+
+          <label>Age Range
+            <select name="ageRange">
+              <option value=''>Any</option>
+              {{#each filters.ageRanges}}
+                <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+
+          <label>Graft Count
+            <select name="graftCount">
+              <option value="">Any</option>
+            {{#each filters.graftCounts}}
+                <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+
+          <label>
+            <input  {{#if filters.verified.selected}}checked{{/if}} name="verified" type='checkbox' />
+            Verified only
+          </label>
+
+          <button>Apply Filters</button>
+          </form>
+        </aside>
+
+        <section>
+          <div class='toolbar'>
+            <span class='muted'>Showing {{pagination.total}} results</span>
+            <select><option>Sort: Featured</option></select>
+          </div>
+
+          <div class='grid'>
+
+            {{#each results}}
+
+              <div class='card' onclick="window.location='/results/{{id}}'">
+                <img width="400" height="200" src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x300?text=No+Image{{/if}}' />
+                <div class='card-body'>
+                  <strong>{{hospital.name}}</strong>
+                  {{#if verified}}
+                  <span class='badge'>Verified</span>
+                  {{/if}}
+                  <div class='muted'>{{technique}} · {{graftCount}} grafts · {{operationDateRelative}}</div>
+                  <div class='actions'>
+                    <button>♡ Save</button>
+                    <button>⇄ Compare</button>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+
+          </div>
+
+          <div class='pagination'>
+            {{#if pagination.hasPrev}}
+           <a href="?{{querystring pagination.query page=pagination.prevPage}}">
+                 ← Prev
+                </a>
+            {{/if}}
+{{#each pagination.pages}}
+  <a href="{{url}}" class="{{#if (eq page ../pagination.page)}}active{{/if}}">
+    {{page}}
+  </a>
+{{/each}}
+    
+  {{#if pagination.hasNext}}
+  <a href="?{{querystring pagination.query page=pagination.nextPage}}">
+    Next →
+  </a>
+{{/if}}
+          </div>
+
+        </section>
+
+      </div>
+    </div>
+
+  </body>
+</html>

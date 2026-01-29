@@ -4,9 +4,11 @@ import { Not, Repository } from 'typeorm';
 import { Hospital } from 'src/application/modules/hospital/entities/hospital.entity';
 import { Doctor } from 'src/application/modules/doctor/entities/doctor.entity';
 import { HospitalHairResult } from 'src/application/modules/hospital-hair-result/entities/hospital-hair-result.entity';
+import { HospitalHairResultImage } from 'src/application/modules/hospital-hair-result/entities/hospital-hair-result-image.entity';
 import { generateHospitalMockData } from 'src/application/modules/hospital/mocks/hospital.mock';
 import { generateDoctorMockData } from 'src/application/modules/doctor/mocks/doctor.mock';
 import { generateHospitalHairResult } from 'src/application/modules/hospital-hair-result/mocks/hospital-hair-result.mock';
+import { generateProgressImages } from 'src/application/modules/hospital-hair-result/mocks/hospital-hair-result-image.mock';
 
 export interface SeederOptions {
   hospitalCount?: number;
@@ -25,6 +27,8 @@ export class SeederService {
     private readonly doctorRepository: Repository<Doctor>,
     @InjectRepository(HospitalHairResult)
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
+    @InjectRepository(HospitalHairResultImage)
+    private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
   ) { }
 
   async seed(options: SeederOptions = {}): Promise<void> {
@@ -133,7 +137,40 @@ export class SeederService {
     const entities = results.map((data) =>
       this.hospitalHairResultRepository.create(data),
     );
-    await this.hospitalHairResultRepository.save(entities);
-    this.logger.log(`Seeded ${entities.length} hospital hair results`);
+    const savedResults = await this.hospitalHairResultRepository.save(entities);
+    this.logger.log(`Seeded ${savedResults.length} hospital hair results`);
+
+    // Seed images for each hair result
+    await this.seedHospitalHairResultImages(savedResults);
+  }
+
+  private async seedHospitalHairResultImages(
+    results: HospitalHairResult[],
+  ): Promise<void> {
+    const existingCount = await this.hospitalHairResultImageRepository.count();
+    if (existingCount > 0) {
+      this.logger.log(
+        `Hospital hair result images already seeded (${existingCount} records). Skipping...`,
+      );
+      return;
+    }
+
+    const allImages: Partial<HospitalHairResultImage>[] = [];
+
+    for (const result of results) {
+      const progressImages = generateProgressImages().map((image) => ({
+        ...image,
+        result: result,
+      }));
+      allImages.push(...progressImages);
+    }
+
+    const imageEntities = allImages.map((data) =>
+      this.hospitalHairResultImageRepository.create(data),
+    );
+    await this.hospitalHairResultImageRepository.save(imageEntities);
+    this.logger.log(
+      `Seeded ${imageEntities.length} hospital hair result images`,
+    );
   }
 }

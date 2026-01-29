@@ -277,31 +277,24 @@
 
         <h2>Latest Results</h2>
         <div class='grid'>
-          <div class='card'>
-            <img
-              src='https://ik.imagekit.io/jmtrc6fzf/wp-content/uploads/2020/01/best-hair-transplant-results-jaipur.jpg'
-              class='img'
-              alt=''
-            />
-            <div class='card-body'>
-              <strong>MediClinic</strong>
-              <span class='badge'>Verified</span>
-              <div class='muted'>6 Months · 3200 grafts</div>
-            </div>
-          </div>
+          {{#each results}}
 
           <div class='card'>
             <img
-              src='https://elithair.co.uk/wp-content/uploads/2021/08/before-after-hair-transplant-fue-sapphire-3700-grafts-frederik-g.jpg'
+              src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x300?text=No+Image{{/if}}'
               class='img'
+              style="width: 100%;"
               alt=''
             />
             <div class='card-body'>
-              <strong>Folica Hair Center</strong>
+              <strong>{{hospital.name}}</strong>
+              {{#if verified}}
               <span class='badge'>Verified</span>
-              <div class='muted'>12 Months · 4000 grafts</div>
+              {{/if}}
+              <div class='muted'>{{operationDateRelative}} · {{graftCount}} grafts</div>
             </div>
           </div>
+          {{/each}}
         </div>
       </section>
     </div>

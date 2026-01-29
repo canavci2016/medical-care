@@ -18,6 +18,9 @@ export class HospitalHairResultImage {
   })
   result: HospitalHairResult;
 
+  @Column({ type: 'uuid' })
+  resultId: string;
+
   @Column()
   imageUrl: string;
 

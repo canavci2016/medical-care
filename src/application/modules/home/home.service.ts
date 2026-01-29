@@ -12,6 +12,23 @@ export class HomeService {
   ) { }
 
   async getLatestHairResults() {
-    return this.hospitalHairResultService.findAll({ skip: 0, take: 10 });
+    const { data: results } = await this.hospitalHairResultService.findAll();
+    const hospitals = await this.hospitalService.findAll({
+      id: results.map((r) => r.hospitalId),
+    });
+
+    const doctors = await this.doctorService.findAll({
+      id: results
+        .map((r) => r.doctorId)
+        .filter((id): id is string => id !== undefined),
+    });
+
+    const finalResults = results.map((result) => ({
+      ...result,
+      hospital: hospitals.find((hos) => hos.id === result.hospitalId),
+      doctor: doctors.find((doc) => doc.id === result.doctorId),
+    }));
+
+    return finalResults;
   }
 }
