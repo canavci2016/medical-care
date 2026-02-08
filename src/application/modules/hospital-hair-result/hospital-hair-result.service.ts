@@ -46,6 +46,7 @@ export class HospitalHairResultService {
 
   async findAll(
     options: Partial<{
+      hospitalId: string;
       procedureType: string | Filter;
       technique: string | Filter;
       graftCount: Pick<Filter, 'gte'>;
@@ -91,6 +92,13 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         patientAgeRange: options.ageRange,
+      };
+    }
+
+    if (options.hospitalId) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        hospitalId: options.hospitalId,
       };
     }
 
@@ -144,6 +152,20 @@ export class HospitalHairResultService {
         .select('hr.patientAgeRange', 'ageRange')
         .addSelect('COUNT(*)', 'count')
         .groupBy('hr.patientAgeRange')
+        .getRawMany();
+    return result;
+  }
+
+  async getProcedureTypes(conditios?: { hospitalId?: string }) {
+    const result: { procedureType: string; count: string }[] =
+      await this.hospitalHairResultRepository
+        .createQueryBuilder('hr')
+        .select('hr.procedureType', 'procedureType')
+        .addSelect('COUNT(*)', 'count')
+        .where(conditios?.hospitalId ? 'hr.hospitalId = :hospitalId' : '1=1', {
+          hospitalId: conditios?.hospitalId,
+        })
+        .groupBy('hr.procedureType')
         .getRawMany();
     return result;
   }

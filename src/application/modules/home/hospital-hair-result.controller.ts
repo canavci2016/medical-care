@@ -132,7 +132,7 @@ export class HospitalHairResultController {
       }),
     );
 
-    return res.render('application/modules/home/views/results', {
+    return res.render('results', {
       results,
       pagination: newPagination,
       filters,
@@ -154,7 +154,7 @@ export class HospitalHairResultController {
         .map((img) => img.imageUrl),
     };
 
-    return res.render('application/modules/home/views/result-detail', {
+    return res.render('result-detail', {
       result: newResult,
     });
   }

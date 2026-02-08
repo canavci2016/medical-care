@@ -191,7 +191,7 @@
 
         <!-- LEFT: IMAGES -->
         <div class='card'>
-          <div class='image-slider'>
+          <div class='i3mage-slider'>
             <button class='nav left' aria-label='Previous image'>‹</button>
             <img width="500" height="400" id='sliderImage' src='{{result.images.[0]}}' alt='Result image' />
             <button class='nav right' aria-label='Next image'>›</button>
@@ -249,7 +249,7 @@
                   {{result.hospital.country}}
                   · ⭐
                   {{result.hospital.rating}}</div>
-                <a href='#' style='color:var(--primary); font-size:14px;'>View
+                <a href='/hospitals/{{result.hospital.id}}' style='color:var(--primary); font-size:14px;'>View
                   hospital profile</a>
               </div>
             </div>

@@ -23,7 +23,7 @@ export class HomeController {
       image: result?.images[0]?.imageUrl || null,
     }));
 
-    return res.render('application/modules/home/views/index', {
+    return res.render('index', {
       results,
     });
   }

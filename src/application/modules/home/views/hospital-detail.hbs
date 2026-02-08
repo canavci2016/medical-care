@@ -1,0 +1,389 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>Hospital Profile</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --bg: #f8fafc;
+        --border: #e5e7eb;
+        --text: #0f172a;
+        --muted: #64748b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        font-weight: 600;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 32px auto;
+        padding: 0 16px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 24px;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+      }
+
+      .hero img {
+        width: 100%;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+
+      .hero h1 {
+        margin: 0;
+      }
+
+      .rating {
+        margin-top: 6px;
+        color: #f59e0b;
+        font-size: 14px;
+      }
+
+      .meta {
+        display: flex;
+        gap: 16px;
+        margin: 16px 0;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .actions a {
+        padding: 10px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .actions .primary {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 32px;
+        margin-top: 32px;
+      }
+
+      .card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+      }
+
+      .card h3 {
+        margin-top: 0;
+      }
+
+      .services {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 12px;
+        font-size: 14px;
+      }
+
+      .services span {
+        background: var(--bg);
+        padding: 8px 10px;
+        border-radius: 8px;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+      }
+
+      .gallery img {
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      .info-list {
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .info-list strong {
+        display: block;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* HEADER */
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .header-inner {
+        max-width: 1200px;
+        margin: auto;
+        padding: 12px 32px;
+        display: grid;
+        grid-template-columns: auto 1fr 2fr auto;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .logo {
+        font-size: 22px;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .logo span {
+        color: var(--primary);
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: var(--text);
+        font-size: 15px;
+      }
+
+      .nav a:hover {
+        color: var(--primary);
+      }
+
+      .header-search input {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 14px;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .actions .login {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      /* Mobile */
+      @media (max-width: 900px) {
+        .header-inner {
+          grid-template-columns: 1fr auto;
+        }
+
+        .nav,
+        .header-search {
+          display: none;
+        }
+      }
+
+      /* HEADER -- END */
+    </style>
+  </head>
+  <body>
+
+    <header class='site-header'>
+      <div class='header-inner'>
+
+        <!-- Logo -->
+        <a href='/' class='logo'>
+          Hair<span>Results</span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav class='nav'>
+          <a href='/results'>Results</a>
+          <a href='/hospitals'>Hospitals</a>
+          <a href='/blog'>Blog</a>
+          <a href='/about'>About</a>
+        </nav>
+
+        <!-- Search -->
+        <form class='header-search'>
+          <input
+            type='search'
+            placeholder='Search hospitals or results...'
+            aria-label='Search'
+          />
+        </form>
+
+        <!-- Actions -->
+        <div class='actions'>
+          <a href='/login' class='login'>Login</a>
+          <a href='/submit' class='btn'>Submit Result</a>
+        </div>
+
+      </div>
+    </header>
+
+    <div class='container'>
+
+      <!-- HERO -->
+      <div class='hero'>
+        <img
+          width='400'
+          height='300'
+          src='{{hospital.coverImageUrl}}'
+          alt='{{hospital.name}}'
+        />
+        <div>
+          <h1>{{hospital.name}}</h1>
+          <div class='rating'>★★★★★
+            {{hospital.rating}}
+            ({{hospital.reviewCount}}
+            reviews)</div>
+          <div class='meta'>
+            <span>📍 {{hospital.city}}, {{hospital.country}}</span>
+            <span>🏥 Established {{hospital.established}}</span>
+            {{#if hospital.verified}}
+              <span>✔ Verified</span>
+            {{/if}}
+          </div>
+
+          <p class='muted'>
+            {{hospital.description}}
+          </p>
+
+          <div class='actions'>
+            <a href='tel:{{hospital.phone}}' class='primary'>Contact Hospital</a>
+            <a href='{{hospital.instagramUrl}}' target='_blank'>View Instagram</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class='layout'>
+
+        <!-- LEFT -->
+        <div>
+
+          <div class='card'>
+            <h3>About the Hospital</h3>
+            <p class='muted'>
+              {{hospital.description}}
+            </p>
+          </div>
+
+          <div class='card' style='margin-top:24px;'>
+            <h3>Services & Techniques</h3>
+            <div class='services'>
+              {{#each hospital.techniques}}
+                <span>{{this}}</span>
+              {{/each}}
+              {{#each procedureTypes}}
+                <span>{{this.procedureType}}</span>
+              {{/each}}
+            </div>
+          </div>
+
+          <div class='card' style='margin-top:24px;'>
+            <h3>Latest Results</h3>
+            <div class='gallery'>
+              {{#each latestHairResults}}
+                <img
+                  onclick='window.location.href="/results/{{this.id}}"'
+                  style='cursor: pointer;'
+                  width='200'
+                  height='150'
+                  src='{{this.imageUrl}}'
+                />
+              {{/each}}
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <aside>
+
+          <div class='card'>
+            <h3>Hospital Info</h3>
+            <div class='info-list'>
+              <strong>Address</strong>
+              {{hospital.address}}
+              {{hospital.city}},
+              {{hospital.country}}
+
+              <strong>Languages</strong>
+              English, Turkish, Arabic
+
+              <strong>Accreditations</strong>
+              JCI, ISO 9001
+
+              <strong>Instagram</strong>
+              @{{hospital.instagramHandle}}
+            </div>
+          </div>
+
+          <div class='card' style='margin-top:24px;'>
+            <h3>Statistics</h3>
+            <div class='info-list'>
+              <strong>Total Procedures</strong>
+              {{totalProcedures}}
+
+              <strong>Average Rating</strong>
+              {{hospital.rating}}
+              / 5
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </div>
+
+  </body>
+</html>

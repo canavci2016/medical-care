@@ -9,7 +9,11 @@ import { HospitalController } from './hospital.controller';
 
 @Module({
   imports: [HospitalModule, DoctorModule, HospitalHairResultModule],
-  controllers: [HomeController, HospitalHairResultController, HospitalController],
+  controllers: [
+    HomeController,
+    HospitalHairResultController,
+    HospitalController,
+  ],
   providers: [HomeService],
   exports: [HomeService],
 })

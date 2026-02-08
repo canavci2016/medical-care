@@ -8,6 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setViewEngine('hbs');
   app.setBaseViewsDir(join(__dirname));
+
+  app.setBaseViewsDir(join(__dirname, '../src/application/modules/home', 'views'));
+
+
   hbs.registerHelper('eq', (a, b) => {
     return a == b;
   });
