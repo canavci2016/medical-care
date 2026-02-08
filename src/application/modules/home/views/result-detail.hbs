@@ -1,0 +1,284 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>Hair Result Detail</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --bg: #f8fafc;
+        --border: #e5e7eb;
+        --text: #0f172a;
+        --muted: #64748b;
+        --success: #16a34a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        font-weight: 600;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 32px auto;
+        padding: 0 16px;
+      }
+
+      .breadcrumb {
+        font-size: 14px;
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 32px;
+      }
+
+      .card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .images {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .images img {
+        width: 100%;
+        display: block;
+      }
+
+      .card-body {
+        padding: 16px;
+      }
+
+      .badge {
+        display: inline-block;
+        background: var(--success);
+        color: white;
+        font-size: 12px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        margin-left: 8px;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 16px 0;
+        font-size: 14px;
+      }
+
+      .meta div {
+        background: var(--bg);
+        padding: 10px 12px;
+        border-radius: 8px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .actions button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: white;
+        cursor: pointer;
+      }
+
+      .actions .primary {
+        background: var(--primary);
+        color: white;
+        border: none;
+      }
+
+      .hospital-card {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .hospital-card img {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 1px solid var(--border);
+      }
+
+      .hospital-meta {
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .section {
+        margin-top: 24px;
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .images {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .image-slider {
+        position: relative;
+      }
+
+      .image-slider img {
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      .image-slider .nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid #e5e7eb;
+        font-size: 22px;
+        cursor: pointer;
+      }
+
+      .nav.left {
+        left: 12px;
+      }
+      .nav.right {
+        right: 12px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      Hair Results Platform
+    </header>
+
+    <div class='container'>
+
+      <div class='breadcrumb'>Results → MediClinic → Case #4821</div>
+
+      <div class='layout'>
+
+        <!-- LEFT: IMAGES -->
+        <div class='card'>
+          <div class='image-slider'>
+            <button class='nav left' aria-label='Previous image'>‹</button>
+            <img width="500" height="400" id='sliderImage' src='{{result.images.[0]}}' alt='Result image' />
+            <button class='nav right' aria-label='Next image'>›</button>
+          </div>
+          <div class='card-body'>
+            <strong>Before & After Comparison</strong>
+            <p class='muted'>{{result.patientStory}}</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: DETAILS -->
+        <div>
+
+          <div class='card'>
+            <div class='card-body'>
+              <h2>Hair Transplant Result
+                {{#if result.verified}}
+                  <span class='badge'>Verified</span>
+                {{/if}}
+              </h2>
+
+              <p class='muted'>Submitted by {{result.hospital.name}}</p>
+
+              <div class='meta'>
+                <div><strong>Technique</strong><br />{{result.technique}}</div>
+                <div><strong>Grafts</strong><br />{{result.graftCount}}</div>
+                <div><strong>Months After</strong><br
+                  />{{result.monthsAfter}}</div>
+                <div><strong>Procedure Area</strong><br
+                  />{{result.procedureType}}</div>
+              </div>
+
+              <div class='actions'>
+                <button>♡ Save</button>
+                <button>⇄ Compare</button>
+                <button
+                  class='primary'
+                  onclick="window.location.href='tel:{{result.phone}}'"
+                >Contact Hospital</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- HOSPITAL -->
+          <div class='card section'>
+            <div class='card-body hospital-card'>
+              <img
+                src='{{result.hospital.logoUrl}}'
+                alt='{{result.hospital.name}}'
+              />
+              <div>
+                <strong>{{result.hospital.name}}</strong>
+                <div class='hospital-meta'>{{result.hospital.city}}
+                  ,
+                  {{result.hospital.country}}
+                  · ⭐
+                  {{result.hospital.rating}}</div>
+                <a href='#' style='color:var(--primary); font-size:14px;'>View
+                  hospital profile</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTES -->
+          <div class='card section'>
+            <div class='card-body'>
+              <strong>Case Notes</strong>
+              <p class='muted'>
+                {{result.doctorNotes}}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script>
+      const images ={{{json result.images}}}
+      ; let index = 0;
+      document.querySelector('.nav.left').onclick = () => { index = (index - 1 +
+      images.length) % images.length; sliderImage.src = images[index]; };
+      document.querySelector('.nav.right').onclick = () => { index = (index + 1)
+      % images.length; sliderImage.src = images[index]; };
+    </script>
+
+  </body>
+</html>

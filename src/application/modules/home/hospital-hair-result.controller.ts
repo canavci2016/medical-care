@@ -12,7 +12,6 @@ import { formatDistanceToNow } from 'date-fns';
 import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
-import { id } from 'date-fns/locale';
 
 @Controller('results')
 export class HospitalHairResultController {
@@ -141,7 +140,22 @@ export class HospitalHairResultController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.hospitalHairResultService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
+    const result = await this.hospitalHairResultService.findOne(id);
+    const hospital = await this.hospitalService.findAll({
+      id: result.hospitalId,
+    });
+
+    const newResult = {
+      ...result,
+      hospital: hospital[0] || null,
+      images: result.images
+        .sort((a, b) => a.month - b.month)
+        .map((img) => img.imageUrl),
+    };
+
+    return res.render('application/modules/home/views/result-detail', {
+      result: newResult,
+    });
   }
 }

@@ -151,6 +151,7 @@ export class HospitalHairResultService {
   async findOne(id: string): Promise<HospitalHairResult> {
     const result = await this.hospitalHairResultRepository.findOne({
       where: { id },
+      relations: ['images'],
     });
     if (!result) {
       throw new NotFoundException(
@@ -158,14 +159,6 @@ export class HospitalHairResultService {
       );
     }
     return result;
-  }
-
-  async findBy(
-    criteria: Partial<Pick<HospitalHairResult, 'doctorId' | 'hospitalId'>>,
-  ): Promise<HospitalHairResult[]> {
-    return this.hospitalHairResultRepository.find({
-      where: criteria,
-    });
   }
 
   async update(

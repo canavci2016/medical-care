@@ -8,9 +8,9 @@ import {
   Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { HospitalService } from './hospital.service';
-import { CreateHospitalDto } from './dto/create-hospital.dto';
-import { UpdateHospitalDto } from './dto/update-hospital.dto';
+import { HospitalService } from '../hospital/hospital.service';
+import { CreateHospitalDto } from '../hospital/dto/create-hospital.dto';
+import { UpdateHospitalDto } from '../hospital/dto/update-hospital.dto';
 
 @Controller('hospitals')
 export class HospitalController {
