@@ -17,4 +17,4 @@ import { HospitalController } from './hospital.controller';
   providers: [HomeService],
   exports: [HomeService],
 })
-export class HomeModule { }
+export class SiteModule { }

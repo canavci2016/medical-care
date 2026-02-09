@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { HospitalHairResultModule } from './modules/hospital-hair-result/hospital-hair-result.module';
-import { HomeModule } from './modules/home/home.module';
+import { SiteModule } from './modules/site/site.module';
 import { SeederModule } from './shared/seeder/seeder.module';
 
 @Module({
@@ -34,7 +34,7 @@ import { SeederModule } from './shared/seeder/seeder.module';
     HospitalModule,
     DoctorModule,
     HospitalHairResultModule,
-    HomeModule,
+    SiteModule,
     SeederModule,
   ],
 

@@ -9,8 +9,9 @@ async function bootstrap() {
   app.setViewEngine('hbs');
   app.setBaseViewsDir(join(__dirname));
 
-  app.setBaseViewsDir(join(__dirname, '../src/application/modules/home', 'views'));
-
+  app.setBaseViewsDir(
+    join(__dirname, '../src/application/modules/site', 'views'),
+  );
 
   hbs.registerHelper('eq', (a, b) => {
     return a == b;
