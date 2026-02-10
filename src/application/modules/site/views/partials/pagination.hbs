@@ -1,0 +1,20 @@
+     <div class='pagination'>
+            {{#if pagination.hasPrev}}
+           <a href="?{{querystring pagination.query page=pagination.prevPage}}">
+                 ← Prev
+                </a>
+                {{else}}
+      <a class="disabled">Previous</a>
+            {{/if}}
+{{#each pagination.pages}}
+  <a href="{{url}}" class="{{#if (eq page ../pagination.page)}}active{{/if}}">
+    {{page}}
+  </a>
+{{/each}}
+    
+  {{#if pagination.hasNext}}
+  <a href="?{{querystring pagination.query page=pagination.nextPage}}">
+    Next →
+  </a>
+{{/if}}
+          </div>

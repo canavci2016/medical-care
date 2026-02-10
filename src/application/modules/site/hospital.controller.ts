@@ -1,7 +1,15 @@
-import { Controller, Get, Param, ParseUUIDPipe, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { HospitalService } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
+import { fi } from '@faker-js/faker';
 
 @Controller('hospitals')
 export class HospitalController {
@@ -11,9 +19,78 @@ export class HospitalController {
   ) { }
 
   @Get()
-  async findAll(@Res() res: Response) {
-    const hospitals = await this.hospitalService.findAll();
-    return res.render('hospital-list', { hospitals });
+  async findAll(
+    @Res() res: Response,
+    @Query()
+    query: {
+      page?: string;
+      city?: string;
+      rating?: string;
+      sorting?: string;
+    },
+  ) {
+    const [orderCollumn, orderDirection] = query.sorting
+      ? query.sorting.split('_')
+      : ['rating', 'desc'];
+    const { data: hospitals, pagination } =
+      await this.hospitalService.paginated({
+        city: query.city,
+        rating: query.rating ? parseInt(query.rating, 10) : undefined,
+        page: { limit: 5, page: query.page ? parseInt(query.page, 10) : 1 },
+        orderBy: orderCollumn,
+        orderDirection: orderDirection as 'asc' | 'desc',
+      });
+
+    const newPagination = {
+      ...pagination,
+      query,
+      pages: [] as any[],
+    };
+
+    newPagination.pages = Array.from({ length: pagination.totalPages }).map(
+      (_, i) => ({
+        page: (i + 1).toString(),
+        url: `?${new URLSearchParams({
+          ...query,
+          page: (i + 1).toString(),
+        })}`,
+      }),
+    );
+
+    const cities = await this.hospitalService.getCities();
+
+    const filters = {
+      cities: cities.map((city) => ({
+        label: city.city + ` (${city.count})`,
+        value: city.city,
+        count: city.count,
+        selected: query.city === city.city,
+      })),
+      stars: Object.entries({
+        '5': '5',
+        '4+': '4',
+        '3+': '3',
+        '2+': '2',
+      }).map(([key, value]) => ({
+        label: key,
+        value,
+        selected: query.rating === value,
+      })),
+      sorts: [
+        { label: 'Rating (High to Low)', value: 'rating_desc' },
+        { label: 'Rating (Low to High)', value: 'rating_asc' },
+      ].map((sort) => ({
+        ...sort,
+        selected: query.sorting === sort.value,
+      })),
+    };
+
+    return res.render('hospital-list', {
+      hospitals,
+      pagination: newPagination,
+      styles: ['hospital-list.css'],
+      filters,
+    });
   }
 
   @Get(':id')
@@ -43,6 +120,7 @@ export class HospitalController {
           imageUrl: hr.images[0]?.imageUrl || null,
         }))
         .filter((hr) => hr.imageUrl),
+      layout: false,
       totalProcedures: procedureTypes.reduce(
         (total, pt) => total + parseInt(pt.count, 10),
         0,

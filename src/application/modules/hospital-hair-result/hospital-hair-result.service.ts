@@ -25,7 +25,6 @@ export interface Pagination {
   limit: number;
 }
 
-
 @Injectable()
 export class HospitalHairResultService {
   constructor(

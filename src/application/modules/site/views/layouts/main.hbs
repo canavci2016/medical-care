@@ -1,0 +1,195 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Hair Results Platform</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+
+    <style>
+      :root {
+        --primary: #2563eb;
+        --bg: #f9fafb;
+        --surface: #ffffff;
+        --border: #e5e7eb;
+        --text: #111827;
+        --muted: #6b7280;
+        --radius: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: Inter, system-ui, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        background: white;
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 32px;
+      }
+
+      h1 {
+        font-size: 36px;
+        margin-bottom: 16px;
+      }
+      h2 {
+        margin: 32px 0 16px;
+      }
+
+      /* sections */
+      section {
+        margin-bottom: 64px;
+      }
+
+      /* layout */
+      .split {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+      }
+
+      .sidebar {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 24px;
+        text-align: center;
+        background: white;
+      }
+
+      /* HEADER */
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .header-inner {
+        max-width: 1200px;
+        margin: auto;
+        padding: 12px 32px;
+        display: grid;
+        grid-template-columns: auto 1fr 2fr auto;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .logo {
+        font-size: 22px;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .logo span {
+        color: var(--primary);
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: var(--text);
+        font-size: 15px;
+      }
+
+      .nav a:hover {
+        color: var(--primary);
+      }
+
+      .header-search input {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 14px;
+      }
+
+      /* Mobile */
+      @media (max-width: 900px) {
+        .header-inner {
+          grid-template-columns: 1fr auto;
+        }
+
+        .nav,
+        .header-search {
+          display: none;
+        }
+      }
+
+      /* HEADER -- END */
+    </style>
+
+    {{#each styles}}
+      <link rel='stylesheet' href='/css/{{this}}' />
+    {{/each}}
+
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <header class='site-header'>
+      <div class='header-inner'>
+
+        <!-- Logo -->
+        <a href='/' class='logo'>
+          Hair<span>Results</span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav class='nav'>
+          <a href='/results'>Results</a>
+          <a href='/hospitals'>Hospitals</a>
+          <a href='/blog'>Blog</a>
+          <a href='/about'>About</a>
+        </nav>
+
+        <!-- Search -->
+        <form class='header-search'>
+          <input
+            type='search'
+            placeholder='Search hospitals or results...'
+            aria-label='Search'
+          />
+        </form>
+
+      </div>
+    </header>
+
+    <!-- HOMEPAGE -->
+    {{{body}}}
+
+    <footer>
+      © 2026 HairResults · Results may vary · Medical disclaimer
+    </footer>
+
+    {{#each scripts}}
+      <script src='/js/{{this}}'></script>
+    {{/each}}
+  </body>
+</html>

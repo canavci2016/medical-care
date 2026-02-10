@@ -136,6 +136,7 @@ export class HospitalHairResultController {
       results,
       pagination: newPagination,
       filters,
+      styles: ['results.css'],
     });
   }
 

@@ -6,12 +6,23 @@ import hbs from 'hbs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets(
+    join(__dirname, '../src/application/modules/site', 'public'),
+  );
   app.setViewEngine('hbs');
-  app.setBaseViewsDir(join(__dirname));
 
   app.setBaseViewsDir(
     join(__dirname, '../src/application/modules/site', 'views'),
   );
+
+  hbs.registerPartials(
+    join(__dirname, '../src/application/modules/site', 'views/partials'),
+  );
+
+  app.set('view options', {
+    layout: 'layouts/main',
+  });
 
   hbs.registerHelper('eq', (a, b) => {
     return a == b;
