@@ -6,13 +6,16 @@ import { DoctorModule } from '../doctor/doctor.module';
 import { HospitalHairResultModule } from '../hospital-hair-result/hospital-hair-result.module';
 import { HospitalHairResultController } from './hospital-hair-result.controller';
 import { HospitalController } from './hospital.controller';
+import { BlogModule } from '../blog/blog.module';
+import { BlogController } from './blog.controller';
 
 @Module({
-  imports: [HospitalModule, DoctorModule, HospitalHairResultModule],
+  imports: [HospitalModule, DoctorModule, HospitalHairResultModule, BlogModule],
   controllers: [
     HomeController,
     HospitalHairResultController,
     HospitalController,
+    BlogController,
   ],
   providers: [HomeService],
   exports: [HomeService],

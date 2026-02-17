@@ -5,9 +5,22 @@ import { Hospital } from '../../modules/hospital/entities/hospital.entity';
 import { Doctor } from '../../modules/doctor/entities/doctor.entity';
 import { HospitalHairResult } from '../../modules/hospital-hair-result/entities/hospital-hair-result.entity';
 import { HospitalHairResultImage } from '../../modules/hospital-hair-result/entities/hospital-hair-result-image.entity';
+import { Blog } from '../../modules/blog/entities/blog.entity';
+import { BlogCategory } from '../../modules/blog/entities/blog-category.entity';
+import { BlogTag } from '../../modules/blog/entities/blog-tag.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Hospital, Doctor, HospitalHairResult, HospitalHairResultImage])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Hospital,
+      Doctor,
+      HospitalHairResult,
+      HospitalHairResultImage,
+      Blog,
+      BlogCategory,
+      BlogTag,
+    ]),
+  ],
   providers: [SeederService],
   exports: [SeederService],
 })

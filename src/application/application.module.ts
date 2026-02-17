@@ -5,6 +5,7 @@ import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { HospitalHairResultModule } from './modules/hospital-hair-result/hospital-hair-result.module';
 import { SiteModule } from './modules/site/site.module';
+import { BlogModule } from './modules/blog/blog.module';
 import { SeederModule } from './shared/seeder/seeder.module';
 
 @Module({
@@ -35,6 +36,7 @@ import { SeederModule } from './shared/seeder/seeder.module';
     DoctorModule,
     HospitalHairResultModule,
     SiteModule,
+    BlogModule,
     SeederModule,
   ],
 

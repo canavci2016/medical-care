@@ -1,0 +1,77 @@
+<div class='container'>
+
+  <!-- Main Content -->
+  <div class='content'>
+
+    <div class='blog-hero'>
+      <img src='{{blog.featuredImage}}' alt='Hair Transplant' />
+    </div>
+
+    <div class='blog-meta'>
+      Published on
+      {{blog.publishedAt}}
+      •
+      {{blog.readingTime}}
+      min read • Category:
+      {{blog.category.name}}
+    </div>
+
+    <h1 class='blog-title'>
+      {{blog.title}}
+    </h1>
+
+    <div class='blog-body'>
+      {{{blog.content}}}
+    </div>
+
+    <div class='tags'>
+
+      {{#each blog.tags}}
+        <span>#{{this.name}}</span>
+      {{/each}}
+    </div>
+
+    <!-- Related Posts -->
+    <div class='related'>
+      <h3>Related Articles</h3>
+
+      {{#each popularBlogs}}
+        <div class='related-post'>
+          <img
+            src='{{this.featuredImage}}'
+            alt=''
+          />
+          <div>
+            <a href='/blogs/{{this.slug}}'>{{this.title}}</a>
+            <div style='font-size:13px;color:#666;'>{{this.publishedAt}}</div>
+          </div>
+        </div>
+      {{/each}}
+  
+    </div>
+
+    <!-- Comments -->
+
+  </div>
+
+  <!-- Sidebar -->
+  <div class='sidebar'>
+    <h3>Search</h3>
+    <input type='text' placeholder='Search articles...' />
+
+    <h3>Categories</h3>
+    <ul>
+      {{#each categories}}
+        <li><a href='/blogs?cat={{this.id}}'>{{this.name}}</a></li>
+      {{/each}}
+    </ul>
+
+    <h3>Recent Posts</h3>
+    <ul>
+      {{#each recentBlogs}}
+        <li><a href='/blogs/{{this.slug}}'>{{this.title}}</a></li>
+      {{/each}}
+    </ul>
+  </div>
+
+</div>

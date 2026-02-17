@@ -1,0 +1,86 @@
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
+import { BlogService } from '../blog/blog.service';
+import { BlogStatus } from '../blog/entities/blog.entity';
+import type { Response } from 'express';
+import { BlogCategoryService } from '../blog/blog-category.service';
+
+@Controller('blogs')
+export class BlogController {
+  constructor(
+    private readonly blogService: BlogService,
+    private readonly categoryService: BlogCategoryService,
+  ) { }
+
+  @Get()
+  async findAll(
+    @Res() res: Response,
+    @Query()
+    query: {
+      cat?: string;
+    },
+  ) {
+    const { data: blogs, pagination } = await this.blogService.paginated({
+      page: {
+        page: 1,
+        limit: 5,
+      },
+      orderBy: 'publishedAt',
+      order: 'DESC',
+      status: BlogStatus.PUBLISHED,
+    });
+
+    const recentBlogs = await this.blogService.findAll({
+      skip: pagination.total - 1,
+      take: 3,
+      orderBy: 'publishedAt',
+      order: 'DESC',
+      status: BlogStatus.PUBLISHED,
+    });
+
+    const categories = await this.categoryService.findAll({
+      orderBy: 'name',
+      order: 'ASC',
+    });
+
+    return res.render('blogs', {
+      blogs: blogs,
+      categories: categories,
+      recentBlogs: recentBlogs,
+      pagination: pagination,
+      layout: false,
+    });
+  }
+
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string, @Res() res: Response) {
+    const blog = await this.blogService.findOneBy({ slug });
+    const categories = await this.categoryService.findAll({
+      orderBy: 'name',
+      order: 'ASC',
+    });
+
+    const recentBlogs = await this.blogService.findAll({
+      skip: 0,
+      take: 3,
+      orderBy: 'publishedAt',
+      order: 'DESC',
+      status: BlogStatus.PUBLISHED,
+    });
+
+    const popularBlogs = await this.blogService.findAll({
+      skip: 0,
+      take: 3,
+      orderBy: 'viewCount',
+      order: 'DESC',
+      status: BlogStatus.PUBLISHED,
+    });
+
+    return res.render('blog-detail', {
+      blog,
+      categories,
+      recentBlogs,
+      popularBlogs,
+      styles: ['blog-detail.css'],
+    });
+  }
+}

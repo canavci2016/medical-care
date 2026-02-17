@@ -5,15 +5,24 @@ import { Hospital } from 'src/application/modules/hospital/entities/hospital.ent
 import { Doctor } from 'src/application/modules/doctor/entities/doctor.entity';
 import { HospitalHairResult } from 'src/application/modules/hospital-hair-result/entities/hospital-hair-result.entity';
 import { HospitalHairResultImage } from 'src/application/modules/hospital-hair-result/entities/hospital-hair-result-image.entity';
+import { Blog } from 'src/application/modules/blog/entities/blog.entity';
+import { BlogCategory } from 'src/application/modules/blog/entities/blog-category.entity';
+import { BlogTag } from 'src/application/modules/blog/entities/blog-tag.entity';
 import { generateHospitalMockData } from 'src/application/modules/hospital/mocks/hospital.mock';
 import { generateDoctorMockData } from 'src/application/modules/doctor/mocks/doctor.mock';
 import { generateHospitalHairResult } from 'src/application/modules/hospital-hair-result/mocks/hospital-hair-result.mock';
 import { generateProgressImages } from 'src/application/modules/hospital-hair-result/mocks/hospital-hair-result-image.mock';
+import { generateBlogCategoryMockData } from 'src/application/modules/blog/mocks/blog-category.mock';
+import { generateBlogTagMockData } from 'src/application/modules/blog/mocks/blog-tag.mock';
+import { generateBlogMockData } from 'src/application/modules/blog/mocks/blog.mock';
 
 export interface SeederOptions {
   hospitalCount?: number;
   doctorCount?: number;
   hospitalHairResultCount?: number;
+  blogCategoryCount?: number;
+  blogTagCount?: number;
+  blogCount?: number;
 }
 
 @Injectable()
@@ -29,13 +38,22 @@ export class SeederService {
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
     @InjectRepository(HospitalHairResultImage)
     private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
-  ) { }
+    @InjectRepository(Blog)
+    private readonly blogRepository: Repository<Blog>,
+    @InjectRepository(BlogCategory)
+    private readonly blogCategoryRepository: Repository<BlogCategory>,
+    @InjectRepository(BlogTag)
+    private readonly blogTagRepository: Repository<BlogTag>,
+  ) {}
 
   async seed(options: SeederOptions = {}): Promise<void> {
     const {
       hospitalCount = 20,
       doctorCount = 50,
       hospitalHairResultCount = 100,
+      blogCategoryCount = 8,
+      blogTagCount = 12,
+      blogCount = 40,
     } = options;
 
     this.logger.log('Starting database seeding...');
@@ -43,6 +61,9 @@ export class SeederService {
     await this.seedHospitals(hospitalCount);
     await this.seedDoctors(doctorCount);
     await this.seedHospitalHairResults(hospitalHairResultCount);
+    await this.seedBlogCategories(blogCategoryCount);
+    await this.seedBlogTags(blogTagCount);
+    await this.seedBlogs(blogCount);
 
     this.logger.log('Database seeding completed!');
   }
@@ -51,6 +72,9 @@ export class SeederService {
     this.logger.log('Clearing database...');
 
     await this.hospitalHairResultRepository.delete({ slug: Not('') });
+    await this.blogRepository.delete({ slug: Not('') });
+    await this.blogTagRepository.delete({ slug: Not('') });
+    await this.blogCategoryRepository.delete({ slug: Not('') });
     await this.doctorRepository.delete({ fullName: Not('xyz') });
     await this.hospitalRepository.delete({ name: Not('xyz') });
 
@@ -172,5 +196,81 @@ export class SeederService {
     this.logger.log(
       `Seeded ${imageEntities.length} hospital hair result images`,
     );
+  }
+
+  private async seedBlogCategories(count: number): Promise<void> {
+    const existingCount = await this.blogCategoryRepository.count();
+    if (existingCount > 0) {
+      this.logger.log(
+        `Blog categories already seeded (${existingCount} records). Skipping...`,
+      );
+      return;
+    }
+
+    const categories = generateBlogCategoryMockData(count).map((data, index) =>
+      this.blogCategoryRepository.create({
+        ...data,
+        name: `${data.name} ${index + 1}`,
+        slug: `${data.slug}-${index + 1}`,
+      }),
+    );
+
+    await this.blogCategoryRepository.save(categories);
+    this.logger.log(`Seeded ${categories.length} blog categories`);
+  }
+
+  private async seedBlogTags(count: number): Promise<void> {
+    const existingCount = await this.blogTagRepository.count();
+    if (existingCount > 0) {
+      this.logger.log(
+        `Blog tags already seeded (${existingCount} records). Skipping...`,
+      );
+      return;
+    }
+
+    const tags = generateBlogTagMockData(count).map((data, index) =>
+      this.blogTagRepository.create({
+        ...data,
+        name: `${data.name} ${index + 1}`,
+        slug: `${data.slug}-${index + 1}`,
+      }),
+    );
+
+    await this.blogTagRepository.save(tags);
+    this.logger.log(`Seeded ${tags.length} blog tags`);
+  }
+
+  private async seedBlogs(count: number): Promise<void> {
+    const existingCount = await this.blogRepository.count();
+    if (existingCount > 0) {
+      this.logger.log(
+        `Blogs already seeded (${existingCount} records). Skipping...`,
+      );
+      return;
+    }
+
+    const categories = await this.blogCategoryRepository.find();
+    const tags = await this.blogTagRepository.find();
+
+    if (categories.length === 0) {
+      this.logger.warn('No blog categories found. Cannot seed blogs.');
+      return;
+    }
+
+    const blogs = generateBlogMockData(count).map((data, index) => {
+      const category = categories[index % categories.length];
+      const tagCount = Math.min(tags.length, 3 + (index % 3));
+      const selectedTags = tags.slice(0, tagCount);
+
+      return this.blogRepository.create({
+        ...data,
+        slug: `${data.slug}-${index + 1}`,
+        category,
+        tags: selectedTags,
+      });
+    });
+
+    await this.blogRepository.save(blogs);
+    this.logger.log(`Seeded ${blogs.length} blogs`);
   }
 }

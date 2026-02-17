@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindManyOptions, In, Repository } from 'typeorm';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
-import { UpdateHospitalDto } from './dto/update-hospital.dto';
 
 export interface Pagination {
   page?: number;
