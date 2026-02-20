@@ -12,6 +12,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { buildPagination } from './pagination.util';
 
 @Controller('results')
 export class HospitalHairResultController {
@@ -116,21 +117,7 @@ export class HospitalHairResultController {
       },
     };
 
-    const newPagination = {
-      ...pagination,
-      query,
-      pages: [] as any[],
-    };
-
-    newPagination.pages = Array.from({ length: pagination.totalPages }).map(
-      (_, i) => ({
-        page: (i + 1).toString(),
-        url: `?${new URLSearchParams({
-          ...query,
-          page: (i + 1).toString(),
-        })}`,
-      }),
-    );
+    const newPagination = buildPagination(pagination, query);
 
     return res.render('results', {
       results,

@@ -1,160 +1,27 @@
-<html lang='en'>
-  <head>
-    <meta charset='UTF-8' />
-    <title>Blog List</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f5f7fa;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 40px auto;
-        display: flex;
-        gap: 30px;
-      }
-
-      /* Sidebar */
-      .sidebar {
-        width: 280px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      }
-
-      .sidebar h3 {
-        margin-top: 0;
-      }
-
-      .sidebar input {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 20px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-      }
-
-      .sidebar ul {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 20px 0;
-      }
-
-      .sidebar ul li {
-        margin-bottom: 8px;
-      }
-
-      .sidebar ul li a {
-        text-decoration: none;
-        color: #2563eb;
-      }
-
-      .sidebar ul li a:hover {
-        text-decoration: underline;
-      }
-
-      /* Content */
-      .content {
-        flex: 1;
-      }
-
-      /* Blog Card */
-      .blog-card {
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 25px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      }
-
-      .blog-card img {
-        width: 100%;
-        height: 240px;
-        object-fit: cover;
-      }
-
-      .blog-content {
-        padding: 20px;
-      }
-
-      .blog-content h2 {
-        margin-top: 0;
-        font-size: 22px;
-      }
-
-      .blog-meta {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 10px;
-      }
-
-      .blog-content p {
-        margin-bottom: 15px;
-        line-height: 1.6;
-      }
-
-      .read-more {
-        display: inline-block;
-        padding: 8px 14px;
-        background: #2563eb;
-        color: white;
-        text-decoration: none;
-        border-radius: 6px;
-      }
-
-      /* Pagination */
-      .pagination {
-        margin-top: 30px;
-        display: flex;
-        gap: 8px;
-      }
-
-      .pagination a {
-        padding: 8px 12px;
-        background: #e5e7eb;
-        text-decoration: none;
-        border-radius: 6px;
-        color: black;
-      }
-
-      .pagination a.active {
-        background: #2563eb;
-        color: white;
-      }
-
-      .pagination a.disabled {
-        pointer-events: none;
-        opacity: 0.4;
-      }
-
-      /* Responsive */
-      @media (max-width: 900px) {
-        .container {
-          flex-direction: column;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-
     <div class='container'>
 
       <!-- Sidebar -->
+      <aside>
       <div class='sidebar'>
         <h3>Search</h3>
-        <input type='text' placeholder='Search articles...' />
+        <form method='get' action='/blogs'>
+          <input
+            type='text'
+            name='title'
+            value='{{pagination.query.title}}'
+            placeholder='Search articles...'
+          />
+          {{#if pagination.query.cat}}
+            <input type='hidden' name='cat' value='{{pagination.query.cat}}' />
+          {{/if}}
+          <button type='submit'>Search</button>
+        </form>
 
         <h3>Categories</h3>
         <ul>
           {{#each categories}}
             <li>
-              <a href='?cat={{this.value}}' >{{this.name}}</a>
+              <a href='?cat={{this.id}}' >{{this.name}}</a>
             </li>
           {{/each}}
         </ul>
@@ -168,10 +35,13 @@
           {{/each}}
         </ul>
       </div>
-
+     </aside>
       <!-- Content -->
       <div class='content'>
 
+<div class="blog-header">
+  <p>Showing <strong>{{pagination.length}} of {{pagination.total}}</strong> articles</p>
+</div>
         <!-- Blog 1 -->
         {{#each blogs}}
           <div class='blog-card'>
@@ -196,6 +66,3 @@
       </div>
 
     </div>
-
-  </body>
-</html>

@@ -9,14 +9,14 @@ import {
 import { HospitalService } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
-import { fi } from '@faker-js/faker';
+import { buildPagination } from './pagination.util';
 
 @Controller('hospitals')
 export class HospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
-  ) { }
+  ) {}
 
   @Get()
   async findAll(
@@ -41,21 +41,7 @@ export class HospitalController {
         orderDirection: orderDirection as 'asc' | 'desc',
       });
 
-    const newPagination = {
-      ...pagination,
-      query,
-      pages: [] as any[],
-    };
-
-    newPagination.pages = Array.from({ length: pagination.totalPages }).map(
-      (_, i) => ({
-        page: (i + 1).toString(),
-        url: `?${new URLSearchParams({
-          ...query,
-          page: (i + 1).toString(),
-        })}`,
-      }),
-    );
+    const newPagination = buildPagination(pagination, query);
 
     const cities = await this.hospitalService.getCities();
 
@@ -95,7 +81,6 @@ export class HospitalController {
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
-
     const hospital = await this.hospitalService.findOne(id);
     if (!hospital) {
       return res.status(404).send('Hospital not found');

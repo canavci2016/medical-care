@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Blog } from './entities/blog.entity';
 
 export interface Pagination {
@@ -13,7 +13,7 @@ export class BlogService {
   constructor(
     @InjectRepository(Blog)
     private readonly blogRepository: Repository<Blog>,
-  ) { }
+  ) {}
 
   async create(payload: Partial<Blog>): Promise<Blog> {
     const item = this.blogRepository.create(payload);
@@ -36,20 +36,34 @@ export class BlogService {
         : undefined,
     });
   }
-
-
   async paginated(options?: {
     status?: Blog['status'];
     skip?: number;
     take?: number;
     orderBy?: keyof Blog;
     order?: 'ASC' | 'DESC';
+    categoryId?: string;
+    title?: string;
     page?: Pagination;
   }) {
     const page = options?.page?.page || 1;
     const limit = options?.page?.limit || 10;
+    const where: Record<string, unknown> = {};
+
+    if (options?.status) {
+      where.status = options.status;
+    }
+
+    if (options?.categoryId) {
+      where.category = { id: options.categoryId };
+    }
+
+    if (options?.title) {
+      where.title = ILike(`%${options.title}%`);
+    }
+
     const [items, total] = await this.blogRepository.findAndCount({
-      where: options?.status ? { status: options.status } : undefined,
+      where: Object.keys(where).length > 0 ? where : undefined,
       skip: (page - 1) * limit,
       take: limit,
       order: options?.orderBy

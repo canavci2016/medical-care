@@ -3,13 +3,14 @@ import { BlogService } from '../blog/blog.service';
 import { BlogStatus } from '../blog/entities/blog.entity';
 import type { Response } from 'express';
 import { BlogCategoryService } from '../blog/blog-category.service';
+import { buildPagination } from './pagination.util';
 
 @Controller('blogs')
 export class BlogController {
   constructor(
     private readonly blogService: BlogService,
     private readonly categoryService: BlogCategoryService,
-  ) { }
+  ) {}
 
   @Get()
   async findAll(
@@ -17,20 +18,24 @@ export class BlogController {
     @Query()
     query: {
       cat?: string;
+      page?: string;
+      title?: string;
     },
   ) {
     const { data: blogs, pagination } = await this.blogService.paginated({
       page: {
-        page: 1,
+        page: query.page ? parseInt(query.page, 10) : 1,
         limit: 5,
       },
       orderBy: 'publishedAt',
       order: 'DESC',
+      categoryId: query.cat,
       status: BlogStatus.PUBLISHED,
+      title: query.title,
     });
 
     const recentBlogs = await this.blogService.findAll({
-      skip: pagination.total - 1,
+      skip: blogs.length - 1,
       take: 3,
       orderBy: 'publishedAt',
       order: 'DESC',
@@ -42,12 +47,14 @@ export class BlogController {
       order: 'ASC',
     });
 
+    const newPagination = buildPagination(pagination, query);
+
     return res.render('blogs', {
       blogs: blogs,
       categories: categories,
       recentBlogs: recentBlogs,
-      pagination: pagination,
-      layout: false,
+      pagination: newPagination,
+      styles: ['blogs.css'],
     });
   }
 

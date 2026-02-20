@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import hbs from 'hbs';
+import session from 'express-session';
+import flash from 'connect-flash';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -38,6 +40,14 @@ async function bootstrap() {
   hbs.registerHelper('json', (context) => {
     return JSON.stringify(context);
   });
+
+  app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+  }));
+
+  app.use(flash());
 
   await app.listen(process.env.PORT ?? 3000);
 }

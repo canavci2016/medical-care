@@ -64,14 +64,17 @@ export class HospitalService {
       optionsTyped.where['city'] = options.city;
     }
     if (options.rating) {
+      if (options.rating === 5) {
+        optionsTyped.where['rating'] = Between(5, 5.99);
+      }
       if (options.rating === 4) {
-        optionsTyped.where['rating'] = Between(4, 5);
+        optionsTyped.where['rating'] = Between(4, 4.99);
       }
       if (options.rating === 3) {
-        optionsTyped.where['rating'] = Between(3, 5);
+        optionsTyped.where['rating'] = Between(3, 3.99);
       }
       if (options.rating === 2) {
-        optionsTyped.where['rating'] = Between(2, 5);
+        optionsTyped.where['rating'] = Between(2, 2.99);
       }
     }
 

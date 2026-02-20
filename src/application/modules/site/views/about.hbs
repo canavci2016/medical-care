@@ -1,0 +1,92 @@
+<section class='hero'>
+  <h1>About MedicalCare</h1>
+  <p>Your trusted healthcare information platform</p>
+</section>
+
+<div class='container'>
+
+  <!-- ABOUT -->
+  <section class='about-section'>
+    <h2>Who We Are</h2>
+    <p>
+      MedicalCare connects patients with trusted hospitals, doctors, and
+      healthcare services. Our platform provides reliable medical information,
+      hospital ratings, and healthcare articles.
+    </p>
+    <p>
+      We aim to make healthcare decisions easier through transparent information
+      and user-friendly digital experiences.
+    </p>
+  </section>
+
+  <!-- CONTACT -->
+  <div class='contact-wrapper'>
+
+    <!-- COMPANY INFO -->
+    <div class='card'>
+      <h3>Company Information</h3>
+
+      <div class='info-item'>
+        <strong>Address</strong>
+        Sefaköy<br />
+        Küçükçekmece<br />
+        Istanbul, Turkey
+      </div>
+
+      <div class='info-item'>
+        <strong>Phone</strong>
+        +90 212 123 45 67
+      </div>
+
+      <div class='info-item'>
+        <strong>Email</strong>
+        canavci2016@gmail.com
+      </div>
+
+      <div class='info-item'>
+        <strong>Working Hours</strong>
+        Monday – Friday: 09:00 – 18:00
+      </div>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div class='card'>
+
+      {{#if success.length}}
+
+        <div class='alert alert-success'>
+          <strong>Success!</strong>
+          {{success.[0]}}
+        </div>
+      {{/if}}
+
+      <h3>Send Us a Message</h3>
+
+      <form action='/contact' method='POST'>
+        <div class='form-group'>
+          <label for='name'>Full Name</label>
+          <input type='text' id='name' name='name' required />
+        </div>
+
+        <div class='form-group'>
+          <label for='email'>Email Address</label>
+          <input type='email' id='email' name='email' required />
+        </div>
+
+        <div class='form-group'>
+          <label for='subject'>Subject</label>
+          <input type='text' id='subject' name='subject' required />
+        </div>
+
+        <div class='form-group'>
+          <label for='message'>Message</label>
+          <textarea id='message' name='message' required></textarea>
+        </div>
+
+        <button type='submit'>Send Message</button>
+      </form>
+    </div>
+
+  </div>
+
+</div>

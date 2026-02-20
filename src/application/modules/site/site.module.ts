@@ -8,6 +8,7 @@ import { HospitalHairResultController } from './hospital-hair-result.controller'
 import { HospitalController } from './hospital.controller';
 import { BlogModule } from '../blog/blog.module';
 import { BlogController } from './blog.controller';
+import { OtherController } from './other.controller';
 
 @Module({
   imports: [HospitalModule, DoctorModule, HospitalHairResultModule, BlogModule],
@@ -16,6 +17,7 @@ import { BlogController } from './blog.controller';
     HospitalHairResultController,
     HospitalController,
     BlogController,
+    OtherController,
   ],
   providers: [HomeService],
   exports: [HomeService],
