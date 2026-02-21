@@ -9,6 +9,7 @@ import { HospitalController } from './hospital.controller';
 import { BlogModule } from '../blog/blog.module';
 import { BlogController } from './blog.controller';
 import { OtherController } from './other.controller';
+import { AdminBlogController } from './admin-blog.controller';
 
 @Module({
   imports: [HospitalModule, DoctorModule, HospitalHairResultModule, BlogModule],
@@ -17,9 +18,10 @@ import { OtherController } from './other.controller';
     HospitalHairResultController,
     HospitalController,
     BlogController,
+    AdminBlogController,
     OtherController,
   ],
   providers: [HomeService],
   exports: [HomeService],
 })
-export class SiteModule { }
+export class SiteModule {}
