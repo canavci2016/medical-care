@@ -2,6 +2,7 @@ import { Controller, Get, Res } from '@nestjs/common';
 import { HomeService } from './home.service';
 import type { Response } from 'express';
 import { formatDistanceToNow } from 'date-fns';
+import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 
 @Controller('/')
 export class HomeController {
@@ -23,9 +24,17 @@ export class HomeController {
       image: result?.images[0]?.imageUrl || null,
     }));
 
+    const techniques = Object.entries(HairTransplantTechnique).map(
+      ([key, value]) => ({
+        label: key,
+        value,
+      }),
+    );
+
     return res.render('index', {
       results,
       styles: ['home.css'],
+      techniques,
     });
   }
 

@@ -4,7 +4,12 @@
 
         <div class='search-box'>
           <input placeholder='Search by hospital, city, technique...' />
-          <select><option>FUE</option><option>DHI</option></select>
+          <select name="technique">
+            {{#each techniques}}
+              <option value="{{value}}">{{label}}</option>
+            {{/each}}
+          </select>
+
           <select><option>6 Months</option></select>
           <button class='btn'>Search</button>
         </div>

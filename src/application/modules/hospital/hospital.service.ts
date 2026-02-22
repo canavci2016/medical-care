@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindManyOptions, In, Repository } from 'typeorm';
+import { Between, FindManyOptions, ILike, In, Repository } from 'typeorm';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 
@@ -53,6 +53,7 @@ export class HospitalService {
     options: Partial<{
       rating: number;
       city: string;
+      name: string;
       page: Pagination;
       orderBy: string;
       orderDirection: 'asc' | 'desc';
@@ -76,6 +77,10 @@ export class HospitalService {
       if (options.rating === 2) {
         optionsTyped.where['rating'] = Between(2, 2.99);
       }
+    }
+
+    if (options.name) {
+      optionsTyped.where['name'] = ILike(`%${options.name}%`);
     }
 
     const page = options.page?.page || 1;

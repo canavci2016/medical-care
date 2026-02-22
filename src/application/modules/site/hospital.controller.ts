@@ -27,6 +27,7 @@ export class HospitalController {
       city?: string;
       rating?: string;
       sorting?: string;
+      name?: string;
     },
   ) {
     const [orderCollumn, orderDirection] = query.sorting
@@ -34,6 +35,7 @@ export class HospitalController {
       : ['rating', 'desc'];
     const { data: hospitals, pagination } =
       await this.hospitalService.paginated({
+        name: query.name,
         city: query.city,
         rating: query.rating ? parseInt(query.rating, 10) : undefined,
         page: { limit: 5, page: query.page ? parseInt(query.page, 10) : 1 },
