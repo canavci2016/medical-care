@@ -34,8 +34,11 @@ export class HospitalHairResultController {
       ageRange?: string;
       orderBy?: string;
       orderDirection?: 'asc' | 'desc';
+      name?: string;
+      duration?: string;
     },
   ) {
+
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
         page: {
@@ -46,6 +49,9 @@ export class HospitalHairResultController {
         technique: query.technique,
         graftCount: query.graftCount
           ? { gte: parseInt(query.graftCount, 10) }
+          : undefined,
+        availableMonths: query.duration
+          ? parseInt(query.duration, 10)
           : undefined,
         verified:
           query.verified === 'on'
@@ -59,6 +65,8 @@ export class HospitalHairResultController {
       });
 
     const ageRanges = await this.hospitalHairResultService.getAgeRanges();
+    const availableMonths =
+      await this.hospitalHairResultService.getAvailableMonths();
 
     const hospitals = await this.hospitalService.findAll({
       id: latestHairResults.map((r) => r.hospitalId),
@@ -115,6 +123,14 @@ export class HospitalHairResultController {
         label: 'Verified only',
         selected: query.verified === 'on',
       },
+      availableMonths: availableMonths.map((month) => ({
+        label:
+          month.month === 0
+            ? 'Before'
+            : `${month.month} months after (${month.count})`,
+        value: month.month,
+        selected: query.duration === month.month.toString(),
+      })),
     };
 
     const newPagination = buildPagination(pagination, query);

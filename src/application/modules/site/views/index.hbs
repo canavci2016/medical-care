@@ -1,20 +1,24 @@
     <div class='container'>
       <section>
-        <h1>Find Real Hair Transplant Results</h1>
+        <form action="/results" method="GET">
+          <h1>Find Real Hair Transplant Results</h1>
 
-        <div class='search-box'>
-          <input placeholder='Search by hospital, city, technique...' />
-          <select name="technique">
-            {{#each techniques}}
-              <option value="{{value}}">{{label}}</option>
-            {{/each}}
-          </select>
+          <div class='search-box'>
+            <input name="name" placeholder='Search by hospital, city, technique...' />
+            <select name="technique">
+              {{#each techniques}}
+                <option value="{{value}}">{{label}}</option>
+              {{/each}}
+            </select>
 
-          <select><option>6 Months</option></select>
-          <button class='btn'>Search</button>
-        </div>
-
-        <h2>Latest Results</h2>
+            <select name="duration">
+              {{#each availableMonths}}
+                <option value="{{value}}">{{label}}</option>
+              {{/each}}
+            </select>
+            <button type="submit" class='btn'>Search</button>
+          </div>
+        </form>    <h2>Latest Results</h2>
         <div class='grid'>
           {{#each results}}
 

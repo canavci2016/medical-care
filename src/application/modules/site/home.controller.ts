@@ -31,10 +31,16 @@ export class HomeController {
       }),
     );
 
+    const availableMonths = [0, 3, 6, 9, 12].map((month) => ({
+      label: month === 0 ? 'Before' : `${month} months after`,
+      value: month,
+    }));
+
     return res.render('index', {
       results,
       styles: ['home.css'],
       techniques,
+      availableMonths,
     });
   }
 

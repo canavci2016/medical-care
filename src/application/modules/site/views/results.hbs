@@ -47,6 +47,15 @@
             </select>
           </label>
 
+          <label>Duration
+            <select name="duration">
+              <option value="">Any</option>
+            {{#each filters.availableMonths}}
+                <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+
           <label>
             <input  {{#if filters.verified.selected}}checked{{/if}} name="verified" type='checkbox' />
             Verified only
@@ -58,7 +67,7 @@
 
         <section>
           <div class='toolbar'>
-            <span class='muted'>Showing {{pagination.total}} results</span>
+            <span class='muted'>Showing {{pagination.length}} of {{pagination.total}} results</span>
             <select><option>Sort: Featured</option></select>
           </div>
 

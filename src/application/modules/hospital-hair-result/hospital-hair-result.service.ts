@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, In, Repository, MoreThan, MoreThanOrEqual } from 'typeorm';
+import { FindManyOptions, In, Repository, MoreThanOrEqual, Raw } from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
 import {
@@ -32,7 +32,7 @@ export class HospitalHairResultService {
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
     @InjectRepository(HospitalHairResultImage)
     private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
-  ) { }
+  ) {}
 
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
@@ -45,7 +45,7 @@ export class HospitalHairResultService {
 
   async findAll(
     options: Partial<{
-      hospitalId: string;
+      hospitalId: string | string[];
       procedureType: string | Filter;
       technique: string | Filter;
       graftCount: Pick<Filter, 'gte'>;
@@ -54,6 +54,7 @@ export class HospitalHairResultService {
       orderBy: string;
       orderDirection: 'asc' | 'desc';
       ageRange: string;
+      availableMonths: number | number[];
     }> = {},
   ) {
     const optionsTyped: FindManyOptions<HospitalHairResult> = {
@@ -95,9 +96,26 @@ export class HospitalHairResultService {
     }
 
     if (options.hospitalId) {
+      const hospitalIds = Array.isArray(options.hospitalId)
+        ? options.hospitalId
+        : [options.hospitalId];
       optionsTyped.where = {
         ...optionsTyped.where,
-        hospitalId: options.hospitalId,
+        hospitalId: In(hospitalIds),
+      };
+    }
+
+    if (options.availableMonths !== undefined) {
+      const months = Array.isArray(options.availableMonths)
+        ? options.availableMonths
+        : [options.availableMonths];
+
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        availableMonths: Raw(
+          (alias) => `string_to_array(${alias}, ',')::int[] && :months`,
+          { months },
+        ),
       };
     }
 
@@ -133,6 +151,7 @@ export class HospitalHairResultService {
       data: items,
       pagination: {
         total,
+        length: items.length,
         page: page,
         limit: limit,
         totalPages: totalPages,
@@ -174,6 +193,35 @@ export class HospitalHairResultService {
       .groupBy('hr.procedureType')
       .getRawMany();
     return result;
+  }
+
+  async getAvailableMonths(conditions?: { hospitalId?: string | string[] }) {
+    let query = this.hospitalHairResultRepository
+      .createQueryBuilder('hr')
+      .select(
+        "unnest(string_to_array(hr.availableMonths, ',')::int[])",
+        'month',
+      )
+      .addSelect('COUNT(*)', 'count');
+
+    if (conditions?.hospitalId) {
+      const hospitalIds = Array.isArray(conditions.hospitalId)
+        ? conditions.hospitalId
+        : [conditions.hospitalId];
+      query = query.where('hr.hospitalId IN (:...hospitalIds)', {
+        hospitalIds,
+      });
+    }
+
+    const result: { month: string; count: string }[] = await query
+      .groupBy('month')
+      .orderBy('month', 'ASC')
+      .getRawMany();
+
+    return result.map((r) => ({
+      month: parseInt(r.month, 10),
+      count: parseInt(r.count, 10),
+    }));
   }
 
   async findOne(id: string): Promise<HospitalHairResult> {
