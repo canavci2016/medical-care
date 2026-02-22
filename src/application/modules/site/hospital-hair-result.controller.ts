@@ -13,32 +13,17 @@ import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { buildPagination } from './pagination.util';
+import { HairResultQueryDto } from './dto/hair-result-query.dto';
 
 @Controller('results')
 export class HospitalHairResultController {
   constructor(
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
-  ) { }
+  ) {}
 
   @Get()
-  async findAll(
-    @Res() res: Response,
-    @Query()
-    query: {
-      procedure?: string;
-      technique?: string;
-      graftCount?: string;
-      verified?: string;
-      page?: string;
-      ageRange?: string;
-      orderBy?: string;
-      orderDirection?: 'asc' | 'desc';
-      name?: string;
-      duration?: string;
-    },
-  ) {
-
+  async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
         page: {
@@ -82,8 +67,8 @@ export class HospitalHairResultController {
         procedure: result.procedureType,
         operationDateRelative: result.operationDate
           ? formatDistanceToNow(new Date(result.operationDate), {
-            addSuffix: true,
-          })
+              addSuffix: true,
+            })
           : '',
         image: result?.images[0]?.imageUrl || null,
       };

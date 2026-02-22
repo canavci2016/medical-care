@@ -10,6 +10,7 @@ import { HospitalService } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { buildPagination } from './pagination.util';
+import { HospitalQueryDto } from './dto/hospital-query.dto';
 
 @Controller('hospitals')
 export class HospitalController {
@@ -19,17 +20,7 @@ export class HospitalController {
   ) {}
 
   @Get()
-  async findAll(
-    @Res() res: Response,
-    @Query()
-    query: {
-      page?: string;
-      city?: string;
-      rating?: string;
-      sorting?: string;
-      name?: string;
-    },
-  ) {
+  async findAll(@Res() res: Response, @Query() query: HospitalQueryDto) {
     const [orderCollumn, orderDirection] = query.sorting
       ? query.sorting.split('_')
       : ['rating', 'desc'];

@@ -4,6 +4,7 @@ import { BlogStatus } from '../blog/entities/blog.entity';
 import type { Response } from 'express';
 import { BlogCategoryService } from '../blog/blog-category.service';
 import { buildPagination } from './pagination.util';
+import { BlogQueryDto } from './dto/blog-query.dto';
 
 @Controller('blogs')
 export class BlogController {
@@ -13,15 +14,7 @@ export class BlogController {
   ) {}
 
   @Get()
-  async findAll(
-    @Res() res: Response,
-    @Query()
-    query: {
-      cat?: string;
-      page?: string;
-      title?: string;
-    },
-  ) {
+  async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
     const { data: blogs, pagination } = await this.blogService.paginated({
       page: {
         page: query.page ? parseInt(query.page, 10) : 1,
