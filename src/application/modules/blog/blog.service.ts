@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Blog } from './entities/blog.entity';
@@ -16,6 +20,50 @@ export class BlogService {
   ) {}
 
   async create(payload: Partial<Blog>): Promise<Blog> {
+    if (!payload.id) {
+      const requiredFields: (keyof Blog)[] = [
+        'title',
+        'slug',
+        'excerpt',
+        'content',
+        'featuredImage',
+        'metaTitle',
+        'metaDescription',
+        'metaKeywords',
+        'status',
+        'isFeatured',
+        'publishedAt',
+        'category',
+        'tags',
+        'viewCount',
+        'readingTime',
+      ];
+
+      const missingFields = requiredFields.filter((field) => {
+        const value = payload[field];
+
+        if (value === undefined || value === null) {
+          return true;
+        }
+
+        if (typeof value === 'string' && value.trim() === '') {
+          return true;
+        }
+
+        if (Array.isArray(value) && value.length === 0) {
+          return true;
+        }
+
+        return false;
+      });
+
+      if (missingFields.length > 0) {
+        throw new BadRequestException(
+          `All blog properties must be entered. Missing fields: ${missingFields.join(', ')}`,
+        );
+      }
+    }
+
     const item = this.blogRepository.create(payload);
     return this.blogRepository.save(item);
   }

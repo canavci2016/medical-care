@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Post,
@@ -11,11 +12,13 @@ import {
 } from '@nestjs/common';
 import { BlogService } from '../blog/blog.service';
 import { Blog } from '../blog/entities/blog.entity';
+import { CreateBlogDto } from '../blog/dto/create-blog.dto';
 import type { Response } from 'express';
+
 
 @Controller('admin/blogs')
 export class AdminBlogController {
-  constructor(private readonly blogService: BlogService) { }
+  constructor(private readonly blogService: BlogService) {}
 
   @Get()
   async findAll(@Res() res: Response) {
@@ -43,8 +46,10 @@ export class AdminBlogController {
   }
 
   @Post()
-  async create(@Body() createBlogDto: Partial<Blog>) {
-    return this.blogService.create(createBlogDto);
+  async create(@Body() createBlogDto: CreateBlogDto) {
+    return this.blogService.create({
+      ...createBlogDto,
+    });
   }
 
   @Put(':id')
