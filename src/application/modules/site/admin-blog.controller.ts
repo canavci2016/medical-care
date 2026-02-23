@@ -29,6 +29,13 @@ export class AdminBlogController {
       layout: false,
     });
   }
+  @Get('create')
+  createForm(@Res() res: Response) {
+    return res.render('admin/create-blog', {
+      styles: ['create-blog.css'],
+      layout: false,
+    });
+  }
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {

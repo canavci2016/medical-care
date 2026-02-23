@@ -18,8 +18,8 @@ export class HomeController {
       graftCount: result.graftCount,
       operationDateRelative: result.operationDate
         ? formatDistanceToNow(new Date(result.operationDate), {
-          addSuffix: true,
-        })
+            addSuffix: true,
+          })
         : '',
       image: result?.images[0]?.imageUrl || null,
     }));

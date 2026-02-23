@@ -53,6 +53,7 @@ export class HospitalHairResultService {
       page: Pagination;
       orderBy: string;
       orderDirection: 'asc' | 'desc';
+      random?: boolean;
       ageRange: string;
       availableMonths: number | number[];
     }> = {},
@@ -125,16 +126,35 @@ export class HospitalHairResultService {
     optionsTyped.skip = (page - 1) * limit;
     optionsTyped.take = limit;
 
-    if (options.orderBy) {
+    const shouldRandomize =
+      options.random === true ||
+      (typeof options.orderBy === 'string' &&
+        options.orderBy.toLowerCase() === 'random');
+
+    if (options.orderBy && !shouldRandomize) {
       optionsTyped.order = {
         [options.orderBy]: options.orderDirection || 'ASC',
       };
     }
 
-    const [results, total] =
-      await this.hospitalHairResultRepository.findAndCount({
-        ...optionsTyped,
-      });
+    const [results, total] = shouldRandomize
+      ? await Promise.all([
+          this.hospitalHairResultRepository
+            .createQueryBuilder('hr')
+            .setFindOptions({
+              where: optionsTyped.where,
+              skip: optionsTyped.skip,
+              take: optionsTyped.take,
+            })
+            .orderBy('RANDOM()')
+            .getMany(),
+          this.hospitalHairResultRepository.count({
+            where: optionsTyped.where,
+          }),
+        ])
+      : await this.hospitalHairResultRepository.findAndCount({
+          ...optionsTyped,
+        });
 
     const images = await this.hospitalHairResultImageRepository.find({
       where: { resultId: In(results.map((r) => r.id)) },

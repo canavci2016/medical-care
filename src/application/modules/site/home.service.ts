@@ -12,7 +12,9 @@ export class HomeService {
   ) { }
 
   async getLatestHairResults() {
-    const { data: results } = await this.hospitalHairResultService.findAll();
+    const { data: results } = await this.hospitalHairResultService.findAll({
+      random: true,
+    });
     const hospitals = await this.hospitalService.findAll({
       id: results.map((r) => r.hospitalId),
     });
