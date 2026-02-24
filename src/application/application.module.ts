@@ -7,6 +7,7 @@ import { HospitalHairResultModule } from './modules/hospital-hair-result/hospita
 import { SiteModule } from './modules/site/site.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { SeederModule } from './shared/seeder/seeder.module';
+import { AwsModule } from './shared/modules/aws/aws.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { SeederModule } from './shared/seeder/seeder.module';
     SiteModule,
     BlogModule,
     SeederModule,
+    AwsModule,
   ],
 
   controllers: [],
