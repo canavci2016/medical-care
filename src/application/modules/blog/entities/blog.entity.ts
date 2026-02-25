@@ -41,6 +41,9 @@ export class Blog {
   @Column({ type: 'text' })
   content: string;
 
+  @Column({ type: 'uuid' })
+  categoryId?: string;
+
   // -------- MEDIA --------
 
   @Column({ nullable: true })

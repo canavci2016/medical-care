@@ -6,6 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Blog } from './entities/blog.entity';
+import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
+import { randomUUID } from 'node:crypto';
 
 export interface Pagination {
   page?: number;
@@ -17,7 +19,8 @@ export class BlogService {
   constructor(
     @InjectRepository(Blog)
     private readonly blogRepository: Repository<Blog>,
-  ) {}
+    private readonly awsS3Service: AwsS3Service,
+  ) { }
 
   async create(payload: Partial<Blog>): Promise<Blog> {
     if (!payload.id) {
@@ -66,6 +69,14 @@ export class BlogService {
 
     const item = this.blogRepository.create(payload);
     return this.blogRepository.save(item);
+  }
+
+  async generateUploadUrl(contentType: string) {
+    const res = await this.awsS3Service.getSignedUploadUrl(
+      `uploads/${randomUUID()}`,
+      contentType,
+    );
+    return res;
   }
 
   async findAll(options?: {

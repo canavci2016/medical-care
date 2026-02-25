@@ -26,8 +26,10 @@ export class AwsS3Service {
       ContentType: contentType,
     });
 
-    return await getSignedUrl(this.s3Client, command, {
-      expiresIn: 60 * 5,
+    const url = await getSignedUrl(this.s3Client, command, {
+      expiresIn: 60 * 5, // URL expires in 5 minutes
     });
+
+    return { url, key };
   }
 }

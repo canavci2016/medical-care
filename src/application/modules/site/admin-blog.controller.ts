@@ -12,8 +12,8 @@ import {
 import { BlogService } from '../blog/blog.service';
 import { Blog } from '../blog/entities/blog.entity';
 import { CreateBlogDto } from '../blog/dto/create-blog.dto';
+import { BlogTag } from '../blog/entities/blog-tag.entity';
 import type { Response } from 'express';
-
 
 @Controller('admin/blogs')
 export class AdminBlogController {
@@ -46,9 +46,20 @@ export class AdminBlogController {
 
   @Post()
   async create(@Body() createBlogDto: CreateBlogDto) {
+    const { categoryId, tagIds, ...rest } = createBlogDto;
+
+    return { ...createBlogDto, categoryId, tagIds };
+
     return this.blogService.create({
-      ...createBlogDto,
+      ...rest,
+      categoryId: categoryId,
+      tags: tagIds.map((id) => ({ id }) as BlogTag),
     });
+  }
+
+  @Post('upload-url')
+  getUploadUrl(@Body('contentType') contentType: string) {
+    return this.blogService.generateUploadUrl(contentType);
   }
 
   @Put(':id')

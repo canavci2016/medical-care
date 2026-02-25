@@ -767,15 +767,24 @@
                       </div>
 
                       <div class="mb-3">
-                        <label for="featuredImage" class="form-label">Featured Image URL</label>
+                        <label for="featuredImage" class="form-label">Featured Image</label>
                         <input
-                          type="url"
+                          type="file"
                           class="form-control"
                           id="featuredImage"
                           name="featuredImage"
-                          placeholder="https://example.com/image.jpg"
+                          accept="image/*"
                           required
                         />
+                        <div class="mt-2 d-none" id="featuredImagePreviewWrapper">
+                          <img
+                            id="featuredImagePreview"
+                            src=""
+                            alt="Featured image preview"
+                            class="img-thumbnail"
+                            style="max-width: 220px"
+                          />
+                        </div>
                       </div>
 
                       <div class="mb-3">
@@ -934,14 +943,80 @@
         }
       });
 
+      async function uploadFile(file) {
+        const response = await fetch('/admin/blogs/upload-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contentType: file.type }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Could not get upload url.');
+        }
+
+        const {url} = await response.json();
+
+        const uploadResponse = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': file.type,
+          },
+          body: file,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Could not upload featured image.');
+        }
+
+        return uploadResponse.url.split('?')[0]; // Return the URL without query parameters (S3 presigned URL)
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('createBlogForm');
         const alertBox = document.getElementById('createBlogAlert');
         const submitButton = document.getElementById('createBlogSubmitBtn');
+        const featuredImageInput = document.getElementById('featuredImage');
+        const featuredImagePreview = document.getElementById('featuredImagePreview');
+        const featuredImagePreviewWrapper = document.getElementById('featuredImagePreviewWrapper');
+        let featuredImageObjectUrl = null;
 
-        if (!form || !alertBox || !submitButton) {
+        if (
+          !form ||
+          !alertBox ||
+          !submitButton ||
+          !featuredImageInput ||
+          !featuredImagePreview ||
+          !featuredImagePreviewWrapper
+        ) {
           return;
         }
+
+        const clearFeaturedImagePreview = () => {
+          if (featuredImageObjectUrl) {
+            URL.revokeObjectURL(featuredImageObjectUrl);
+            featuredImageObjectUrl = null;
+          }
+
+          featuredImagePreview.setAttribute('src', '');
+          featuredImagePreviewWrapper.classList.add('d-none');
+        };
+
+        featuredImageInput.addEventListener('change', function () {
+          const selectedFile = featuredImageInput.files && featuredImageInput.files[0];
+
+          if (!selectedFile || !selectedFile.type.startsWith('image/')) {
+            clearFeaturedImagePreview();
+            return;
+          }
+
+          if (featuredImageObjectUrl) {
+            URL.revokeObjectURL(featuredImageObjectUrl);
+          }
+
+          featuredImageObjectUrl = URL.createObjectURL(selectedFile);
+          featuredImagePreview.setAttribute('src', featuredImageObjectUrl);
+          featuredImagePreviewWrapper.classList.remove('d-none');
+        });
 
         const showAlert = (message, type) => {
           alertBox.textContent = message;
@@ -953,12 +1028,19 @@
           event.preventDefault();
 
           const formData = new FormData(form);
+          const featuredImageFile = formData.get('featuredImage');
+
+          if (!(featuredImageFile instanceof File) || featuredImageFile.size === 0) {
+            showAlert('Featured Image file is required.', 'error');
+            return;
+          }
+
           const payload = {
             title: String(formData.get('title') || '').trim(),
             slug: String(formData.get('slug') || '').trim(),
             excerpt: String(formData.get('excerpt') || '').trim(),
             content: String(formData.get('content') || '').trim(),
-            featuredImage: String(formData.get('featuredImage') || '').trim(),
+            featuredImage: '',
             metaTitle: String(formData.get('metaTitle') || '').trim(),
             metaDescription: String(formData.get('metaDescription') || '').trim(),
             metaKeywords: String(formData.get('metaKeywords') || '')
@@ -981,6 +1063,9 @@
           alertBox.classList.add('d-none');
 
           try {
+            const uploadedKey = await uploadFile(featuredImageFile);
+            payload.featuredImage = uploadedKey;
+
             const response = await fetch(form.action, {
               method: 'POST',
               headers: {
@@ -1013,6 +1098,7 @@
 
             showAlert('Blog created successfully.', 'success');
             form.reset();
+            clearFeaturedImagePreview();
           } catch (error) {
             const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
             showAlert(message, 'error');
