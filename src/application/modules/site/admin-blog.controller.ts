@@ -39,6 +39,20 @@ export class AdminBlogController {
     });
   }
 
+  @Get(':id/detail')
+  async detailPage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() res: Response,
+  ) {
+    const blog = await this.blogService.findOneBy({ id });
+
+    return res.render('admin/blog-detail', {
+      blog,
+      styles: ['create-blog.css'],
+      layout: false,
+    });
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.blogService.findOneBy({ id });
