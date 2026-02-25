@@ -20,7 +20,7 @@ export class BlogService {
     @InjectRepository(Blog)
     private readonly blogRepository: Repository<Blog>,
     private readonly awsS3Service: AwsS3Service,
-  ) { }
+  ) {}
 
   async create(payload: Partial<Blog>): Promise<Blog> {
     if (!payload.id) {
@@ -37,7 +37,6 @@ export class BlogService {
         'isFeatured',
         'publishedAt',
         'category',
-        'tags',
         'viewCount',
         'readingTime',
       ];

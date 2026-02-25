@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { Blog, BlogStatus } from '../entities/blog.entity';
 import { generateBlogCategory } from './blog-category.mock';
-import { generateBlogTagMockData } from './blog-tag.mock';
 
 const keywordPool = [
   'hair transplant',
@@ -23,7 +22,7 @@ const generateBlog = (overrides?: Partial<Blog>): Blog => {
   const createdAt = faker.date.past({ years: 1 });
   const updatedAt = faker.date.between({ from: createdAt, to: new Date() });
   const publishedAt = faker.date.between({ from: createdAt, to: new Date() });
-  const tagCount = faker.number.int({ min: 2, max: 5 });
+  const keywordCount = faker.number.int({ min: 2, max: 5 });
 
   return {
     id: faker.string.uuid(),
@@ -34,12 +33,11 @@ const generateBlog = (overrides?: Partial<Blog>): Blog => {
     featuredImage: faker.image.urlLoremFlickr({ category: 'business' }),
     metaTitle: `${title} | Medical Care`,
     metaDescription: faker.lorem.sentence({ min: 10, max: 20 }),
-    metaKeywords: faker.helpers.arrayElements(keywordPool, tagCount),
+    metaKeywords: faker.helpers.arrayElements(keywordPool, keywordCount),
     status: BlogStatus.PUBLISHED,
     isFeatured: faker.datatype.boolean({ probability: 0.2 }),
     publishedAt,
     category: generateBlogCategory(),
-    tags: generateBlogTagMockData(tagCount),
     viewCount: faker.number.int({ min: 0, max: 10000 }),
     readingTime: faker.number.int({ min: 3, max: 15 }),
     createdAt,

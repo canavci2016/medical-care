@@ -50,10 +50,6 @@ export class CreateBlogDto {
   @IsUUID()
   categoryId: string;
 
-  @IsArray()
-  @IsUUID('4', { each: true })
-  tagIds: string[];
-
   @IsInt()
   @Min(0)
   viewCount: number;

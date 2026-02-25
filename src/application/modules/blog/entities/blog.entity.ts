@@ -8,12 +8,9 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  ManyToMany,
-  JoinTable,
   Index,
 } from 'typeorm';
 import { BlogCategory } from './blog-category.entity';
-import { BlogTag } from './blog-tag.entity';
 
 export enum BlogStatus {
   DRAFT = 'draft',
@@ -81,10 +78,6 @@ export class Blog {
     eager: true,
   })
   category: BlogCategory;
-
-  @ManyToMany(() => BlogTag, (tag) => tag.blogs, { eager: true })
-  @JoinTable()
-  tags: BlogTag[];
 
   // -------- ANALYTICS --------
 

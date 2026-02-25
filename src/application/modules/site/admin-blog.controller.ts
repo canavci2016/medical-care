@@ -12,7 +12,7 @@ import {
 import { BlogService } from '../blog/blog.service';
 import { Blog } from '../blog/entities/blog.entity';
 import { CreateBlogDto } from '../blog/dto/create-blog.dto';
-import { BlogTag } from '../blog/entities/blog-tag.entity';
+import { BlogCategory } from '../blog/entities/blog-category.entity';
 import type { Response } from 'express';
 
 @Controller('admin/blogs')
@@ -46,14 +46,11 @@ export class AdminBlogController {
 
   @Post()
   async create(@Body() createBlogDto: CreateBlogDto) {
-    const { categoryId, tagIds, ...rest } = createBlogDto;
-
-    return { ...createBlogDto, categoryId, tagIds };
+    const { categoryId, ...rest } = createBlogDto;
 
     return this.blogService.create({
       ...rest,
-      categoryId: categoryId,
-      tags: tagIds.map((id) => ({ id }) as BlogTag),
+      category: { id: categoryId } as BlogCategory,
     });
   }
 

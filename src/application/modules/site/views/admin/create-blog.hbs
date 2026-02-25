@@ -845,11 +845,6 @@
                       </div>
 
                       <div class="mb-3">
-                        <label for="tagIds" class="form-label">Tag IDs (comma separated UUIDs)</label>
-                        <input type="text" class="form-control" id="tagIds" name="tagIds" required />
-                      </div>
-
-                      <div class="mb-3">
                         <label for="viewCount" class="form-label">View Count</label>
                         <input
                           type="number"
@@ -1051,10 +1046,6 @@
             isFeatured: formData.get('isFeatured') === 'true',
             publishedAt: String(formData.get('publishedAt') || '').trim(),
             categoryId: String(formData.get('categoryId') || '').trim(),
-            tagIds: String(formData.get('tagIds') || '')
-              .split(',')
-              .map((item) => item.trim())
-              .filter(Boolean),
             viewCount: Number(formData.get('viewCount') || 0),
             readingTime: Number(formData.get('readingTime') || 0),
           };

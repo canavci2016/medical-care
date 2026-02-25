@@ -21,4 +21,4 @@ import { ConfigService } from '@nestjs/config';
   ],
   exports: [AwsS3Service],
 })
-export class AwsModule { }
+export class AwsModule {}
