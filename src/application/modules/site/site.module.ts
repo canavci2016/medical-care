@@ -10,6 +10,7 @@ import { BlogModule } from '../blog/blog.module';
 import { BlogController } from './blog.controller';
 import { OtherController } from './other.controller';
 import { AdminBlogController } from './admin-blog.controller';
+import { AdminBlogCategoryController } from './admin-blog-category.controller';
 
 @Module({
   imports: [HospitalModule, DoctorModule, HospitalHairResultModule, BlogModule],
@@ -19,6 +20,7 @@ import { AdminBlogController } from './admin-blog.controller';
     HospitalController,
     BlogController,
     AdminBlogController,
+    AdminBlogCategoryController,
     OtherController,
   ],
   providers: [HomeService],

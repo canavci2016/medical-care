@@ -8,27 +8,39 @@ import {
   ParseUUIDPipe,
   Put,
   Res,
+  Query,
 } from '@nestjs/common';
 import { BlogService } from '../blog/blog.service';
-import { Blog } from '../blog/entities/blog.entity';
+import { Blog, BlogStatus } from '../blog/entities/blog.entity';
 import { CreateBlogDto } from '../blog/dto/create-blog.dto';
 import { BlogCategory } from '../blog/entities/blog-category.entity';
 import type { Response } from 'express';
+import { BlogQueryDto } from './dto/blog-query.dto';
+import { buildPagination } from './pagination.util';
 
 @Controller('admin/blogs')
 export class AdminBlogController {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(private readonly blogService: BlogService) { }
 
   @Get()
-  async findAll(@Res() res: Response) {
-    const blogs = await this.blogService.findAll({
-      orderBy: 'createdAt',
+  async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
+    const { data: blogs, pagination } = await this.blogService.paginated({
+      page: {
+        page: query.page ? parseInt(query.page, 10) : 1,
+        limit: 20,
+      },
+      orderBy: 'publishedAt',
       order: 'DESC',
+      status: BlogStatus.PUBLISHED,
     });
+
+    const newPagination = buildPagination(pagination, query);
+
     return res.render('admin/blogs', {
       blogs,
       styles: ['blogs.css'],
       layout: false,
+      pagination: newPagination,
     });
   }
   @Get('create')
@@ -51,11 +63,6 @@ export class AdminBlogController {
       styles: ['create-blog.css'],
       layout: false,
     });
-  }
-
-  @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.blogService.findOneBy({ id });
   }
 
   @Post()
