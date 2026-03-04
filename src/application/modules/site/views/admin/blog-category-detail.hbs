@@ -42,47 +42,65 @@
   </head>
   <!--end::Head-->
   <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <!--begin::App Wrapper-->
     <div class="app-wrapper">
-      <main class="app-main p-3 p-md-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">Blog Category Detail</h3>
-        <a href="/admin/blog-categories" class="btn btn-outline-secondary btn-sm">Back</a>
-      </div>
-
-      <div class="card card-primary card-outline">
-        <div class="card-header"><div class="card-title">Category Properties</div></div>
-        <div class="card-body">
-          <div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text" class="form-control" id="categoryId" value="{{category.id}}" readonly />
+      <!--begin::Header-->
+      {{> adminheader}}
+      <!--end::Header-->
+      <!--begin::Sidebar-->
+      {{> adminsidebar}}
+      <!--end::Sidebar-->
+      <!--begin::App Main-->
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-sm-6"><h3 class="mb-0">Blog Category Detail</h3></div>
+              <div class="col-sm-6 text-sm-end mt-2 mt-sm-0">
+                <a href="/admin/blog-categories" class="btn btn-outline-secondary btn-sm">Back</a>
+              </div>
+            </div>
           </div>
-
-          <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" id="categoryName" value="{{category.name}}" />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Slug</label>
-            <input type="text" class="form-control" id="categorySlug" value="{{category.slug}}" />
-          </div>
-
-          <div id="updateCategoryAlert" class="alert d-none" role="alert"></div>
-
-          <button type="button" class="btn btn-success" id="updateCategoryBtn">Update Category</button>
         </div>
-      </div>
-      </main>
 
-      <footer class="app-footer">
-        <div class="float-end d-none d-sm-inline">Anything you want</div>
-        <strong>
-          Copyright &copy; 2014-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
-        </strong>
-        All rights reserved.
-      </footer>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card card-primary card-outline mb-4">
+                  <div class="card-header"><div class="card-title">Category Properties</div></div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label class="form-label">ID</label>
+                      <input type="text" class="form-control" id="categoryId" value="{{category.id}}" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Name</label>
+                      <input type="text" class="form-control" id="categoryName" value="{{category.name}}" />
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Slug</label>
+                      <input type="text" class="form-control" id="categorySlug" value="{{category.slug}}" />
+                    </div>
+
+                    <div id="updateCategoryAlert" class="alert d-none" role="alert"></div>
+
+                    <button type="button" class="btn btn-success" id="updateCategoryBtn">Update Category</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!--end::App Main-->
+      <!--begin::Footer-->
+      {{> adminfooter}}
+      <!--end::Footer-->
     </div>
+    <!--end::App Wrapper-->
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
@@ -165,5 +183,25 @@
       crossorigin="anonymous"
     ></script>
     <script src="/scripts/admin/js/adminlte.js"></script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+    </script>
   </body>
 </html>

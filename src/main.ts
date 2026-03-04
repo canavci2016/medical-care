@@ -20,7 +20,7 @@ async function bootstrap() {
   );
 
   hbs.registerPartials(
-    join(__dirname, '../src/application/modules/site', 'views/partials'),
+    join(__dirname, '../src/application/modules/site', 'views', 'partials'),
   );
 
   app.set('view options', {
