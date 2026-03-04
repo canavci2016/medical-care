@@ -1,4 +1,9 @@
-import { IsOptional, IsString, IsNumberString } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsNumberString,
+  ValidateIf,
+} from 'class-validator';
 
 export class HospitalQueryDto {
   [key: string]: string | undefined;
@@ -12,6 +17,7 @@ export class HospitalQueryDto {
   city?: string;
 
   @IsOptional()
+  @ValidateIf((o: HospitalQueryDto) => o.rating !== '')
   @IsNumberString()
   rating?: string;
 
