@@ -14,13 +14,17 @@ import { BlogService } from '../blog/blog.service';
 import { Blog, BlogStatus } from '../blog/entities/blog.entity';
 import { CreateBlogDto } from '../blog/dto/create-blog.dto';
 import { BlogCategory } from '../blog/entities/blog-category.entity';
+import { BlogCategoryService } from '../blog/blog-category.service';
 import type { Response } from 'express';
 import { BlogQueryDto } from './dto/blog-query.dto';
 import { buildPagination } from './pagination.util';
 
 @Controller('admin/blogs')
 export class AdminBlogController {
-  constructor(private readonly blogService: BlogService) { }
+  constructor(
+    private readonly blogService: BlogService,
+    private readonly blogCategoryService: BlogCategoryService,
+  ) {}
 
   @Get()
   async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
@@ -44,8 +48,14 @@ export class AdminBlogController {
     });
   }
   @Get('create')
-  createForm(@Res() res: Response) {
+  async createForm(@Res() res: Response) {
+    const categories = await this.blogCategoryService.findAll({
+      orderBy: 'name',
+      order: 'ASC',
+    });
+
     return res.render('admin/create-blog', {
+      categories,
       styles: ['create-blog.css'],
       layout: false,
     });
@@ -57,9 +67,14 @@ export class AdminBlogController {
     @Res() res: Response,
   ) {
     const blog = await this.blogService.findOneBy({ id });
+    const categories = await this.blogCategoryService.findAll({
+      orderBy: 'name',
+      order: 'ASC',
+    });
 
     return res.render('admin/blog-detail', {
       blog,
+      categories,
       styles: ['create-blog.css'],
       layout: false,
     });
@@ -83,10 +98,17 @@ export class AdminBlogController {
   @Put(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateBlogDto: Partial<Blog>,
+    @Body() updateBlogDto: Partial<Blog> & { categoryId?: string },
   ) {
+    const { categoryId, ...rest } = updateBlogDto;
     const blog = await this.blogService.findOneBy({ id });
-    Object.assign(blog, updateBlogDto);
+
+    Object.assign(blog, rest);
+
+    if (categoryId) {
+      blog.category = { id: categoryId } as BlogCategory;
+    }
+
     return this.blogService.create(blog);
   }
 

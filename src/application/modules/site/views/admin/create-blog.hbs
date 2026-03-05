@@ -178,8 +178,13 @@
                       </div>
 
                       <div class="mb-3">
-                        <label for="categoryId" class="form-label">Category ID (UUID)</label>
-                        <input type="text" class="form-control" id="categoryId" name="categoryId" required />
+                        <label for="categoryId" class="form-label">Category</label>
+                        <select class="form-select" id="categoryId" name="categoryId" required>
+                          <option value="" disabled selected>Select category</option>
+                          {{#each categories}}
+                            <option value="{{this.id}}">{{this.name}}</option>
+                          {{/each}}
+                        </select>
                       </div>
 
                       <div class="mb-3">
