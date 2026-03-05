@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindManyOptions, ILike, In, Repository } from 'typeorm';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
+import { UpdateHospitalDto } from './dto/update-hospital.dto';
 
 export interface Pagination {
   page?: number;
@@ -123,6 +124,17 @@ export class HospitalService {
       throw new NotFoundException(`Hospital with ID "${id}" not found`);
     }
     return hospital;
+  }
+
+  async update(id: string, updateHospitalDto: UpdateHospitalDto) {
+    const hospital = await this.findOne(id);
+    Object.assign(hospital, updateHospitalDto);
+    return this.hospitalRepository.save(hospital);
+  }
+
+  async remove(id: string): Promise<void> {
+    const hospital = await this.findOne(id);
+    await this.hospitalRepository.remove(hospital);
   }
 
   async getCities() {

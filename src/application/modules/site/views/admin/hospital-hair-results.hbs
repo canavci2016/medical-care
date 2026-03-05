@@ -1,0 +1,224 @@
+<html lang='en'>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>AdminLTE 4 | Hospital Hair Results</title>
+    <meta
+      name='viewport'
+      content='width=device-width, initial-scale=1.0, user-scalable=yes'
+    />
+    <meta name='color-scheme' content='light dark' />
+    <meta
+      name='theme-color'
+      content='#007bff'
+      media='(prefers-color-scheme: light)'
+    />
+    <meta
+      name='theme-color'
+      content='#1a1a1a'
+      media='(prefers-color-scheme: dark)'
+    />
+    <meta name='supported-color-schemes' content='light dark' />
+    <link rel='preload' href='/css/admin/adminlte.css' as='style' />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css'
+      integrity='sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q='
+      crossorigin='anonymous'
+      media='print'
+      onload="this.media='all'"
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'
+      crossorigin='anonymous'
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'
+      crossorigin='anonymous'
+    />
+    <link rel='stylesheet' href='/css/admin/adminlte.css' />
+  </head>
+  <body class='layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary'>
+    <div class='app-wrapper'>
+      {{> adminheader}}
+      {{> adminsidebar}}
+
+      <main class='app-main'>
+        <div class='app-content'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='col-md-12'>
+                <div class='card mb-4'>
+                  <div class='card-header'>
+                    <h3 class='card-title'>Hospital Hair Results ({{pagination.total}})</h3>
+                    <div class='card-tools'>
+                      <a
+                        href='/admin/hospital-hair-results/create'
+                        class='btn btn-primary btn-sm me-2'
+                      >Create Result</a>
+                      <ul class='pagination pagination-sm float-end mb-0'>
+                        {{#if pagination.hasPrev}}
+                          <li class='page-item'><a
+                              class='page-link'
+                              href='?page={{pagination.prevPage}}'
+                            >&laquo;</a></li>
+                        {{else}}
+                          <li class='page-item disabled'><a
+                              class='page-link'
+                              href='#'
+                            >&laquo;</a></li>
+                        {{/if}}
+
+                        {{#each pagination.pages}}
+                          <li class='page-item'><a
+                              class='page-link'
+                              href='{{url}}'
+                            >{{page}}</a></li>
+                        {{/each}}
+
+                        {{#if pagination.hasNext}}
+                          <li class='page-item'><a
+                              class='page-link'
+                              href='?page={{pagination.nextPage}}'
+                            >&raquo;</a></li>
+                        {{else}}
+                          <li class='page-item disabled'><a
+                              class='page-link'
+                              href='#'
+                            >&raquo;</a></li>
+                        {{/if}}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class='card-body p-0'>
+                    <table class='table'>
+                      <thead>
+                        <tr>
+                          <th style='width: 10px'>#</th>
+                          <th>Hospital</th>
+                          <th>Procedure</th>
+                          <th>Technique</th>
+                          <th>Grafts</th>
+                          <th>Verified</th>
+                          <th style='width: 180px'>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {{#if results.length}}
+                          {{#each results}}
+                            <tr class='align-middle'>
+                              <td>{{this.id}}</td>
+                              <td>{{this.hospitalName}}</td>
+                              <td>{{this.procedureType}}</td>
+                              <td>{{this.technique}}</td>
+                              <td>{{this.graftCount}}</td>
+                              <td>
+                                {{#if this.verified}}
+                                  <span class='badge text-bg-success'>Yes</span>
+                                {{else}}
+                                  <span class='badge text-bg-secondary'>No</span>
+                                {{/if}}
+                              </td>
+                              <td>
+                                <a
+                                  href='/admin/hospital-hair-results/{{this.id}}/detail'
+                                  class='btn btn-sm btn-outline-primary me-1'
+                                >Detail</a>
+                                <button
+                                  type='button'
+                                  class='btn btn-sm btn-outline-danger js-delete-result-btn'
+                                  data-result-id='{{this.id}}'
+                                >Delete</button>
+                              </td>
+                            </tr>
+                          {{/each}}
+                        {{else}}
+                          <tr>
+                            <td colspan='7' class='text-center py-4'>No results found.</td>
+                          </tr>
+                        {{/if}}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {{> adminfooter}}
+    </div>
+
+    <script
+      src='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script src='/scripts/admin/js/adminlte.js'></script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+
+        const deleteButtons = document.querySelectorAll('.js-delete-result-btn');
+        deleteButtons.forEach(function (button) {
+          button.addEventListener('click', async function () {
+            const resultId = button.getAttribute('data-result-id');
+            if (!resultId) {
+              return;
+            }
+
+            const confirmed = window.confirm('Are you sure you want to delete this result?');
+            if (!confirmed) {
+              return;
+            }
+
+            button.disabled = true;
+
+            try {
+              const response = await fetch(`/admin/hospital-hair-results/${resultId}`, {
+                method: 'DELETE',
+                headers: {
+                  Accept: 'application/json',
+                },
+              });
+
+              if (!response.ok) {
+                throw new Error('Result could not be deleted.');
+              }
+
+              window.location.reload();
+            } catch (error) {
+              const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+              window.alert(message);
+              button.disabled = false;
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

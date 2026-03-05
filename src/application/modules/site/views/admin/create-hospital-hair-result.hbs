@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>AdminLTE 4 | Create Hair Result</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes' />
+    <meta name='color-scheme' content='light dark' />
+    <meta name='theme-color' content='#007bff' media='(prefers-color-scheme: light)' />
+    <meta name='theme-color' content='#1a1a1a' media='(prefers-color-scheme: dark)' />
+    <meta name='supported-color-schemes' content='light dark' />
+    <link rel='preload' href='/css/admin/adminlte.css' as='style' />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css'
+      integrity='sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q='
+      crossorigin='anonymous'
+      media='print'
+      onload="this.media='all'"
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'
+      crossorigin='anonymous'
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'
+      crossorigin='anonymous'
+    />
+    <link rel='stylesheet' href='/css/admin/adminlte.css' />
+  </head>
+  <body class='layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary'>
+    <div class='app-wrapper'>
+      {{> adminheader}}
+      {{> adminsidebar}}
+
+      <main class='app-main'>
+        <div class='app-content-header'>
+          <div class='container-fluid'>
+            <div class='row align-items-center'>
+              <div class='col-sm-6'><h3 class='mb-0'>Create Hair Result</h3></div>
+              <div class='col-sm-6 text-sm-end mt-2 mt-sm-0'>
+                <a href='/admin/hospital-hair-results' class='btn btn-outline-secondary btn-sm'>Back to List</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='app-content'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='col-12'>
+                <div class='card card-primary card-outline mb-4'>
+                  <div class='card-header'><div class='card-title'>Result Properties</div></div>
+                  <form id='createResultForm' action='/admin/hospital-hair-results' method='post'>
+                    <div class='card-body'>
+                      <div class='mb-3'>
+                        <label for='hospitalId' class='form-label'>Hospital</label>
+                        <select class='form-select' id='hospitalId' name='hospitalId' required>
+                          <option value='' disabled selected>Select hospital</option>
+                          {{#each hospitals}}
+                            <option value='{{this.id}}'>{{this.name}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-md-6 mb-3'>
+                          <label for='procedureType' class='form-label'>Procedure Type</label>
+                          <select class='form-select' id='procedureType' name='procedureType' required>
+                            <option value='' disabled selected>Select procedure type</option>
+                            {{#each procedureTypes}}
+                              <option value='{{this}}'>{{this}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                        <div class='col-md-6 mb-3'>
+                          <label for='technique' class='form-label'>Technique</label>
+                          <select class='form-select' id='technique' name='technique' required>
+                            <option value='' disabled selected>Select technique</option>
+                            {{#each techniques}}
+                              <option value='{{this}}'>{{this}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-md-6 mb-3'>
+                          <label for='graftCount' class='form-label'>Graft Count</label>
+                          <input type='number' min='0' class='form-control' id='graftCount' name='graftCount' required />
+                        </div>
+                        <div class='col-md-6 mb-3'>
+                          <label for='monthsAfter' class='form-label'>Months After</label>
+                          <input type='number' min='0' class='form-control' id='monthsAfter' name='monthsAfter' required />
+                        </div>
+                      </div>
+
+                      <div class='mb-3'>
+                        <label for='availableMonths' class='form-label'>Available Months (comma separated)</label>
+                        <input type='text' class='form-control' id='availableMonths' name='availableMonths' placeholder='0,1,3,6,12' required />
+                      </div>
+
+                      <div class='row'>
+                        <div class='col-md-6 mb-3'>
+                          <label for='operationDate' class='form-label'>Operation Date</label>
+                          <input type='date' class='form-control' id='operationDate' name='operationDate' />
+                        </div>
+                        <div class='col-md-6 mb-3'>
+                          <label for='patientAgeRange' class='form-label'>Patient Age Range</label>
+                          <input type='text' class='form-control' id='patientAgeRange' name='patientAgeRange' placeholder='25-30' />
+                        </div>
+                      </div>
+
+                      <div class='form-check mb-2'>
+                        <input class='form-check-input' type='checkbox' id='verified' name='verified' />
+                        <label class='form-check-label' for='verified'>Verified</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input class='form-check-input' type='checkbox' id='consentReceived' name='consentReceived' />
+                        <label class='form-check-label' for='consentReceived'>Consent Received</label>
+                      </div>
+                      <div class='form-check mb-3'>
+                        <input class='form-check-input' type='checkbox' id='isPublic' name='isPublic' checked />
+                        <label class='form-check-label' for='isPublic'>Public</label>
+                      </div>
+
+                      <div class='mb-3'>
+                        <label for='doctorNotes' class='form-label'>Doctor Notes</label>
+                        <textarea class='form-control' id='doctorNotes' name='doctorNotes' rows='3'></textarea>
+                      </div>
+
+                      <div class='mb-3'>
+                        <label for='patientStory' class='form-label'>Patient Story</label>
+                        <textarea class='form-control' id='patientStory' name='patientStory' rows='3'></textarea>
+                      </div>
+                    </div>
+
+                    <div class='card-footer'>
+                      <div id='createResultAlert' class='alert d-none' role='alert'></div>
+                      <button type='submit' class='btn btn-primary' id='createResultSubmitBtn'>Create Result</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {{> adminfooter}}
+    </div>
+
+    <script
+      src='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script src='/scripts/admin/js/adminlte.js'></script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('createResultForm');
+        const alertBox = document.getElementById('createResultAlert');
+        const submitButton = document.getElementById('createResultSubmitBtn');
+
+        if (!form || !alertBox || !submitButton) {
+          return;
+        }
+
+        const showAlert = (message, type) => {
+          alertBox.textContent = message;
+          alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+          alertBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
+        };
+
+        form.addEventListener('submit', async function (event) {
+          event.preventDefault();
+          const formData = new FormData(form);
+
+          const availableMonths = String(formData.get('availableMonths') || '')
+            .split(',')
+            .map((item) => parseInt(item.trim(), 10))
+            .filter((item) => !Number.isNaN(item));
+
+          const payload = {
+            hospitalId: String(formData.get('hospitalId') || '').trim(),
+            procedureType: String(formData.get('procedureType') || '').trim(),
+            technique: String(formData.get('technique') || '').trim(),
+            graftCount: Number(formData.get('graftCount') || 0),
+            monthsAfter: Number(formData.get('monthsAfter') || 0),
+            availableMonths,
+            operationDate: String(formData.get('operationDate') || '').trim() || undefined,
+            patientAgeRange: String(formData.get('patientAgeRange') || '').trim() || undefined,
+            verified: formData.get('verified') === 'on',
+            consentReceived: formData.get('consentReceived') === 'on',
+            isPublic: formData.get('isPublic') === 'on',
+            doctorNotes: String(formData.get('doctorNotes') || '').trim() || undefined,
+            patientStory: String(formData.get('patientStory') || '').trim() || undefined,
+          };
+
+          submitButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            const response = await fetch(form.action, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify(payload),
+            });
+
+            const responseText = await response.text();
+            let responseBody = null;
+
+            if (responseText) {
+              try {
+                responseBody = JSON.parse(responseText);
+              } catch (error) {
+                responseBody = null;
+              }
+            }
+
+            if (!response.ok) {
+              const errorMessage =
+                responseBody?.message ||
+                responseBody?.error ||
+                response.statusText ||
+                'Result could not be created.';
+
+              throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+            }
+
+            showAlert('Result created successfully.', 'success');
+            form.reset();
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+          } finally {
+            submitButton.disabled = false;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
