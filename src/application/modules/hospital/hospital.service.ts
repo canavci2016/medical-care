@@ -20,13 +20,12 @@ export interface Filter {
   lte?: number;
 }
 
-
 @Injectable()
 export class HospitalService {
   constructor(
     @InjectRepository(Hospital)
     private readonly hospitalRepository: Repository<Hospital>,
-  ) { }
+  ) {}
 
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
     const hospital = this.hospitalRepository.create(createHospitalDto);

@@ -72,7 +72,7 @@ export class BlogService {
 
   async generateUploadUrl(contentType: string) {
     const res = await this.awsS3Service.getSignedUploadUrl(
-      `uploads/${randomUUID()}`,
+      `uploads/blogs/${randomUUID()}`,
       contentType,
     );
     return res;
