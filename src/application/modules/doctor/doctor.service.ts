@@ -34,6 +34,56 @@ export class DoctorService {
     });
   }
 
+  async paginated(
+    options: Partial<{
+      page: number;
+      limit: number;
+      orderBy: keyof Doctor;
+      orderDirection: 'asc' | 'desc';
+    }> = {},
+  ): Promise<{
+    data: Doctor[];
+    pagination: {
+      total: number;
+      length: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+      hasPrev: boolean;
+      hasNext: boolean;
+      prevPage: number;
+      nextPage: number;
+    };
+  }> {
+    const page = options.page || 1;
+    const limit = options.limit || 20;
+
+    const [items, total] = await this.doctorRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: options.orderBy
+        ? { [options.orderBy]: options.orderDirection || 'ASC' }
+        : undefined,
+    });
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: items,
+      pagination: {
+        total,
+        length: items.length,
+        page,
+        limit,
+        totalPages,
+        hasPrev: page > 1,
+        hasNext: page < totalPages,
+        prevPage: page - 1,
+        nextPage: page + 1,
+      },
+    };
+  }
+
   async findOne(id: string): Promise<Doctor> {
     const doctor = await this.doctorRepository.findOne({
       where: { id },
@@ -48,6 +98,10 @@ export class DoctorService {
     return this.doctorRepository.find({
       where: { hospitalId },
     });
+  }
+
+  async count(): Promise<number> {
+    return this.doctorRepository.count();
   }
 
   async update(id: string, updateDoctorDto: UpdateDoctorDto): Promise<Doctor> {

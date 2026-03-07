@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>AdminLTE 4 | Doctor Detail</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes' />
+    <meta name='color-scheme' content='light dark' />
+    <meta name='theme-color' content='#007bff' media='(prefers-color-scheme: light)' />
+    <meta name='theme-color' content='#1a1a1a' media='(prefers-color-scheme: dark)' />
+    <meta name='supported-color-schemes' content='light dark' />
+    <link rel='preload' href='/css/admin/adminlte.css' as='style' />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css'
+      integrity='sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q='
+      crossorigin='anonymous'
+      media='print'
+      onload="this.media='all'"
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'
+      crossorigin='anonymous'
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'
+      crossorigin='anonymous'
+    />
+    <link rel='stylesheet' href='/css/admin/adminlte.css' />
+  </head>
+  <body class='layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary'>
+    <div class='app-wrapper'>
+      {{> adminheader}}
+      {{> adminsidebar}}
+
+      <main class='app-main'>
+        <div class='app-content-header'>
+          <div class='container-fluid'>
+            <div class='row align-items-center'>
+              <div class='col-sm-6'><h3 class='mb-0'>Doctor Detail</h3></div>
+              <div class='col-sm-6 text-sm-end mt-2 mt-sm-0'>
+                <a href='/admin/doctors' class='btn btn-outline-secondary btn-sm'>Back to List</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='app-content'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='col-12'>
+                <div class='card card-primary card-outline mb-4'>
+                  <div class='card-header'><div class='card-title'>Doctor Properties</div></div>
+                  <div class='card-body'>
+                    <div class='mb-3'>
+                      <label class='form-label'>ID</label>
+                      <input type='text' class='form-control' id='doctorId' value='{{doctor.id}}' readonly />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='fullName' class='form-label'>Full Name</label>
+                      <input type='text' class='form-control' id='fullName' value='{{doctor.fullName}}' />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='title' class='form-label'>Title</label>
+                      <input type='text' class='form-control' id='title' value='{{doctor.title}}' />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='hospitalId' class='form-label'>Hospital</label>
+                      <select class='form-select' id='hospitalId'>
+                        <option value=''>Select hospital</option>
+                        {{#each hospitals}}
+                          <option
+                            value='{{this.id}}'
+                            {{#if (eq this.id ../doctor.hospitalId)}}selected{{/if}}
+                          >{{this.name}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+
+                    <div id='updateDoctorAlert' class='alert d-none' role='alert'></div>
+
+                    <div class='d-flex gap-2'>
+                      <button type='button' class='btn btn-success' id='updateDoctorBtn'>Update Doctor</button>
+                      <button type='button' class='btn btn-outline-danger' id='deleteDoctorBtn'>Delete Doctor</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {{> adminfooter}}
+    </div>
+
+    <script
+      src='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script src='/scripts/admin/js/adminlte.js'></script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const updateButton = document.getElementById('updateDoctorBtn');
+        const deleteButton = document.getElementById('deleteDoctorBtn');
+        const alertBox = document.getElementById('updateDoctorAlert');
+        const doctorIdInput = document.getElementById('doctorId');
+
+        if (!updateButton || !deleteButton || !alertBox || !doctorIdInput) {
+          return;
+        }
+
+        const showAlert = (message, type) => {
+          alertBox.textContent = message;
+          alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+          alertBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
+        };
+
+        const buildPayload = () => ({
+          fullName: String(document.getElementById('fullName').value || '').trim(),
+          title: String(document.getElementById('title').value || '').trim() || undefined,
+          hospitalId: String(document.getElementById('hospitalId').value || '').trim() || undefined,
+        });
+
+        updateButton.addEventListener('click', async function () {
+          updateButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            const response = await fetch(`/admin/doctors/${doctorIdInput.value}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify(buildPayload()),
+            });
+
+            if (!response.ok) {
+              const responseText = await response.text();
+              let responseBody = null;
+
+              if (responseText) {
+                try {
+                  responseBody = JSON.parse(responseText);
+                } catch (error) {
+                  responseBody = null;
+                }
+              }
+
+              const errorMessage =
+                responseBody?.message ||
+                responseBody?.error ||
+                response.statusText ||
+                'Doctor could not be updated.';
+
+              throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+            }
+
+            showAlert('Doctor updated successfully.', 'success');
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+          } finally {
+            updateButton.disabled = false;
+          }
+        });
+
+        deleteButton.addEventListener('click', async function () {
+          const confirmed = window.confirm('Are you sure you want to delete this doctor?');
+          if (!confirmed) {
+            return;
+          }
+
+          deleteButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            const response = await fetch(`/admin/doctors/${doctorIdInput.value}`, {
+              method: 'DELETE',
+              headers: {
+                Accept: 'application/json',
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error('Doctor could not be deleted.');
+            }
+
+            window.location.href = '/admin/doctors';
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+            deleteButton.disabled = false;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
