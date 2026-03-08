@@ -79,6 +79,16 @@
                       <input type='text' class='form-control' id='address' value='{{hospital.address}}' />
                     </div>
 
+                    <div class='mb-3'>
+                      <label for='googlePlaceId' class='form-label'>Google Place ID</label>
+                      <input
+                        type='text'
+                        class='form-control'
+                        id='googlePlaceId'
+                        value='{{hospital.googlePlaceId}}'
+                      />
+                    </div>
+
                     <div class='row'>
                       <div class='col-md-6 mb-3'>
                         <label for='phone' class='form-label'>Phone</label>
@@ -294,6 +304,7 @@
           city: String(document.getElementById('city').value || '').trim() || undefined,
           country: String(document.getElementById('country').value || '').trim() || undefined,
           address: String(document.getElementById('address').value || '').trim() || undefined,
+          googlePlaceId: String(document.getElementById('googlePlaceId').value || '').trim() || undefined,
           phone: String(document.getElementById('phone').value || '').trim() || undefined,
           email: String(document.getElementById('email').value || '').trim() || undefined,
           website: String(document.getElementById('website').value || '').trim() || undefined,

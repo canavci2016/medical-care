@@ -75,6 +75,11 @@
                         <input type='text' class='form-control' id='address' name='address' />
                       </div>
 
+                      <div class='mb-3'>
+                        <label for='googlePlaceId' class='form-label'>Google Place ID</label>
+                        <input type='text' class='form-control' id='googlePlaceId' name='googlePlaceId' />
+                      </div>
+
                       <div class='row'>
                         <div class='col-md-6 mb-3'>
                           <label for='phone' class='form-label'>Phone</label>
@@ -305,6 +310,7 @@
               city: String(formData.get('city') || '').trim() || undefined,
               country: String(formData.get('country') || '').trim() || undefined,
               address: String(formData.get('address') || '').trim() || undefined,
+              googlePlaceId: String(formData.get('googlePlaceId') || '').trim() || undefined,
               phone: String(formData.get('phone') || '').trim() || undefined,
               email: String(formData.get('email') || '').trim() || undefined,
               website: String(formData.get('website') || '').trim() || undefined,

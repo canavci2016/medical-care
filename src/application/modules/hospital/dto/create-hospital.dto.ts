@@ -47,6 +47,10 @@ export class CreateHospitalDto {
   @IsString()
   address?: string;
 
+  @IsOptional()
+  @IsString()
+  googlePlaceId?: string;
+
   /* ===============================
      CONTACT
   =============================== */

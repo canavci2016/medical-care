@@ -19,6 +19,7 @@ const generateHospital = (overrides?: Partial<Hospital>): Hospital => {
     city: faker.location.city(),
     country: faker.location.country(),
     address: faker.location.streetAddress({ useFullAddress: true }),
+    googlePlaceId: faker.string.alphanumeric({ length: 27, casing: 'mixed' }),
     phone: faker.phone.number(),
     email: faker.internet.email(),
     website: faker.internet.url(),

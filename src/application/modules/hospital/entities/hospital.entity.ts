@@ -38,6 +38,9 @@ export class Hospital {
   @Column({ nullable: true })
   address?: string;
 
+  @Column({ nullable: true })
+  googlePlaceId?: string;
+
   /* ===============================
      CONTACT
   =============================== */
