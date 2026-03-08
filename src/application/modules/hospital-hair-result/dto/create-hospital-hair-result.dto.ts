@@ -150,4 +150,9 @@ export class CreateHospitalHairResultDto {
   @IsOptional()
   @IsString()
   patientStory?: string;
+
+   @IsOptional()
+   @IsArray()
+   @IsUrl({}, { each: true })
+   imageUrls?: string[];
 }

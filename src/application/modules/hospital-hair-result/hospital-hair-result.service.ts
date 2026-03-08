@@ -37,10 +37,29 @@ export class HospitalHairResultService {
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
-    const result = this.hospitalHairResultRepository.create(
-      createHospitalHairResultDto,
-    );
-    return this.hospitalHairResultRepository.save(result);
+    const { imageUrls, ...rest } = createHospitalHairResultDto as
+      CreateHospitalHairResultDto & {
+        imageUrls?: string[];
+      };
+
+    const result = this.hospitalHairResultRepository.create(rest);
+    const savedResult = await this.hospitalHairResultRepository.save(result);
+
+    if (imageUrls?.length) {
+      const images = this.hospitalHairResultImageRepository.create(
+        imageUrls.map((imageUrl) => ({
+          resultId: savedResult.id,
+          imageUrl,
+          month: savedResult.monthsAfter || 0,
+          isAfter: true,
+          isBefore: false,
+        })),
+      );
+
+      await this.hospitalHairResultImageRepository.save(images);
+    }
+
+    return this.findOne(savedResult.id);
   }
 
   async findAll(
@@ -261,9 +280,34 @@ export class HospitalHairResultService {
     id: string,
     updateHospitalHairResultDto: UpdateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
+    const { imageUrls, ...rest } = updateHospitalHairResultDto as
+      UpdateHospitalHairResultDto & {
+        imageUrls?: string[];
+      };
+
     const result = await this.findOne(id);
-    Object.assign(result, updateHospitalHairResultDto);
-    return this.hospitalHairResultRepository.save(result);
+    Object.assign(result, rest);
+    await this.hospitalHairResultRepository.save(result);
+
+    if (imageUrls !== undefined) {
+      await this.hospitalHairResultImageRepository.delete({ resultId: id });
+
+      if (imageUrls.length > 0) {
+        const images = this.hospitalHairResultImageRepository.create(
+          imageUrls.map((imageUrl) => ({
+            resultId: id,
+            imageUrl,
+            month: result.monthsAfter || 0,
+            isAfter: true,
+            isBefore: false,
+          })),
+        );
+
+        await this.hospitalHairResultImageRepository.save(images);
+      }
+    }
+
+    return this.findOne(id);
   }
 
   async remove(id: string): Promise<void> {

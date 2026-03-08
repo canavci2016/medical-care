@@ -134,6 +134,23 @@
                         <label for='patientStory' class='form-label'>Patient Story</label>
                         <textarea class='form-control' id='patientStory' name='patientStory' rows='3'></textarea>
                       </div>
+
+                      <div class='mb-3'>
+                        <label for='resultImages' class='form-label'>Attach Images</label>
+                        <input
+                          type='file'
+                          class='form-control'
+                          id='resultImages'
+                          accept='image/*'
+                          multiple
+                        />
+                        <button
+                          type='button'
+                          class='btn btn-outline-primary btn-sm mt-2'
+                          id='uploadResultImagesBtn'
+                        >Upload Selected Images</button>
+                        <div id='resultImagesPreview' class='mt-3 d-flex flex-wrap gap-2'></div>
+                      </div>
                     </div>
 
                     <div class='card-footer'>
@@ -188,16 +205,113 @@
         const form = document.getElementById('createResultForm');
         const alertBox = document.getElementById('createResultAlert');
         const submitButton = document.getElementById('createResultSubmitBtn');
+        const uploadImagesButton = document.getElementById('uploadResultImagesBtn');
+        const resultImagesInput = document.getElementById('resultImages');
+        const resultImagesPreview = document.getElementById('resultImagesPreview');
+        const uploadedImageUrls = [];
 
-        if (!form || !alertBox || !submitButton) {
+        if (
+          !form ||
+          !alertBox ||
+          !submitButton ||
+          !uploadImagesButton ||
+          !resultImagesInput ||
+          !resultImagesPreview
+        ) {
           return;
         }
+
+        const renderImagePreview = () => {
+          resultImagesPreview.innerHTML = '';
+
+          uploadedImageUrls.forEach((url, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'position-relative';
+            wrapper.style.width = '110px';
+
+            const image = document.createElement('img');
+            image.src = url;
+            image.alt = 'Result image';
+            image.className = 'img-thumbnail';
+            image.style.width = '110px';
+            image.style.height = '110px';
+            image.style.objectFit = 'cover';
+
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn btn-sm btn-danger position-absolute top-0 end-0';
+            removeButton.textContent = '×';
+            removeButton.addEventListener('click', function () {
+              uploadedImageUrls.splice(index, 1);
+              renderImagePreview();
+            });
+
+            wrapper.appendChild(image);
+            wrapper.appendChild(removeButton);
+            resultImagesPreview.appendChild(wrapper);
+          });
+        };
+
+        const uploadFile = async (file) => {
+          const response = await fetch('/admin/hospital-hair-results/upload-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contentType: file.type }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Could not get upload url.');
+          }
+
+          const { url } = await response.json();
+
+          const uploadResponse = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': file.type,
+            },
+            body: file,
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('Could not upload image.');
+          }
+
+          return uploadResponse.url.split('?')[0];
+        };
 
         const showAlert = (message, type) => {
           alertBox.textContent = message;
           alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
           alertBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
         };
+
+        uploadImagesButton.addEventListener('click', async function () {
+          const selectedFiles = Array.from(resultImagesInput.files || []);
+
+          if (selectedFiles.length === 0) {
+            showAlert('Please select at least one image.', 'error');
+            return;
+          }
+
+          uploadImagesButton.disabled = true;
+          submitButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            const uploadedUrls = await Promise.all(selectedFiles.map((file) => uploadFile(file)));
+            uploadedImageUrls.push(...uploadedUrls);
+            renderImagePreview();
+            resultImagesInput.value = '';
+            showAlert('Images uploaded successfully.', 'success');
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+          } finally {
+            uploadImagesButton.disabled = false;
+            submitButton.disabled = false;
+          }
+        });
 
         form.addEventListener('submit', async function (event) {
           event.preventDefault();
@@ -222,6 +336,7 @@
             isPublic: formData.get('isPublic') === 'on',
             doctorNotes: String(formData.get('doctorNotes') || '').trim() || undefined,
             patientStory: String(formData.get('patientStory') || '').trim() || undefined,
+            imageUrls: uploadedImageUrls,
           };
 
           submitButton.disabled = true;

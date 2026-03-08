@@ -136,6 +136,23 @@
                       <textarea class='form-control' id='patientStory' rows='3'>{{result.patientStory}}</textarea>
                     </div>
 
+                    <div class='mb-3'>
+                      <label for='resultImages' class='form-label'>Attached Images</label>
+                      <input
+                        type='file'
+                        class='form-control'
+                        id='resultImages'
+                        accept='image/*'
+                        multiple
+                      />
+                      <button
+                        type='button'
+                        class='btn btn-outline-primary btn-sm mt-2'
+                        id='uploadResultImagesBtn'
+                      >Upload Selected Images</button>
+                      <div id='resultImagesPreview' class='mt-3 d-flex flex-wrap gap-2'></div>
+                    </div>
+
                     <div id='updateResultAlert' class='alert d-none' role='alert'></div>
 
                     <div class='d-flex gap-2'>
@@ -189,12 +206,85 @@
       document.addEventListener('DOMContentLoaded', function () {
         const updateButton = document.getElementById('updateResultBtn');
         const deleteButton = document.getElementById('deleteResultBtn');
+        const uploadImagesButton = document.getElementById('uploadResultImagesBtn');
+        const resultImagesInput = document.getElementById('resultImages');
+        const resultImagesPreview = document.getElementById('resultImagesPreview');
         const alertBox = document.getElementById('updateResultAlert');
         const resultIdInput = document.getElementById('resultId');
+        const uploadedImageUrls = (({{{json result.images}}}) || [])
+          .map((item) => item.imageUrl)
+          .filter(Boolean);
 
-        if (!updateButton || !deleteButton || !alertBox || !resultIdInput) {
+        if (
+          !updateButton ||
+          !deleteButton ||
+          !uploadImagesButton ||
+          !resultImagesInput ||
+          !resultImagesPreview ||
+          !alertBox ||
+          !resultIdInput
+        ) {
           return;
         }
+
+        const renderImagePreview = () => {
+          resultImagesPreview.innerHTML = '';
+
+          uploadedImageUrls.forEach((url, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'position-relative';
+            wrapper.style.width = '110px';
+
+            const image = document.createElement('img');
+            image.src = url;
+            image.alt = 'Result image';
+            image.className = 'img-thumbnail';
+            image.style.width = '110px';
+            image.style.height = '110px';
+            image.style.objectFit = 'cover';
+
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn btn-sm btn-danger position-absolute top-0 end-0';
+            removeButton.textContent = '×';
+            removeButton.addEventListener('click', function () {
+              uploadedImageUrls.splice(index, 1);
+              renderImagePreview();
+            });
+
+            wrapper.appendChild(image);
+            wrapper.appendChild(removeButton);
+            resultImagesPreview.appendChild(wrapper);
+          });
+        };
+
+        const uploadFile = async (file) => {
+          const response = await fetch('/admin/hospital-hair-results/upload-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contentType: file.type }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Could not get upload url.');
+          }
+
+          const { url } = await response.json();
+
+          const uploadResponse = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': file.type,
+            },
+            body: file,
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('Could not upload image.');
+          }
+
+          return uploadResponse.url.split('?')[0];
+        };
 
         const buildPayload = () => {
           const availableMonths = String(document.getElementById('availableMonths').value || '')
@@ -216,6 +306,7 @@
             isPublic: document.getElementById('isPublic').checked,
             doctorNotes: String(document.getElementById('doctorNotes').value || '').trim() || undefined,
             patientStory: String(document.getElementById('patientStory').value || '').trim() || undefined,
+            imageUrls: uploadedImageUrls,
           };
         };
 
@@ -225,40 +316,74 @@
           alertBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
         };
 
+        const updateResult = async (payload) => {
+          const response = await fetch(`/admin/hospital-hair-results/${resultIdInput.value}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const responseText = await response.text();
+            let responseBody = null;
+
+            if (responseText) {
+              try {
+                responseBody = JSON.parse(responseText);
+              } catch (error) {
+                responseBody = null;
+              }
+            }
+
+            const errorMessage =
+              responseBody?.message ||
+              responseBody?.error ||
+              response.statusText ||
+              'Result could not be updated.';
+
+            throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+          }
+        };
+
+        renderImagePreview();
+
+        uploadImagesButton.addEventListener('click', async function () {
+          const selectedFiles = Array.from(resultImagesInput.files || []);
+
+          if (selectedFiles.length === 0) {
+            showAlert('Please select at least one image.', 'error');
+            return;
+          }
+
+          uploadImagesButton.disabled = true;
+          updateButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            const uploadedUrls = await Promise.all(selectedFiles.map((file) => uploadFile(file)));
+            uploadedImageUrls.push(...uploadedUrls);
+            await updateResult(buildPayload());
+            renderImagePreview();
+            resultImagesInput.value = '';
+            showAlert('Images uploaded and saved successfully.', 'success');
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+          } finally {
+            uploadImagesButton.disabled = false;
+            updateButton.disabled = false;
+          }
+        });
+
         updateButton.addEventListener('click', async function () {
           updateButton.disabled = true;
           alertBox.classList.add('d-none');
 
           try {
-            const response = await fetch(`/admin/hospital-hair-results/${resultIdInput.value}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-              },
-              body: JSON.stringify(buildPayload()),
-            });
-
-            if (!response.ok) {
-              const responseText = await response.text();
-              let responseBody = null;
-
-              if (responseText) {
-                try {
-                  responseBody = JSON.parse(responseText);
-                } catch (error) {
-                  responseBody = null;
-                }
-              }
-
-              const errorMessage =
-                responseBody?.message ||
-                responseBody?.error ||
-                response.statusText ||
-                'Result could not be updated.';
-
-              throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
-            }
+            await updateResult(buildPayload());
 
             showAlert('Result updated successfully.', 'success');
           } catch (error) {

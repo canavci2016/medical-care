@@ -18,12 +18,15 @@ import { UpdateHospitalHairResultDto } from '../hospital-hair-result/dto/update-
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { buildPagination } from './pagination.util';
+import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
+import { randomUUID } from 'node:crypto';
 
 @Controller('admin/hospital-hair-results')
 export class AdminHospitalHairResultController {
   constructor(
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
+    private readonly awsS3Service: AwsS3Service,
   ) {}
 
   @Get()
@@ -101,6 +104,14 @@ export class AdminHospitalHairResultController {
   @Post()
   async create(@Body() payload: CreateHospitalHairResultDto) {
     return this.hospitalHairResultService.create(payload);
+  }
+
+  @Post('upload-url')
+  async getUploadUrl(@Body('contentType') contentType: string) {
+    return this.awsS3Service.getSignedUploadUrl(
+      `uploads/results/${randomUUID()}`,
+      contentType,
+    );
   }
 
   @Put(':id')
