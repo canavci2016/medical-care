@@ -92,6 +92,11 @@
                       </div>
 
                       <div class='mb-3'>
+                        <label for='instagramUrl' class='form-label'>Instagram URL</label>
+                        <input type='url' class='form-control' id='instagramUrl' name='instagramUrl' />
+                      </div>
+
+                      <div class='mb-3'>
                         <label for='description' class='form-label'>Description</label>
                         <textarea class='form-control' id='description' name='description' rows='3'></textarea>
                       </div>
@@ -303,6 +308,7 @@
               phone: String(formData.get('phone') || '').trim() || undefined,
               email: String(formData.get('email') || '').trim() || undefined,
               website: String(formData.get('website') || '').trim() || undefined,
+              instagramUrl: String(formData.get('instagramUrl') || '').trim() || undefined,
               description: String(formData.get('description') || '').trim() || undefined,
               rating: Number(formData.get('rating') || 0),
               reviewCount: Number(formData.get('reviewCount') || 0),
