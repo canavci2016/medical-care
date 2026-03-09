@@ -13,13 +13,14 @@ export class HomeController {
     const latestHairResults = await this.homeService.getLatestHairResults();
 
     const results = latestHairResults.map((result) => ({
+      id: result.id,
       hospital: result.hospital,
       verified: result.verified,
       graftCount: result.graftCount,
       operationDateRelative: result.operationDate
         ? formatDistanceToNow(new Date(result.operationDate), {
-            addSuffix: true,
-          })
+          addSuffix: true,
+        })
         : '',
       image: result?.images[0]?.imageUrl || null,
     }));

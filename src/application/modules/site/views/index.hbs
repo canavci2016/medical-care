@@ -22,7 +22,7 @@
         <div class='grid'>
           {{#each results}}
 
-          <div class='card'>
+          <div class='card' onclick="window.location='/results/{{id}}'" style="cursor: pointer;">
             <img
               src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x300?text=No+Image{{/if}}'
               class='img'

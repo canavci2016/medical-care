@@ -20,7 +20,7 @@ export class HospitalHairResultController {
   constructor(
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
-  ) {}
+  ) { }
 
   @Get()
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
@@ -67,8 +67,8 @@ export class HospitalHairResultController {
         procedure: result.procedureType,
         operationDateRelative: result.operationDate
           ? formatDistanceToNow(new Date(result.operationDate), {
-              addSuffix: true,
-            })
+            addSuffix: true,
+          })
           : '',
         image: result?.images[0]?.imageUrl || null,
       };
@@ -96,6 +96,7 @@ export class HospitalHairResultController {
         selected: query.graftCount === value,
       })),
       ageRanges: ageRanges
+        .filter((ar) => ar.ageRange !== null)
         .map((ar) => ({
           label: ar.ageRange + ` (${ar.count})`,
           value: ar.ageRange,

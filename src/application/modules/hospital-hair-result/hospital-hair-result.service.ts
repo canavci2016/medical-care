@@ -280,8 +280,8 @@ export class HospitalHairResultService {
     id: string,
     updateHospitalHairResultDto: UpdateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
-    const { imageUrls, ...rest } = updateHospitalHairResultDto as
-      UpdateHospitalHairResultDto & {
+    const { imageUrls, ...rest } =
+      updateHospitalHairResultDto as UpdateHospitalHairResultDto & {
         imageUrls?: string[];
       };
 
