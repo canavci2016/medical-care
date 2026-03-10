@@ -57,8 +57,5 @@ export class HairResultQueryDto {
   @IsOptional()
   @ValidateIf((o: HairResultQueryDto) => o.duration !== '')
   @IsNumberString()
-  @Matches(/^([0-9]|1[0-2])$/, {
-    message: 'duration must be a number between 0 and 12',
-  })
   duration?: string;
 }

@@ -121,7 +121,7 @@
 
                     <div class="mb-3">
                       <label class="form-label">Content</label>
-                      <textarea class="form-control" id="blogContent" rows="8" readonly>{{blog.content}}</textarea>
+                      <textarea class="form-control" id="blogContent" rows="8">{{blog.content}}</textarea>
                     </div>
 
                     <div class="mb-3">
@@ -296,6 +296,7 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="/scripts/admin/js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
@@ -367,6 +368,7 @@
         const categoryIdInput = document.getElementById('blogCategoryId');
         const viewCountInput = document.getElementById('blogViewCount');
         const readingTimeInput = document.getElementById('blogReadingTime');
+        let contentEditor = null;
 
         if (
           !uploadButton ||
@@ -392,6 +394,16 @@
           return;
         }
 
+        if (window.ClassicEditor) {
+          ClassicEditor.create(contentInput)
+            .then((editor) => {
+              contentEditor = editor;
+            })
+            .catch(() => {
+              contentEditor = null;
+            });
+        }
+
         const showAlert = (message, type) => {
           alertBox.textContent = message;
           alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
@@ -407,7 +419,7 @@
             title: String(titleInput.value || '').trim(),
             slug: String(slugInput.value || '').trim(),
             excerpt: String(excerptInput.value || '').trim(),
-            content: String(contentInput.value || '').trim(),
+            content: String(contentEditor ? contentEditor.getData() : contentInput.value || '').trim(),
             featuredImage: String(featuredImageValue || '').trim(),
             metaTitle: String(metaTitleInput.value || '').trim(),
             metaDescription: String(metaDescriptionInput.value || '').trim(),

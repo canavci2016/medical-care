@@ -101,7 +101,7 @@
 
                       <div class="mb-3">
                         <label for="content" class="form-label">Content</label>
-                        <textarea class="form-control" id="content" name="content" rows="8" required></textarea>
+                        <textarea class="form-control" id="content" name="content" rows="8"></textarea>
                       </div>
 
                       <div class="mb-3">
@@ -248,6 +248,7 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="/scripts/admin/js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
@@ -303,20 +304,33 @@
         const form = document.getElementById('createBlogForm');
         const alertBox = document.getElementById('createBlogAlert');
         const submitButton = document.getElementById('createBlogSubmitBtn');
+        const contentField = document.getElementById('content');
         const featuredImageInput = document.getElementById('featuredImage');
         const featuredImagePreview = document.getElementById('featuredImagePreview');
         const featuredImagePreviewWrapper = document.getElementById('featuredImagePreviewWrapper');
         let featuredImageObjectUrl = null;
+        let contentEditor = null;
 
         if (
           !form ||
           !alertBox ||
           !submitButton ||
+          !contentField ||
           !featuredImageInput ||
           !featuredImagePreview ||
           !featuredImagePreviewWrapper
         ) {
           return;
+        }
+
+        if (window.ClassicEditor) {
+          ClassicEditor.create(contentField)
+            .then((editor) => {
+              contentEditor = editor;
+            })
+            .catch(() => {
+              contentEditor = null;
+            });
         }
 
         const clearFeaturedImagePreview = () => {
@@ -355,11 +369,21 @@
         form.addEventListener('submit', async function (event) {
           event.preventDefault();
 
+          if (contentEditor) {
+            contentField.value = contentEditor.getData();
+          }
+
           const formData = new FormData(form);
           const featuredImageFile = formData.get('featuredImage');
+          const contentValue = String(formData.get('content') || '').trim();
 
           if (!(featuredImageFile instanceof File) || featuredImageFile.size === 0) {
             showAlert('Featured Image file is required.', 'error');
+            return;
+          }
+
+          if (!contentValue) {
+            showAlert('Content is required.', 'error');
             return;
           }
 
@@ -367,7 +391,7 @@
             title: String(formData.get('title') || '').trim(),
             slug: String(formData.get('slug') || '').trim(),
             excerpt: String(formData.get('excerpt') || '').trim(),
-            content: String(formData.get('content') || '').trim(),
+            content: contentValue,
             featuredImage: '',
             metaTitle: String(formData.get('metaTitle') || '').trim(),
             metaDescription: String(formData.get('metaDescription') || '').trim(),
