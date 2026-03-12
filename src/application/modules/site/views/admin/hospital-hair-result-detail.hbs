@@ -113,6 +113,11 @@
                       </div>
                     </div>
 
+                    <div class='mb-3'>
+                      <label for='original_url' class='form-label'>Original URL (Patient History)</label>
+                      <input type='url' class='form-control' id='original_url' value='{{result.original_url}}' />
+                    </div>
+
                     <div class='form-check mb-2'>
                       <input class='form-check-input' type='checkbox' id='verified' {{#if result.verified}}checked{{/if}} />
                       <label class='form-check-label' for='verified'>Verified</label>
@@ -301,6 +306,7 @@
             availableMonths,
             operationDate: String(document.getElementById('operationDate').value || '').trim() || undefined,
             patientAgeRange: String(document.getElementById('patientAgeRange').value || '').trim() || undefined,
+            original_url: String(document.getElementById('original_url').value || '').trim() || undefined,
             verified: document.getElementById('verified').checked,
             consentReceived: document.getElementById('consentReceived').checked,
             isPublic: document.getElementById('isPublic').checked,

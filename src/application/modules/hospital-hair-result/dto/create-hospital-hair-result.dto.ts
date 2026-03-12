@@ -66,6 +66,10 @@ export class CreateHospitalHairResultDto {
   =============================== */
 
   @IsOptional()
+  @IsUrl()
+  original_url?: string;
+
+  @IsOptional()
   @IsString()
   patientAgeRange?: string;
 

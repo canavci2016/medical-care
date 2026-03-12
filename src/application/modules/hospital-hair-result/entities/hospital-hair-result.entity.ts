@@ -84,6 +84,9 @@ export class HospitalHairResult {
   =============================== */
 
   @Column({ nullable: true })
+  original_url?: string; // Original patient history reference URL
+
+  @Column({ nullable: true })
   patientAgeRange?: string; // "25-30"
 
   @Column({ nullable: true })
