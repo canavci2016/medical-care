@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
@@ -20,7 +21,9 @@ import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransp
 import { buildPagination } from './pagination.util';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { randomUUID } from 'node:crypto';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 
+@UseGuards(AdminAuthGuard)
 @Controller('admin/hospital-hair-results')
 export class AdminHospitalHairResultController {
   constructor(

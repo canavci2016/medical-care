@@ -9,6 +9,7 @@ import {
   Put,
   Res,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogService } from '../blog/blog.service';
 import { Blog, BlogStatus } from '../blog/entities/blog.entity';
@@ -18,7 +19,9 @@ import { BlogCategoryService } from '../blog/blog-category.service';
 import type { Response } from 'express';
 import { BlogQueryDto } from './dto/blog-query.dto';
 import { buildPagination } from './pagination.util';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 
+@UseGuards(AdminAuthGuard)
 @Controller('admin/blogs')
 export class AdminBlogController {
   constructor(

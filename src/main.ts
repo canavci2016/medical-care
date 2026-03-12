@@ -42,11 +42,16 @@ async function bootstrap() {
     return JSON.stringify(context);
   });
 
-  app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-  }));
+  app.use(
+    session({
+      secret: 'my-secret',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+      },
+    }),
+  );
 
   app.use(flash());
 

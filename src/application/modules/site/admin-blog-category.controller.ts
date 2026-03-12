@@ -8,11 +8,14 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogCategoryService } from '../blog/blog-category.service';
 import { BlogCategory } from '../blog/entities/blog-category.entity';
 import type { Response } from 'express';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 
+@UseGuards(AdminAuthGuard)
 @Controller('admin/blog-categories')
 export class AdminBlogCategoryController {
   constructor(private readonly blogCategoryService: BlogCategoryService) {}

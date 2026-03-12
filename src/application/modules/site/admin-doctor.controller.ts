@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { DoctorService } from '../doctor/doctor.service';
@@ -17,7 +18,9 @@ import { HospitalService } from '../hospital/hospital.service';
 import { CreateDoctorDto } from '../doctor/dto/create-doctor.dto';
 import { UpdateDoctorDto } from '../doctor/dto/update-doctor.dto';
 import { buildPagination } from './pagination.util';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 
+@UseGuards(AdminAuthGuard)
 @Controller('admin/doctors')
 export class AdminDoctorController {
   constructor(
