@@ -26,7 +26,8 @@ jobs:
 
       - name: Zip project
         run: zip -r deploy.zip . -x "node_modules/*" ".git/*"
-
+      - name: Check region
+        run: echo "Region is ${{ secrets.AWS_REGION }}"
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
