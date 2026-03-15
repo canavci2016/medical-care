@@ -9,9 +9,12 @@ import { BlogModule } from './modules/blog/blog.module';
 import { CountryModule } from './shared/modules/country/country.module';
 import { SeederModule } from './shared/seeder/seeder.module';
 import { AwsModule } from './shared/modules/aws/aws.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -42,6 +45,7 @@ import { AwsModule } from './shared/modules/aws/aws.module';
     CountryModule,
     SeederModule,
     AwsModule,
+    CronjobModule,
   ],
 
   controllers: [],

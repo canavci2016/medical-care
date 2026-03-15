@@ -1,9 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindManyOptions, ILike, In, Repository } from 'typeorm';
+import {
+  Between,
+  FindManyOptions,
+  ILike,
+  In,
+  IsNull,
+  Not,
+  Repository,
+} from 'typeorm';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
+import { Query } from 'src/application/shared/interfaces/query.interface';
 
 export interface Pagination {
   page?: number;
@@ -25,7 +34,7 @@ export class HospitalService {
   constructor(
     @InjectRepository(Hospital)
     private readonly hospitalRepository: Repository<Hospital>,
-  ) {}
+  ) { }
 
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
     const hospital = this.hospitalRepository.create(createHospitalDto);
@@ -33,7 +42,12 @@ export class HospitalService {
   }
 
   async findAll(
-    params: Partial<{ skip: number; take: number; id: string | string[] }> = {},
+    params: Partial<{
+      skip: number;
+      take: number;
+      id: string | string[];
+      googlePlaceId: Query;
+    }> = {},
   ): Promise<Hospital[]> {
     const payload = {};
 
@@ -42,10 +56,15 @@ export class HospitalService {
       payload['id'] = In(idAttr);
     }
 
+    if (params.googlePlaceId?.notNull) {
+      payload['googlePlaceId'] = Not(IsNull());
+    }
+
     return this.hospitalRepository.find({
       where: payload,
       skip: params.skip || 0,
       take: params.take || 10,
+      order: { createdAt: 'DESC' },
     });
   }
 
