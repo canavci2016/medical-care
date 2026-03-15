@@ -32,31 +32,51 @@ export class HospitalHairResultService {
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
     @InjectRepository(HospitalHairResultImage)
     private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
-  ) {}
+  ) { }
 
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
-    const { imageUrls, ...rest } = createHospitalHairResultDto as
+    const { imageUrls, images, ...rest } = createHospitalHairResultDto as
       CreateHospitalHairResultDto & {
         imageUrls?: string[];
+        images?: Array<{
+          imageUrl: string;
+          month?: number;
+          isBefore?: boolean;
+          isAfter?: boolean;
+          angle?: string;
+          lighting?: string;
+          watermarked?: boolean;
+        }>;
       };
 
     const result = this.hospitalHairResultRepository.create(rest);
     const savedResult = await this.hospitalHairResultRepository.save(result);
 
-    if (imageUrls?.length) {
-      const images = this.hospitalHairResultImageRepository.create(
-        imageUrls.map((imageUrl) => ({
-          resultId: savedResult.id,
-          imageUrl,
-          month: savedResult.monthsAfter || 0,
-          isAfter: true,
-          isBefore: false,
-        })),
-      );
+    const imagesToSave =
+      images?.map((img) => ({
+        resultId: savedResult.id,
+        imageUrl: img.imageUrl,
+        month: img.month ?? savedResult.monthsAfter ?? 0,
+        isBefore: img.isBefore ?? false,
+        isAfter: img.isAfter ?? true,
+        angle: img.angle,
+        lighting: img.lighting,
+        watermarked: img.watermarked ?? false,
+      })) ??
+      imageUrls?.map((imageUrl) => ({
+        resultId: savedResult.id,
+        imageUrl,
+        month: savedResult.monthsAfter || 0,
+        isAfter: true,
+        isBefore: false,
+      }));
 
-      await this.hospitalHairResultImageRepository.save(images);
+    if (imagesToSave?.length) {
+      const imagesToCreate =
+        this.hospitalHairResultImageRepository.create(imagesToSave);
+      await this.hospitalHairResultImageRepository.save(imagesToCreate);
     }
 
     return this.findOne(savedResult.id);
@@ -158,22 +178,22 @@ export class HospitalHairResultService {
 
     const [results, total] = shouldRandomize
       ? await Promise.all([
-          this.hospitalHairResultRepository
-            .createQueryBuilder('hr')
-            .setFindOptions({
-              where: optionsTyped.where,
-              skip: optionsTyped.skip,
-              take: optionsTyped.take,
-            })
-            .orderBy('RANDOM()')
-            .getMany(),
-          this.hospitalHairResultRepository.count({
+        this.hospitalHairResultRepository
+          .createQueryBuilder('hr')
+          .setFindOptions({
             where: optionsTyped.where,
-          }),
-        ])
+            skip: optionsTyped.skip,
+            take: optionsTyped.take,
+          })
+          .orderBy('RANDOM()')
+          .getMany(),
+        this.hospitalHairResultRepository.count({
+          where: optionsTyped.where,
+        }),
+      ])
       : await this.hospitalHairResultRepository.findAndCount({
-          ...optionsTyped,
-        });
+        ...optionsTyped,
+      });
 
     const images = await this.hospitalHairResultImageRepository.find({
       where: { resultId: In(results.map((r) => r.id)) },
@@ -280,30 +300,47 @@ export class HospitalHairResultService {
     id: string,
     updateHospitalHairResultDto: UpdateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
-    const { imageUrls, ...rest } =
+    const { imageUrls, images, ...rest } =
       updateHospitalHairResultDto as UpdateHospitalHairResultDto & {
         imageUrls?: string[];
+        images?: Array<{
+          imageUrl: string;
+          month?: number;
+          isBefore?: boolean;
+          isAfter?: boolean;
+          angle?: string;
+          lighting?: string;
+          watermarked?: boolean;
+        }>;
       };
 
     const result = await this.findOne(id);
     Object.assign(result, rest);
     await this.hospitalHairResultRepository.save(result);
 
-    if (imageUrls !== undefined) {
+    if (imageUrls !== undefined || images !== undefined) {
       await this.hospitalHairResultImageRepository.delete({ resultId: id });
 
-      if (imageUrls.length > 0) {
-        const images = this.hospitalHairResultImageRepository.create(
-          imageUrls.map((imageUrl) => ({
-            resultId: id,
-            imageUrl,
-            month: result.monthsAfter || 0,
-            isAfter: true,
-            isBefore: false,
-          })),
-        );
+      const imagesToSave = images?.map((img) => ({
+        resultId: id,
+        imageUrl: img.imageUrl,
+        month: img.month ?? result.monthsAfter ?? 0,
+        isBefore: img.isBefore ?? false,
+        isAfter: img.isAfter ?? true,
+        angle: img.angle,
+        lighting: img.lighting,
+        watermarked: img.watermarked ?? false,
+      })) ?? imageUrls?.map((imageUrl) => ({
+        resultId: id,
+        imageUrl,
+        month: result.monthsAfter || 0,
+        isAfter: true,
+        isBefore: false,
+      }));
 
-        await this.hospitalHairResultImageRepository.save(images);
+      if (imagesToSave && imagesToSave.length > 0) {
+        const imagesToCreate = this.hospitalHairResultImageRepository.create(imagesToSave);
+        await this.hospitalHairResultImageRepository.save(imagesToCreate);
       }
     }
 

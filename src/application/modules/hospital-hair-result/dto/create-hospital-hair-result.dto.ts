@@ -10,9 +10,12 @@ import {
   IsEnum,
   IsDateString,
   Min,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairProcedureType } from '../entities/hospital-hair-result.entity';
+import { CreateImageDto } from './create-image.dto';
 
 export class CreateHospitalHairResultDto {
   /* ===============================
@@ -155,8 +158,14 @@ export class CreateHospitalHairResultDto {
   @IsString()
   patientStory?: string;
 
-   @IsOptional()
-   @IsArray()
-   @IsUrl({}, { each: true })
-   imageUrls?: string[];
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateImageDto)
+  images?: CreateImageDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsUrl({}, { each: true })
+  imageUrls?: string[];
 }

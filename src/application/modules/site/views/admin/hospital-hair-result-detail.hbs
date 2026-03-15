@@ -169,6 +169,53 @@
 
                     <div id='updateResultAlert' class='alert d-none' role='alert'></div>
 
+                    <div id='imageDetailsModal' class='modal' tabindex='-1'>
+                      <div class='modal-dialog'>
+                        <div class='modal-content'>
+                          <div class='modal-header'>
+                            <h5 class='modal-title'>Image Properties</h5>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                          </div>
+                          <div class='modal-body'>
+                            <div class='mb-3'>
+                              <label for='imageMonth' class='form-label'>Month</label>
+                              <input type='number' class='form-control' id='imageMonth' min='0' value='0' />
+                            </div>
+                            <div class='mb-3'>
+                              <label for='imageAngle' class='form-label'>Angle</label>
+                              <select class='form-select' id='imageAngle'>
+                                <option value=''>None</option>
+                                <option value='front'>Front</option>
+                                <option value='left'>Left</option>
+                                <option value='right'>Right</option>
+                                <option value='top'>Top</option>
+                              </select>
+                            </div>
+                            <div class='mb-3'>
+                              <label for='imageLighting' class='form-label'>Lighting</label>
+                              <input type='text' class='form-control' id='imageLighting' placeholder='e.g., natural, fluorescent' />
+                            </div>
+                            <div class='form-check mb-2'>
+                              <input class='form-check-input' type='checkbox' id='imageIsBefore' />
+                              <label class='form-check-label' for='imageIsBefore'>Before</label>
+                            </div>
+                            <div class='form-check mb-2'>
+                              <input class='form-check-input' type='checkbox' id='imageIsAfter' />
+                              <label class='form-check-label' for='imageIsAfter'>After</label>
+                            </div>
+                            <div class='form-check mb-3'>
+                              <input class='form-check-input' type='checkbox' id='imageWatermarked' />
+                              <label class='form-check-label' for='imageWatermarked'>Watermarked</label>
+                            </div>
+                          </div>
+                          <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                            <button type='button' class='btn btn-primary' id='saveImageDetailsBtn'>Save Changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class='d-flex gap-2'>
                       <button type='button' class='btn btn-success' id='updateResultBtn'>Update Result</button>
                       <button type='button' class='btn btn-outline-danger' id='deleteResultBtn'>Delete Result</button>
@@ -225,9 +272,16 @@
         const resultImagesPreview = document.getElementById('resultImagesPreview');
         const alertBox = document.getElementById('updateResultAlert');
         const resultIdInput = document.getElementById('resultId');
-        const uploadedImageUrls = (({{{json result.images}}}) || [])
-          .map((item) => item.imageUrl)
-          .filter(Boolean);
+        const uploadedImages = (({{{json result.images}}}) || []).map((item) => ({
+          id: item.id,
+          imageUrl: item.imageUrl,
+          month: item.month,
+          isBefore: item.isBefore,
+          isAfter: item.isAfter,
+          angle: item.angle,
+          lighting: item.lighting,
+          watermarked: item.watermarked,
+        }));
 
         if (
           !updateButton ||
@@ -244,30 +298,46 @@
         const renderImagePreview = () => {
           resultImagesPreview.innerHTML = '';
 
-          uploadedImageUrls.forEach((url, index) => {
+          uploadedImages.forEach((img, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = 'position-relative';
-            wrapper.style.width = '110px';
+            wrapper.style.width = '120px';
 
             const image = document.createElement('img');
-            image.src = url;
+            image.src = img.imageUrl;
             image.alt = 'Result image';
             image.className = 'img-thumbnail';
             image.style.width = '110px';
             image.style.height = '110px';
             image.style.objectFit = 'cover';
 
+            const infoButton = document.createElement('button');
+            infoButton.type = 'button';
+            infoButton.className = 'btn btn-sm btn-info position-absolute top-0 start-0';
+            infoButton.textContent = 'ℹ';
+            infoButton.style.padding = '2px 6px';
+            infoButton.addEventListener('click', function () {
+              showImageDetailsModal(img, index);
+            });
+
             const removeButton = document.createElement('button');
             removeButton.type = 'button';
             removeButton.className = 'btn btn-sm btn-danger position-absolute top-0 end-0';
             removeButton.textContent = '×';
             removeButton.addEventListener('click', function () {
-              uploadedImageUrls.splice(index, 1);
+              uploadedImages.splice(index, 1);
               renderImagePreview();
             });
 
+            const monthLabel = document.createElement('small');
+            monthLabel.className = 'position-absolute bottom-0 start-0 bg-dark text-white p-1';
+            monthLabel.textContent = `M${img.month}`;
+            monthLabel.style.fontSize = '10px';
+
             wrapper.appendChild(image);
+            wrapper.appendChild(infoButton);
             wrapper.appendChild(removeButton);
+            wrapper.appendChild(monthLabel);
             resultImagesPreview.appendChild(wrapper);
           });
         };
@@ -321,7 +391,15 @@
             isPublic: document.getElementById('isPublic').checked,
             doctorNotes: String(document.getElementById('doctorNotes').value || '').trim() || undefined,
             patientStory: String(document.getElementById('patientStory').value || '').trim() || undefined,
-            imageUrls: uploadedImageUrls,
+            images: uploadedImages.map((img) => ({
+              imageUrl: img.imageUrl,
+              month: img.month,
+              isBefore: img.isBefore,
+              isAfter: img.isAfter,
+              angle: img.angle || undefined,
+              lighting: img.lighting || undefined,
+              watermarked: img.watermarked,
+            })),
           };
         };
 
@@ -330,6 +408,44 @@
           alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
           alertBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
         };
+
+        let currentEditingImageIndex = -1;
+
+        const showImageDetailsModal = (img, index) => {
+          currentEditingImageIndex = index;
+          document.getElementById('imageMonth').value = img.month || 0;
+          document.getElementById('imageAngle').value = img.angle || '';
+          document.getElementById('imageLighting').value = img.lighting || '';
+          document.getElementById('imageIsBefore').checked = img.isBefore || false;
+          document.getElementById('imageIsAfter').checked = img.isAfter || false;
+          document.getElementById('imageWatermarked').checked = img.watermarked || false;
+
+          const modal = new bootstrap.Modal(document.getElementById('imageDetailsModal'));
+          modal.show();
+        };
+
+        const saveImageDetailsBtn = document.getElementById('saveImageDetailsBtn');
+        if (saveImageDetailsBtn) {
+          saveImageDetailsBtn.addEventListener('click', function () {
+            if (currentEditingImageIndex !== -1) {
+              uploadedImages[currentEditingImageIndex] = {
+                ...uploadedImages[currentEditingImageIndex],
+                month: Number(document.getElementById('imageMonth').value || 0),
+                angle: document.getElementById('imageAngle').value || undefined,
+                lighting: document.getElementById('imageLighting').value || undefined,
+                isBefore: document.getElementById('imageIsBefore').checked,
+                isAfter: document.getElementById('imageIsAfter').checked,
+                watermarked: document.getElementById('imageWatermarked').checked,
+              };
+              renderImagePreview();
+              const modalElement = document.getElementById('imageDetailsModal');
+              const modal = bootstrap.Modal.getInstance(modalElement);
+              if (modal) {
+                modal.hide();
+              }
+            }
+          });
+        }
 
         const updateResult = async (payload) => {
           const response = await fetch(`/admin/hospital-hair-results/${resultIdInput.value}`, {
@@ -379,7 +495,21 @@
 
           try {
             const uploadedUrls = await Promise.all(selectedFiles.map((file) => uploadFile(file)));
-            uploadedImageUrls.push(...uploadedUrls);
+            
+            // Add newly uploaded images with default properties
+            const newMonthValue = Number(document.getElementById('monthsAfter').value || 0);
+            uploadedUrls.forEach((url) => {
+              uploadedImages.push({
+                imageUrl: url,
+                month: newMonthValue,
+                isBefore: false,
+                isAfter: true,
+                angle: undefined,
+                lighting: undefined,
+                watermarked: false,
+              });
+            });
+
             await updateResult(buildPayload());
             renderImagePreview();
             resultImagesInput.value = '';
