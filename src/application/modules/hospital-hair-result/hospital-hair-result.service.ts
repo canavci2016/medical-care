@@ -37,8 +37,8 @@ export class HospitalHairResultService {
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
-    const { imageUrls, images, ...rest } = createHospitalHairResultDto as
-      CreateHospitalHairResultDto & {
+    const { imageUrls, images, ...rest } =
+      createHospitalHairResultDto as CreateHospitalHairResultDto & {
         imageUrls?: string[];
         images?: Array<{
           imageUrl: string;
@@ -321,25 +321,28 @@ export class HospitalHairResultService {
     if (imageUrls !== undefined || images !== undefined) {
       await this.hospitalHairResultImageRepository.delete({ resultId: id });
 
-      const imagesToSave = images?.map((img) => ({
-        resultId: id,
-        imageUrl: img.imageUrl,
-        month: img.month ?? result.monthsAfter ?? 0,
-        isBefore: img.isBefore ?? false,
-        isAfter: img.isAfter ?? true,
-        angle: img.angle,
-        lighting: img.lighting,
-        watermarked: img.watermarked ?? false,
-      })) ?? imageUrls?.map((imageUrl) => ({
-        resultId: id,
-        imageUrl,
-        month: result.monthsAfter || 0,
-        isAfter: true,
-        isBefore: false,
-      }));
+      const imagesToSave =
+        images?.map((img) => ({
+          resultId: id,
+          imageUrl: img.imageUrl,
+          month: img.month ?? result.monthsAfter ?? 0,
+          isBefore: img.isBefore ?? false,
+          isAfter: img.isAfter ?? true,
+          angle: img.angle,
+          lighting: img.lighting,
+          watermarked: img.watermarked ?? false,
+        })) ??
+        imageUrls?.map((imageUrl) => ({
+          resultId: id,
+          imageUrl,
+          month: result.monthsAfter || 0,
+          isAfter: true,
+          isBefore: false,
+        }));
 
       if (imagesToSave && imagesToSave.length > 0) {
-        const imagesToCreate = this.hospitalHairResultImageRepository.create(imagesToSave);
+        const imagesToCreate =
+          this.hospitalHairResultImageRepository.create(imagesToSave);
         await this.hospitalHairResultImageRepository.save(imagesToCreate);
       }
     }
