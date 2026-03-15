@@ -7,12 +7,16 @@ import { HospitalHairResult } from 'src/application/modules/hospital-hair-result
 import { HospitalHairResultImage } from 'src/application/modules/hospital-hair-result/entities/hospital-hair-result-image.entity';
 import { Blog } from 'src/application/modules/blog/entities/blog.entity';
 import { BlogCategory } from 'src/application/modules/blog/entities/blog-category.entity';
+import { Country } from 'src/application/shared/modules/country/entities/country.entity';
 import { generateHospitalMockData } from 'src/application/modules/hospital/mocks/hospital.mock';
 import { generateDoctorMockData } from 'src/application/modules/doctor/mocks/doctor.mock';
 import { generateHospitalHairResult } from 'src/application/modules/hospital-hair-result/mocks/hospital-hair-result.mock';
 import { generateProgressImages } from 'src/application/modules/hospital-hair-result/mocks/hospital-hair-result-image.mock';
 import { generateBlogCategoryMockData } from 'src/application/modules/blog/mocks/blog-category.mock';
 import { generateBlogMockData } from 'src/application/modules/blog/mocks/blog.mock';
+import countryMock from 'src/application/shared/modules/country/mocks/country.mock';
+
+type SeederName = 'country';
 
 export interface SeederOptions {
   hospitalCount?: number;
@@ -39,9 +43,16 @@ export class SeederService {
     private readonly blogRepository: Repository<Blog>,
     @InjectRepository(BlogCategory)
     private readonly blogCategoryRepository: Repository<BlogCategory>,
+    @InjectRepository(Country)
+    private readonly countryRepository: Repository<Country>,
   ) {}
 
-  async seed(options: SeederOptions = {}): Promise<void> {
+  async seed(target?: string, options: SeederOptions = {}): Promise<void> {
+    if (target) {
+      await this.seedByName(target);
+      return;
+    }
+
     const {
       hospitalCount = 20,
       doctorCount = 50,
@@ -61,7 +72,12 @@ export class SeederService {
     this.logger.log('Database seeding completed!');
   }
 
-  async clear(): Promise<void> {
+  async clear(target?: string): Promise<void> {
+    if (target) {
+      await this.clearByName(target);
+      return;
+    }
+
     this.logger.log('Clearing database...');
 
     await this.hospitalHairResultRepository.delete({ slug: Not('') });
@@ -71,6 +87,52 @@ export class SeederService {
     await this.hospitalRepository.delete({ name: Not('xyz') });
 
     this.logger.log('Database cleared!');
+  }
+
+  private toSeederName(name: string): SeederName {
+    if (name === 'country' || name === 'countries') {
+      return 'country';
+    }
+
+    throw new Error(`Unknown seeder name: ${name}`);
+  }
+
+  private async seedByName(name: string): Promise<void> {
+    const seederName = this.toSeederName(name.toLowerCase());
+
+    if (seederName === 'country') {
+      await this.seedCountries();
+    }
+  }
+
+  private async clearByName(name: string): Promise<void> {
+    const seederName = this.toSeederName(name.toLowerCase());
+
+    if (seederName === 'country') {
+      await this.countryRepository.clear();
+      this.logger.log('Countries cleared!');
+    }
+  }
+
+  private async seedCountries(): Promise<void> {
+    const existingCount = await this.countryRepository.count();
+    if (existingCount > 0) {
+      this.logger.log(
+        `Countries already seeded (${existingCount} records). Skipping...`,
+      );
+      return;
+    }
+
+    const countries = countryMock.map((item) =>
+      this.countryRepository.create({
+        name: item.english_name,
+        code: item.alpha2_code,
+        isActive: true,
+      }),
+    );
+
+    await this.countryRepository.save(countries);
+    this.logger.log(`Seeded ${countries.length} countries`);
   }
 
   private async seedHospitals(count: number): Promise<void> {

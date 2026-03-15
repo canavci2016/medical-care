@@ -7,6 +7,7 @@ import { HospitalHairResult } from '../../modules/hospital-hair-result/entities/
 import { HospitalHairResultImage } from '../../modules/hospital-hair-result/entities/hospital-hair-result-image.entity';
 import { Blog } from '../../modules/blog/entities/blog.entity';
 import { BlogCategory } from '../../modules/blog/entities/blog-category.entity';
+import { Country } from '../modules/country/entities/country.entity';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { BlogCategory } from '../../modules/blog/entities/blog-category.entity';
       HospitalHairResultImage,
       Blog,
       BlogCategory,
+      Country,
     ]),
   ],
   providers: [SeederService],
