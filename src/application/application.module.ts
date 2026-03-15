@@ -6,6 +6,7 @@ import { DoctorModule } from './modules/doctor/doctor.module';
 import { HospitalHairResultModule } from './modules/hospital-hair-result/hospital-hair-result.module';
 import { SiteModule } from './modules/site/site.module';
 import { BlogModule } from './modules/blog/blog.module';
+import { CountryModule } from './shared/modules/country/country.module';
 import { SeederModule } from './shared/seeder/seeder.module';
 import { AwsModule } from './shared/modules/aws/aws.module';
 
@@ -38,6 +39,7 @@ import { AwsModule } from './shared/modules/aws/aws.module';
     HospitalHairResultModule,
     SiteModule,
     BlogModule,
+    CountryModule,
     SeederModule,
     AwsModule,
   ],
