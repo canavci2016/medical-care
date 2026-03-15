@@ -37,6 +37,7 @@ jobs:
            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
            echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
            echo "AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}" >> .env
+           echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
 
       - name: Zip project
         run: zip -r deploy.zip . -x "node_modules/*" ".git/*"

@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { HospitalService } from 'src/application/modules/hospital/hospital.service';
 
@@ -9,6 +10,7 @@ export class CronjobService {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) { }
 
   logInitialization(): void {
@@ -17,7 +19,7 @@ export class CronjobService {
 
   @Cron('0 23 * * *')
   async readHospitalReviews() {
-    const API_KEY = 'AIzaSyCF_J8Gpzv-CnCHXz7kGtYWyWBc5PHFUwc';
+    const API_KEY = this.configService.get<string>('GOOGLE_API_KEY');
     this.logger.debug('Running readHospitalReviews cron job');
     const limit = 10;
     let offset = 0;
