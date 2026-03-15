@@ -109,7 +109,16 @@
                       </div>
                       <div class='col-md-6 mb-3'>
                         <label for='patientAgeRange' class='form-label'>Patient Age Range</label>
-                        <input type='text' class='form-control' id='patientAgeRange' value='{{result.patientAgeRange}}' />
+                        <select class='form-select' id='patientAgeRange'>
+                          <option value='20-25' {{#if (eq '20-25' result.patientAgeRange)}}selected{{/if}}>20-25</option>
+                          <option value='25-30' {{#if (eq '25-30' result.patientAgeRange)}}selected{{/if}}>25-30</option>
+                          <option value='30-35' {{#if (eq '30-35' result.patientAgeRange)}}selected{{/if}}>30-35</option>
+                          <option value='35-40' {{#if (eq '35-40' result.patientAgeRange)}}selected{{/if}}>35-40</option>
+                          <option value='40-45' {{#if (eq '40-45' result.patientAgeRange)}}selected{{/if}}>40-45</option>
+                          <option value='45-50' {{#if (eq '45-50' result.patientAgeRange)}}selected{{/if}}>45-50</option>
+                          <option value='50-55' {{#if (eq '50-55' result.patientAgeRange)}}selected{{/if}}>50-55</option>
+                          <option value='55-60' {{#if (eq '55-60' result.patientAgeRange)}}selected{{/if}}>55-60</option>
+                        </select>
                       </div>
                     </div>
 
