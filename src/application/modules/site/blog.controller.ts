@@ -48,6 +48,22 @@ export class BlogController {
       recentBlogs: recentBlogs,
       pagination: newPagination,
       styles: ['blogs.css'],
+      seo: {
+        title: 'Hair Transplant Blog | Medical Care',
+        keywords:
+          'hair transplant blog, hair restoration guides, FUE tips, DHI articles, post transplant care',
+        description:
+          'Read expert blog articles on hair transplant techniques, recovery, and clinic guidance.',
+        canonical: '/blogs',
+        ogType: 'website',
+        ogTitle: 'Hair Transplant Blog | Medical Care',
+        ogDescription:
+          'Educational content on hair transplant planning, procedures, and aftercare.',
+        ogUrl: '/blogs',
+        twitterTitle: 'Hair Transplant Blog | Medical Care',
+        twitterDescription:
+          'Discover practical hair transplant guides and expert insights.',
+      },
     });
   }
 

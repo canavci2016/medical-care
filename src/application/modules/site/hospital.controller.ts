@@ -69,6 +69,22 @@ export class HospitalController {
       pagination: newPagination,
       styles: ['hospital-list.css'],
       filters,
+      seo: {
+        title: 'Hospitals | Medical Care',
+        keywords:
+          'hair transplant hospitals, best hair clinics, clinic ratings, hair restoration hospitals, hospital directory',
+        description:
+          'Browse verified hospitals and clinics for hair transplant procedures. Filter by city, rating, and sorting options.',
+        canonical: '/hospitals',
+        ogType: 'website',
+        ogTitle: 'Hospitals | Medical Care',
+        ogDescription:
+          'Discover and compare hair transplant hospitals by rating and location.',
+        ogUrl: '/hospitals',
+        twitterTitle: 'Hospitals | Medical Care',
+        twitterDescription:
+          'Compare top hair transplant hospitals and clinics in one place.',
+      },
     });
   }
 

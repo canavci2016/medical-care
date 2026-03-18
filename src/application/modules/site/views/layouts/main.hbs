@@ -1,8 +1,43 @@
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
-    <title>Hair Results Platform</title>
+    <title>{{#if seo.title}}{{seo.title}}{{else}}Hair Results Platform{{/if}}</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
+    {{#if seo.keywords}}
+      <meta name='keywords' content='{{seo.keywords}}' />
+    {{/if}}
+    {{#if seo.description}}
+      <meta name='description' content='{{seo.description}}' />
+    {{/if}}
+    {{#if seo.canonical}}
+      <link rel='canonical' href='{{seo.canonical}}' />
+    {{/if}}
+    {{#if seo.ogType}}
+      <meta property='og:type' content='{{seo.ogType}}' />
+    {{/if}}
+    {{#if seo.ogTitle}}
+      <meta property='og:title' content='{{seo.ogTitle}}' />
+    {{/if}}
+    {{#if seo.ogDescription}}
+      <meta property='og:description' content='{{seo.ogDescription}}' />
+    {{/if}}
+    {{#if seo.ogUrl}}
+      <meta property='og:url' content='{{seo.ogUrl}}' />
+    {{/if}}
+    {{#if seo.ogImage}}
+      <meta property='og:image' content='{{seo.ogImage}}' />
+    {{/if}}
+    <meta property='og:site_name' content='Medical Care' />
+    <meta name='twitter:card' content='summary_large_image' />
+    {{#if seo.twitterTitle}}
+      <meta name='twitter:title' content='{{seo.twitterTitle}}' />
+    {{/if}}
+    {{#if seo.twitterDescription}}
+      <meta name='twitter:description' content='{{seo.twitterDescription}}' />
+    {{/if}}
+    {{#if seo.twitterImage}}
+      <meta name='twitter:image' content='{{seo.twitterImage}}' />
+    {{/if}}
 
     <style>
       :root {

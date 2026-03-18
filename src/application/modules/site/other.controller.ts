@@ -8,6 +8,22 @@ export class OtherController {
     return res.render('about', {
       styles: ['about.css'],
       success: req.flash('success'),
+      seo: {
+        title: 'About Us | Medical Care',
+        keywords:
+          'about medical care, hair transplant platform, healthcare marketplace, clinic transparency',
+        description:
+          'Learn about Medical Care, our mission, and how we help users discover trusted clinics and real treatment outcomes.',
+        canonical: '/about',
+        ogType: 'website',
+        ogTitle: 'About Us | Medical Care',
+        ogDescription:
+          'Meet the Medical Care platform and our mission to improve patient decision-making.',
+        ogUrl: '/about',
+        twitterTitle: 'About Us | Medical Care',
+        twitterDescription:
+          'Learn more about the Medical Care platform and our mission.',
+      },
     });
   }
 

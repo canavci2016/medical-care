@@ -126,6 +126,22 @@ export class HospitalHairResultController {
       pagination: newPagination,
       filters,
       styles: ['results.css'],
+      seo: {
+        title: 'Hair Transplant Results | Medical Care',
+        keywords:
+          'hair transplant results, before after hair transplant, verified hair results, FUE results, DHI results',
+        description:
+          'Browse verified hair transplant before-and-after cases. Filter by procedure type, technique, graft count, age range, and duration.',
+        canonical: '/results',
+        ogType: 'website',
+        ogTitle: 'Hair Transplant Results | Medical Care',
+        ogDescription:
+          'Explore real hair transplant outcomes with filters for technique, graft count, and timeline.',
+        ogUrl: '/results',
+        twitterTitle: 'Hair Transplant Results | Medical Care',
+        twitterDescription:
+          'See verified before-and-after hair transplant cases and compare outcomes.',
+      },
     });
   }
 
