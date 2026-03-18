@@ -156,23 +156,23 @@
         border-radius: 8px;
       }
 
-      .image-slider .nav {
+      .nav-btn {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: white;
-        border: 1px solid #e5e7eb;
-        font-size: 22px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        font-size: 20px;
+        padding: 10px 14px;
         cursor: pointer;
+        border-radius: 50%;
       }
 
-      .nav.left {
+      .nav-btn.left {
         left: 12px;
       }
-      .nav.right {
+      .nav-btn.right {
         right: 12px;
       }
     </style>
@@ -187,10 +187,16 @@
 
         <!-- LEFT: IMAGES -->
         <div class='card'>
-          <div class='i3mage-slider'>
-            <button class='nav left' aria-label='Previous image'>‹</button>
-            <img width="500" height="400" id='sliderImage' src='{{result.images.[0]}}' alt='Result image' />
-            <button class='nav right' aria-label='Next image'>›</button>
+          <div class='image-slider'>
+            <button class='nav-btn left' aria-label='Previous image'>‹</button>
+            <img
+              width='500'
+              height='400'
+              id='sliderImage'
+              src='{{result.images.[0]}}'
+              alt='Result image'
+            />
+            <button class='nav-btn right' aria-label='Next image'>›</button>
           </div>
           <div class='card-body'>
             <strong>Before & After Comparison</strong>
@@ -245,8 +251,10 @@
                   {{result.hospital.country}}
                   · ⭐
                   {{result.hospital.rating}}</div>
-                <a href='/hospitals/{{result.hospital.id}}' style='color:var(--primary); font-size:14px;'>View
-                  hospital profile</a>
+                <a
+                  href='/hospitals/{{result.hospital.id}}'
+                  style='color:var(--primary); font-size:14px;'
+                >View hospital profile</a>
               </div>
             </div>
           </div>
@@ -269,11 +277,10 @@
 
     <script>
       const images ={{{json result.images}}}
-      ; let index = 0;
-      document.querySelector('.nav.left').onclick = () => { index = (index - 1 +
-      images.length) % images.length; sliderImage.src = images[index]; };
-      document.querySelector('.nav.right').onclick = () => { index = (index + 1)
-      % images.length; sliderImage.src = images[index]; };
+      ; let index = 0; document.querySelector('.nav-btn.left').onclick = () => {
+      index = (index - 1 + images.length) % images.length; sliderImage.src =
+      images[index]; }; document.querySelector('.nav-btn.right').onclick = () => {
+      index = (index + 1) % images.length; sliderImage.src = images[index]; };
     </script>
 
   </body>
