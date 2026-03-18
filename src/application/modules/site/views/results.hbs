@@ -76,7 +76,7 @@
             {{#each results}}
 
               <div class='card' onclick="window.location='/results/{{id}}'">
-                <img width="400" height="300" src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x400?text=No+Image{{/if}}' />
+                <img width="400" height="300" src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x400?text=No+Image{{/if}}' alt='{{hospital.name}} hair transplant result image' />
                 <div class='card-body'>
                   <strong>{{hospital.name}}</strong>
                   {{#if verified}}
