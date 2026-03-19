@@ -1,4 +1,6 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Inject, Res } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
 import type { Response } from 'express';
 import { BlogService } from '../blog/blog.service';
 import { BlogStatus } from '../blog/entities/blog.entity';
@@ -7,14 +9,27 @@ import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair
 
 @Controller()
 export class SitemapController {
+  private readonly CACHE_KEY = 'sitemap_xml';
+  private readonly CACHE_TTL_MS = 5 * 60 * 60 * 1000; // 5 hours
+  private readonly cacheManager!: Cache;
+
   constructor(
     private readonly blogService: BlogService,
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
-  ) {}
+    @Inject(CACHE_MANAGER) cacheManager: unknown,
+  ) {
+    this.cacheManager = cacheManager as Cache;
+  }
 
   @Get('sitemap.xml')
   async getSitemap(@Res() res: Response) {
+    const cached = await this.cacheManager.get<string>(this.CACHE_KEY);
+    if (cached) {
+      res.header('Content-Type', 'application/xml');
+      return res.send(cached);
+    }
+
     const baseUrl = process.env.APP_URL || 'https://medicalcare.com';
     const today = new Date().toISOString().split('T')[0];
 
@@ -23,12 +38,12 @@ export class SitemapController {
       changefreq: string;
       priority: string;
     }> = [
-      { loc: '/', changefreq: 'daily', priority: '1.0' },
-      { loc: '/hospitals', changefreq: 'daily', priority: '0.9' },
-      { loc: '/results', changefreq: 'daily', priority: '0.9' },
-      { loc: '/blogs', changefreq: 'weekly', priority: '0.8' },
-      { loc: '/about', changefreq: 'monthly', priority: '0.5' },
-    ];
+        { loc: '/', changefreq: 'daily', priority: '1.0' },
+        { loc: '/hospitals', changefreq: 'daily', priority: '0.9' },
+        { loc: '/results', changefreq: 'daily', priority: '0.9' },
+        { loc: '/blogs', changefreq: 'weekly', priority: '0.8' },
+        { loc: '/about', changefreq: 'monthly', priority: '0.5' },
+      ];
 
     const [blogs, hospitals, hairResults] = await Promise.all([
       this.blogService.findAll({
@@ -81,6 +96,8 @@ export class SitemapController {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${xmlEntries}
 </urlset>`;
+
+    await this.cacheManager.set(this.CACHE_KEY, xml, this.CACHE_TTL_MS);
 
     res.header('Content-Type', 'application/xml');
     return res.send(xml);

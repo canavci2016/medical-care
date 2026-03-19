@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Query, Res } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Controller, Get, Inject, Param, Query, Res } from '@nestjs/common';
 import { BlogService } from '../blog/blog.service';
 import { BlogStatus } from '../blog/entities/blog.entity';
+import type { Cache } from 'cache-manager';
 import type { Response } from 'express';
 import { BlogCategoryService } from '../blog/blog-category.service';
 import { buildPagination } from './pagination.util';
@@ -8,13 +10,33 @@ import { BlogQueryDto } from './dto/blog-query.dto';
 
 @Controller('blogs')
 export class BlogController {
+  private readonly BLOG_LIST_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+  private readonly cacheManager!: Cache;
+
   constructor(
     private readonly blogService: BlogService,
     private readonly categoryService: BlogCategoryService,
-  ) {}
+    @Inject(CACHE_MANAGER) cacheManager: unknown,
+  ) {
+    this.cacheManager = cacheManager as Cache;
+  }
+
+  private buildBlogListCacheKey(query: BlogQueryDto) {
+    const page = query.page ? parseInt(query.page, 10) : 1;
+    const category = query.cat || '';
+    const title = (query.title || '').trim().toLowerCase();
+
+    return `blog_list:page=${page}:cat=${category}:title=${encodeURIComponent(title)}`;
+  }
 
   @Get()
   async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
+    const cacheKey = this.buildBlogListCacheKey(query);
+    const cachedHtml = await this.cacheManager.get<string>(cacheKey);
+    if (cachedHtml) {
+      return res.send(cachedHtml);
+    }
+
     const { data: blogs, pagination } = await this.blogService.paginated({
       page: {
         page: query.page ? parseInt(query.page, 10) : 1,
@@ -28,7 +50,7 @@ export class BlogController {
     });
 
     const recentBlogs = await this.blogService.findAll({
-      skip: blogs.length - 1,
+      skip: blogs.length - 1 < 0 ? 0 : blogs.length - 1,
       take: 3,
       orderBy: 'publishedAt',
       order: 'DESC',
@@ -42,7 +64,7 @@ export class BlogController {
 
     const newPagination = buildPagination(pagination, query);
 
-    return res.render('blogs', {
+    const viewModel = {
       blogs: blogs,
       categories: categories,
       recentBlogs: recentBlogs,
@@ -64,7 +86,26 @@ export class BlogController {
         twitterDescription:
           'Discover practical hair transplant guides and expert insights.',
       },
+    };
+
+    const renderedHtml = await new Promise<string>((resolve, reject) => {
+      res.render('blogs', viewModel, (error, html) => {
+        if (error || !html) {
+          reject(error || new Error('Failed to render blogs page'));
+          return;
+        }
+
+        resolve(html);
+      });
     });
+
+    await this.cacheManager.set(
+      cacheKey,
+      renderedHtml,
+      this.BLOG_LIST_CACHE_TTL_MS,
+    );
+
+    return res.send(renderedHtml);
   }
 
   @Get(':slug')
