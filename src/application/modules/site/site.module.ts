@@ -15,6 +15,7 @@ import { AdminHospitalHairResultController } from './admin-hospital-hair-result.
 import { AdminHospitalController } from './admin-hospital.controller';
 import { AdminDoctorController } from './admin-doctor.controller';
 import { AdminAuthController } from './admin-auth.controller';
+import { SitemapController } from './sitemap.controller';
 
 @Module({
   imports: [HospitalModule, DoctorModule, HospitalHairResultModule, BlogModule],
@@ -30,6 +31,7 @@ import { AdminAuthController } from './admin-auth.controller';
     AdminDoctorController,
     AdminAuthController,
     OtherController,
+    SitemapController,
   ],
   providers: [HomeService],
   exports: [HomeService],
