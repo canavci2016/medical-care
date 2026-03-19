@@ -27,7 +27,7 @@
               src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x300?text=No+Image{{/if}}'
               class='img'
               style="width: 100%;"
-              alt=''
+              alt='{{#if hospital.name}}Hair transplant before and after result from {{hospital.name}}{{else}}Hair transplant before and after result{{/if}}{{#if graftCount}} with {{graftCount}} grafts{{/if}}{{#if operationDateRelative}}, shared {{operationDateRelative}}{{/if}}'
             />
             <div class='card-body'>
               <strong>{{hospital.name}}</strong>

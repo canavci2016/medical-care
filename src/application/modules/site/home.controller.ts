@@ -42,6 +42,22 @@ export class HomeController {
       styles: ['home.css'],
       techniques,
       availableMonths,
+      seo: {
+        title: 'Real Hair Transplant Results | Medical Care',
+        keywords:
+          'hair transplant results, before after hair transplant, FUE results, DHI results, verified clinic outcomes',
+        description:
+          'Find real hair transplant before-and-after results from trusted clinics. Search by hospital, technique, and treatment timeline.',
+        canonical: '/',
+        ogType: 'website',
+        ogTitle: 'Real Hair Transplant Results | Medical Care',
+        ogDescription:
+          'Explore authentic hair transplant outcomes and compare results by clinic and technique.',
+        ogUrl: '/',
+        twitterTitle: 'Real Hair Transplant Results | Medical Care',
+        twitterDescription:
+          'Discover real before-and-after hair transplant cases from trusted clinics.',
+      },
     });
   }
 
