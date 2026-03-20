@@ -2,7 +2,10 @@
   <head>
     <meta charset='UTF-8' />
     <title>{{#if seo.title}}{{seo.title}}{{else}}Hair Results Platform{{/if}}</title>
-    <meta name="google-site-verification" content="XoHpajvB7DSFCP5DmC0JGiNHsbvOgI5CU8eZuUwu14w" />
+    <meta
+      name='google-site-verification'
+      content='XoHpajvB7DSFCP5DmC0JGiNHsbvOgI5CU8eZuUwu14w'
+    />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     {{#if seo.keywords}}
       <meta name='keywords' content='{{seo.keywords}}' />
@@ -113,73 +116,83 @@
         text-align: center;
         font-size: 14px;
       }
+
       /* HEADER */
 
-      .site-header {
+      .header {
+        background: #0d6efd;
+        color: white;
+        padding: 40px 40px;
         position: sticky;
         top: 0;
-        z-index: 100;
-        background: white;
-        border-bottom: 1px solid var(--border);
+        z-index: 1000;
       }
 
-      .header-inner {
-        max-width: 1200px;
+      .nav-container {
+        max-width: 1100px;
         margin: auto;
-        padding: 12px 32px;
-        display: grid;
-        grid-template-columns: auto 1fr 2fr auto;
+        display: flex;
         align-items: center;
-        gap: 24px;
+        justify-content: space-between;
       }
 
       .logo {
-        font-size: 22px;
-        font-weight: 700;
-        text-decoration: none;
-        color: var(--text);
+        font-weight: bold;
+        font-size: 20px;
+        margin-right: 5%;
       }
 
-      .logo span {
-        color: var(--primary);
-      }
-
-      .nav {
+      /* NAV LINKS */
+      .nav-links {
         display: flex;
         gap: 20px;
       }
 
-      .nav a {
+      .nav-links a {
+        color: white;
         text-decoration: none;
-        color: var(--text);
-        font-size: 15px;
+        font-size: 16px;
       }
 
-      .nav a:hover {
-        color: var(--primary);
+      .nav-links a:hover {
+        text-decoration: underline;
       }
 
-      .header-search input {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        font-size: 14px;
+      /* MOBILE */
+      .menu-toggle {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
       }
 
-      /* Mobile */
-      @media (max-width: 900px) {
-        .header-inner {
-          grid-template-columns: 1fr auto;
-        }
-
-        .nav,
-        .header-search {
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .nav-links {
+          position: absolute;
+          top: 60px;
+          left: 0;
+          width: 100%;
+          background: #0d6efd;
+          flex-direction: column;
           display: none;
+          padding: 15px 0;
+        }
+
+        .nav-links a {
+          padding: 10px 20px;
+          display: block;
+        }
+
+        .nav-links.active {
+          display: flex;
+        }
+
+        .menu-toggle {
+          display: block;
         }
       }
 
-      /* HEADER -- END */
+      /* HEADER END */
     </style>
 
     {{#each styles}}
@@ -190,31 +203,27 @@
 
   <body>
 
-    <!-- HEADER -->
-    <header class='site-header'>
-      <div class='header-inner'>
+    <header class='header'>
+      <div class='nav-container'>
 
-        <!-- Logo -->
-        <a href='/' class='logo'>
-          Hair<span>Results</span>
-        </a>
+        <!-- LOGO -->
+        <div class='logo'>
+          HairResult
+        </div>
 
-        <!-- Primary Navigation -->
-        <nav class='nav'>
-          <a href='/results'>Results</a>
+        <!-- DESKTOP NAV -->
+        <nav class='nav-links' id='navLinks'>
+          <a href='/'>Home</a>
           <a href='/hospitals'>Hospitals</a>
+          <a href='/results'>Results</a>
           <a href='/blogs'>Blog</a>
           <a href='/about'>About</a>
         </nav>
 
-        <!-- Search -->
-        <form class='header-search'>
-          <input
-            type='search'
-            placeholder='Search hospitals or results...'
-            aria-label='Search'
-          />
-        </form>
+        <!-- MOBILE TOGGLE -->
+        <div class='menu-toggle' onclick='toggleMenu()'>
+          ☰
+        </div>
 
       </div>
     </header>
@@ -225,6 +234,11 @@
     <footer>
       © 2026 HairResults · Results may vary · Medical disclaimer
     </footer>
+
+    <script>
+      function toggleMenu() {
+      document.getElementById("navLinks").classList.toggle("active"); }
+    </script>
 
     {{#each scripts}}
       <script src='/js/{{this}}'></script>
