@@ -1,7 +1,6 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
+import { GooglePlaceService } from 'src/application/core/google/google-place.service';
 import { HospitalService } from 'src/application/modules/hospital/hospital.service';
 
 @Injectable()
@@ -9,9 +8,8 @@ export class CronjobService {
   private readonly logger = new Logger(CronjobService.name);
   constructor(
     private readonly hospitalService: HospitalService,
-    private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-  ) { }
+    private readonly googlePlaceService: GooglePlaceService,
+  ) {}
 
   logInitialization(): void {
     this.logger.debug('CronjobService initialized');
@@ -19,7 +17,6 @@ export class CronjobService {
 
   @Cron('0 23 * * *')
   async readHospitalReviews() {
-    const API_KEY = this.configService.get<string>('GOOGLE_API_KEY');
     this.logger.debug('Running readHospitalReviews cron job');
     const limit = 10;
     let offset = 0;
@@ -35,20 +32,16 @@ export class CronjobService {
       }
 
       for (const hospital of hospitals) {
-        const url = `https://places.googleapis.com/v1/places/${hospital.googlePlaceId}`;
+        if (!hospital.googlePlaceId) {
+          this.logger.warn(
+            `Hospital ${hospital.name} does not have a googlePlaceId, skipping...`,
+          );
+          continue;
+        }
 
-        const { data } = await this.httpService.axiosRef.get<{
-          rating: number;
-          userRatingCount: number;
-          formattedAddress: string;
-          websiteUri: string;
-          displayName: { text: string };
-        }>(url, {
-          params: {
-            fields: '*',
-            key: API_KEY,
-          },
-        });
+        const data = await this.googlePlaceService.getPlaceDetails(
+          hospital.googlePlaceId,
+        );
 
         await this.hospitalService.update(hospital.id, {
           rating: data.rating,

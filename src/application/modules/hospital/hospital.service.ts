@@ -13,6 +13,7 @@ import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
 import { Query } from 'src/application/shared/interfaces/query.interface';
+import { GooglePlaceService } from 'src/application/core/google/google-place.service';
 
 export interface Pagination {
   page?: number;
@@ -34,11 +35,28 @@ export class HospitalService {
   constructor(
     @InjectRepository(Hospital)
     private readonly hospitalRepository: Repository<Hospital>,
+    private readonly googlePlaceService: GooglePlaceService,
   ) { }
 
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
     const hospital = this.hospitalRepository.create(createHospitalDto);
-    return this.hospitalRepository.save(hospital);
+    const createdHosp = await this.hospitalRepository.save(hospital);
+
+    if (createHospitalDto.googlePlaceId) {
+      const details = await this.googlePlaceService.getPlaceDetails(
+        createHospitalDto.googlePlaceId,
+      );
+      await this.update(createdHosp.id, {
+        rating: details.rating,
+        reviewCount: details.userRatingCount,
+        address: details.formattedAddress,
+        name: details.displayName?.text || '',
+        website: details.websiteUri,
+        phone: details.internationalPhoneNumber,
+      });
+    }
+
+    return createdHosp;
   }
 
   async findAll(
@@ -145,9 +163,23 @@ export class HospitalService {
   }
 
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {
+    if (updateHospitalDto.googlePlaceId) {
+      const details = await this.googlePlaceService.getPlaceDetails(
+        updateHospitalDto.googlePlaceId,
+      );
+      updateHospitalDto.rating = details.rating;
+      updateHospitalDto.reviewCount = details.userRatingCount;
+      updateHospitalDto.address = details.formattedAddress;
+      updateHospitalDto.name = details.displayName?.text || '';
+      updateHospitalDto.website = details.websiteUri;
+      updateHospitalDto.phone = details.internationalPhoneNumber;
+    }
+
     const hospital = await this.findOne(id);
     Object.assign(hospital, updateHospitalDto);
-    return this.hospitalRepository.save(hospital);
+    const updatedHospital = await this.hospitalRepository.save(hospital);
+
+    return updatedHospital;
   }
 
   async remove(id: string): Promise<void> {

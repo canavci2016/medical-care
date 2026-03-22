@@ -13,6 +13,7 @@ import { SeederModule } from './shared/seeder/seeder.module';
 import { AwsModule } from './shared/modules/aws/aws.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
+import { GoogleModule } from './core/google/google.module';
 
 @Module({
   imports: [
@@ -60,6 +61,13 @@ import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
     SeederModule,
     AwsModule,
     CronjobModule,
+    GoogleModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        apiKey: config.get<string>('GOOGLE_API_KEY', ''),
+      }),
+      inject: [ConfigService],
+    }),
   ],
 
   controllers: [],
