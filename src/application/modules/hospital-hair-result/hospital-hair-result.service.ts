@@ -9,6 +9,7 @@ import {
 } from './entities/hospital-hair-result.entity';
 import { HospitalHairResultImage } from './entities/hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { instagramGetUrl } from 'instagram-url-direct';
 
 export interface Filter {
   gt?: number;
@@ -37,6 +38,7 @@ export class HospitalHairResultService {
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
   ): Promise<HospitalHairResult> {
+    const fullImages: string[] = [];
     const { imageUrls, images, ...rest } =
       createHospitalHairResultDto as CreateHospitalHairResultDto & {
         imageUrls?: string[];
@@ -50,6 +52,23 @@ export class HospitalHairResultService {
           watermarked?: boolean;
         }>;
       };
+
+    if (imageUrls) {
+      fullImages.push(...imageUrls);
+    }
+
+    if (createHospitalHairResultDto.original_url?.includes('instagram.com')) {
+      const data = await instagramGetUrl(
+        createHospitalHairResultDto.original_url,
+      );
+
+      const urls =
+        data.media_details
+          ?.filter((m) => m.type == 'image')
+          .map((m) => m.url) || [];
+
+      fullImages.push(...urls);
+    }
 
     const result = this.hospitalHairResultRepository.create(rest);
     const savedResult = await this.hospitalHairResultRepository.save(result);
@@ -65,7 +84,7 @@ export class HospitalHairResultService {
         lighting: img.lighting,
         watermarked: img.watermarked ?? false,
       })) ??
-      imageUrls?.map((imageUrl) => ({
+      fullImages?.map((imageUrl) => ({
         resultId: savedResult.id,
         imageUrl,
         month: savedResult.monthsAfter || 0,
