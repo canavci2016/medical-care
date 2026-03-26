@@ -26,6 +26,7 @@ export class HospitalHairResultController {
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
+        hospitalId: query.hospitalId,
         page: {
           page: query.page ? parseInt(query.page, 10) : 1,
           limit: 10,
@@ -125,7 +126,6 @@ export class HospitalHairResultController {
       results,
       pagination: newPagination,
       filters,
-      styles: ['results.css'],
       seo: {
         title: 'Hair Transplant Results | Medical Care',
         keywords:

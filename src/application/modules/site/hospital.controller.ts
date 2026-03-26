@@ -9,7 +9,6 @@ import {
 import { HospitalService } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
-import { buildPagination } from './pagination.util';
 import { HospitalQueryDto } from './dto/hospital-query.dto';
 
 @Controller('hospitals')
@@ -17,28 +16,28 @@ export class HospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
-  ) {}
+  ) { }
 
   @Get()
   async findAll(@Res() res: Response, @Query() query: HospitalQueryDto) {
     const [orderCollumn, orderDirection] = query.sorting
       ? query.sorting.split('_')
       : ['rating', 'desc'];
+
     const { data: hospitals, pagination } =
       await this.hospitalService.paginated({
         name: query.name,
         city: query.city,
         rating: query.rating ? parseInt(query.rating, 10) : undefined,
-        page: { limit: 5, page: query.page ? parseInt(query.page, 10) : 1 },
+        page: { limit: 6, page: query.page ? parseInt(query.page, 10) : 1 },
         orderBy: orderCollumn,
         orderDirection: orderDirection as 'asc' | 'desc',
       });
 
-    const newPagination = buildPagination(pagination, query);
-
     const cities = await this.hospitalService.getCities();
 
     const filters = {
+      name: query.name || '',
       cities: cities.map((city) => ({
         label: city.city + ` (${city.count})`,
         value: city.city,
@@ -65,9 +64,9 @@ export class HospitalController {
     };
 
     return res.render('hospital-list', {
+      currentPage: 'hospitals',
       hospitals,
-      pagination: newPagination,
-      styles: ['hospital-list.css'],
+      pagination,
       filters,
       seo: {
         title: 'Hospitals | Medical Care',
@@ -103,18 +102,23 @@ export class HospitalController {
     const { data: latestHairResults } =
       await this.hospitalHairResultService.findAll({
         hospitalId: id,
+        page: { limit: 3, page: 1 },
       });
 
     return res.render('hospital-detail', {
+      currentPage: 'hospitals',
       hospital: hospital,
       procedureTypes: procedureTypes,
       latestHairResults: latestHairResults
         .map((hr) => ({
           id: hr.id,
-          imageUrl: hr.images[0]?.imageUrl || null,
+          beforeImage: hr.images[0]?.imageUrl || null,
+          afterImage: hr.images[1]?.imageUrl || hr.images[0]?.imageUrl || null,
+          graftCount: hr.graftCount,
+          technique: hr.procedureType,
+          operationDateRelative: hr.operationDateRelative,
         }))
-        .filter((hr) => hr.imageUrl),
-      layout: false,
+        .filter((hr) => hr.beforeImage && hr.afterImage),
       totalProcedures: procedureTypes.reduce(
         (total, pt) => total + parseInt(pt.count, 10),
         0,

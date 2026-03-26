@@ -1,389 +1,320 @@
-<html lang='en'>
-  <head>
-    <meta charset='UTF-8' />
-    <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <title>Hospital Profile</title>
-    <style>
-      :root {
-        --primary: #2563eb;
-        --bg: #f8fafc;
-        --border: #e5e7eb;
-        --text: #0f172a;
-        --muted: #64748b;
-      }
+<section class='detail-hero'></section>
 
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        font-family: Inter, system-ui, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-      }
-
-      header {
-        background: white;
-        border-bottom: 1px solid var(--border);
-        padding: 16px 32px;
-        font-weight: 600;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 32px auto;
-        padding: 0 16px;
-      }
-
-      .hero {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 24px;
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 24px;
-      }
-
-      .hero img {
-        width: 100%;
-        border-radius: 12px;
-        object-fit: cover;
-      }
-
-      .hero h1 {
-        margin: 0;
-      }
-
-      .rating {
-        margin-top: 6px;
-        color: #f59e0b;
-        font-size: 14px;
-      }
-
-      .meta {
-        display: flex;
-        gap: 16px;
-        margin: 16px 0;
-        font-size: 14px;
-        color: var(--muted);
-      }
-
-      .actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 16px;
-      }
-
-      .actions a {
-        padding: 10px 16px;
-        border-radius: 8px;
-        text-decoration: none;
-        border: 1px solid var(--border);
-        color: var(--text);
-      }
-
-      .actions .primary {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 32px;
-        margin-top: 32px;
-      }
-
-      .card {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 24px;
-      }
-
-      .card h3 {
-        margin-top: 0;
-      }
-
-      .services {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 12px;
-        font-size: 14px;
-      }
-
-      .services span {
-        background: var(--bg);
-        padding: 8px 10px;
-        border-radius: 8px;
-      }
-
-      .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
-      }
-
-      .gallery img {
-        width: 100%;
-        border-radius: 8px;
-      }
-
-      .info-list {
-        font-size: 14px;
-        line-height: 1.8;
-      }
-
-      .info-list strong {
-        display: block;
-      }
-
-      @media (max-width: 900px) {
-        .hero {
-          grid-template-columns: 1fr;
-        }
-        .layout {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* HEADER */
-
-      .site-header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: white;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .header-inner {
-        max-width: 1200px;
-        margin: auto;
-        padding: 12px 32px;
-        display: grid;
-        grid-template-columns: auto 1fr 2fr auto;
-        align-items: center;
-        gap: 24px;
-      }
-
-      .logo {
-        font-size: 22px;
-        font-weight: 700;
-        text-decoration: none;
-        color: var(--text);
-      }
-
-      .logo span {
-        color: var(--primary);
-      }
-
-      .nav {
-        display: flex;
-        gap: 20px;
-      }
-
-      .nav a {
-        text-decoration: none;
-        color: var(--text);
-        font-size: 15px;
-      }
-
-      .nav a:hover {
-        color: var(--primary);
-      }
-
-      .header-search input {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        font-size: 14px;
-      }
-
-      .actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .actions .login {
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 14px;
-      }
-
-      /* Mobile */
-      @media (max-width: 900px) {
-        .header-inner {
-          grid-template-columns: 1fr auto;
-        }
-
-        .nav,
-        .header-search {
-          display: none;
-        }
-      }
-
-      /* HEADER -- END */
-    </style>
-  </head>
-  <body>
-
-    <header class='site-header'>
-      <div class='header-inner'>
-
-        <!-- Logo -->
-        <a href='/' class='logo'>
-          Hair<span>Results</span>
-        </a>
-
-        <!-- Primary Navigation -->
-        <nav class='nav'>
-          <a href='/results'>Results</a>
-          <a href='/hospitals'>Hospitals</a>
-          <a href='/blog'>Blog</a>
-          <a href='/about'>About</a>
-        </nav>
-
-        <!-- Search -->
-        <form class='header-search'>
-          <input
-            type='search'
-            placeholder='Search hospitals or results...'
-            aria-label='Search'
-          />
-        </form>
-
-        <!-- Actions -->
-        <div class='actions'>
-          <a href='/login' class='login'>Login</a>
-          <a href='/submit' class='btn'>Submit Result</a>
-        </div>
-
+<!-- PROFILE HEADER -->
+<section class='detail-content'>
+  <div class='container'>
+    <div class='profile-header'>
+      <div class='profile-image'>
+        <img src='{{hospital.coverImageUrl}}' alt='{{hospital.name}}' />
       </div>
-    </header>
-
-    <div class='container'>
-
-      <!-- HERO -->
-      <div class='hero'>
-        <img
-          width='400'
-          height='300'
-          src='{{hospital.coverImageUrl}}'
-          alt='{{hospital.name}}'
-        />
-        <div>
-          <h1>{{hospital.name}}</h1>
-          <div class='rating'>★★★★★
-            {{hospital.rating}}
-            ({{hospital.reviewCount}}
-            reviews)</div>
-          <div class='meta'>
-            <span>📍 {{hospital.city}}, {{hospital.country}}</span>
-            <span>🏥 Established {{hospital.established}}</span>
-            {{#if hospital.verified}}
-              <span>✔ Verified</span>
-            {{/if}}
-          </div>
-
-          <p class='muted'>
-            {{hospital.description}}
-          </p>
-
-          <div class='actions'>
-            <a href='tel:{{hospital.phone}}' class='primary'>Contact Hospital</a>
-            <a href='{{hospital.instagramUrl}}' target='_blank'>View Instagram</a>
-          </div>
+      <div class='profile-info'>
+        <h1>{{hospital.name}}</h1>
+        <p class='subtitle'>Premier Hair Transplant Clinic ·
+          {{hospital.city}},
+          {{hospital.country}}</p>
+        <div class='profile-badges'>
+          <span class='badge badge-green'>✓ Verified Clinic</span>
+          <span class='badge badge-gold'>★ Top Rated</span>
+          <span class='badge badge-blue'>{{totalProcedures}} Procedures</span>
         </div>
       </div>
-
-      <!-- CONTENT -->
-      <div class='layout'>
-
-        <!-- LEFT -->
-        <div>
-
-          <div class='card'>
-            <h3>About the Hospital</h3>
-            <p class='muted'>
-              {{hospital.description}}
-            </p>
-          </div>
-
-          <div class='card' style='margin-top:24px;'>
-            <h3>Services & Techniques</h3>
-            <div class='services'>
-              {{#each hospital.techniques}}
-                <span>{{this}}</span>
-              {{/each}}
-              {{#each procedureTypes}}
-                <span>{{this.procedureType}}</span>
-              {{/each}}
-            </div>
-          </div>
-
-          <div class='card' style='margin-top:24px;'>
-            <h3>Latest Results</h3>
-            <div class='gallery'>
-              {{#each latestHairResults}}
-                <img
-                  onclick='window.location.href="/results/{{this.id}}"'
-                  style='cursor: pointer;'
-                  width='200'
-                  height='150'
-                  src='{{this.imageUrl}}'
-                />
-              {{/each}}
-
-            </div>
-          </div>
-
-        </div>
-
-        <!-- RIGHT -->
-        <aside>
-
-          <div class='card'>
-            <h3>Hospital Info</h3>
-            <div class='info-list'>
-              <strong>Address</strong>
-              {{hospital.address}}
-              {{hospital.city}},
-              {{hospital.country}}
-
-              <strong>Languages</strong>
-              English, Turkish, Arabic
-
-              <strong>Accreditations</strong>
-              JCI, ISO 9001
-
-              <strong>Instagram</strong>
-              @{{hospital.instagramHandle}}
-            </div>
-          </div>
-
-          <div class='card' style='margin-top:24px;'>
-            <h3>Statistics</h3>
-            <div class='info-list'>
-              <strong>Total Procedures</strong>
-              {{totalProcedures}}
-
-              <strong>Average Rating</strong>
-              {{hospital.rating}}
-              / 5
-            </div>
-          </div>
-
-        </aside>
-
+      <div class='profile-actions'>
+        <div class='stars' style='font-size: 18px;'>★★★★★
+          <strong style='margin-left: 4px;'>{{hospital.rating}}</strong></div>
+        <a href='contact.html' class='btn btn-primary btn-sm'>Book Consultation</a>
       </div>
-
     </div>
 
-  </body>
-</html>
+    <div class='detail-main'>
+      <div class='detail-left'>
+        <!-- About -->
+        <div class='detail-card fade-in'>
+          <h2>About the Hospital</h2>
+          <p>Istanbul Hair Center is one of Turkey's most prestigious hair
+            transplant clinics, founded in 2008. With over 15 years of
+            experience and more than 12,500 successful procedures, we have
+            established ourselves as a global leader in hair restoration. Our
+            state-of-the-art facility is equipped with the latest technology,
+            including Sapphire FUE micro-blades, DHI Choi pens, and advanced PRP
+            therapy systems.</p>
+          <p style='margin-top: 12px;'>We welcome patients from over 80
+            countries and provide comprehensive care packages including airport
+            transfers, luxury hotel accommodation, and multilingual support
+            staff. Our team of 8 specialized surgeons and 30+ medical
+            professionals ensure every patient receives personalized,
+            world-class care.</p>
+        </div>
+
+        <!-- Facilities -->
+        <div class='detail-card fade-in'>
+          <h2>Facilities & Equipment</h2>
+          <div class='facilities-grid' style='margin-top: 16px;'>
+            <div class='facility-item'><div class='facility-icon'>🏥</div>
+              JCI Accredited Facility</div>
+            <div class='facility-item'><div class='facility-icon'>💎</div>
+              Sapphire FUE Blades</div>
+            <div class='facility-item'><div class='facility-icon'>🔬</div>
+              DHI Choi Implanter Pens</div>
+            <div class='facility-item'><div class='facility-icon'>🧬</div>
+              PRP Therapy Lab</div>
+            <div class='facility-item'><div class='facility-icon'>🖥️</div>
+              Digital Hair Analysis</div>
+            <div class='facility-item'><div class='facility-icon'>🛏️</div>
+              Private Recovery Rooms</div>
+            <div class='facility-item'><div class='facility-icon'>🌐</div>
+              Multilingual Staff</div>
+            <div class='facility-item'><div class='facility-icon'>✈️</div>
+              Airport Transfer Service</div>
+            <div class='facility-item'><div class='facility-icon'>🏨</div>
+              Hotel Accommodation</div>
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class='detail-card fade-in'>
+          <h2>Treatment Pricing</h2>
+          <table class='pricing-table'>
+            <thead>
+              <tr>
+                <th>Procedure</th>
+                <th>Grafts</th>
+                <th>Price Range</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>FUE Hair Transplant</td>
+                <td>Up to 5,000</td>
+                <td class='price'>$2,500 – $4,500</td>
+                <td>6-8 hours</td>
+              </tr>
+              <tr>
+                <td>Sapphire FUE</td>
+                <td>Up to 5,000</td>
+                <td class='price'>$3,000 – $5,500</td>
+                <td>6-8 hours</td>
+              </tr>
+              <tr>
+                <td>DHI Technique</td>
+                <td>Up to 4,000</td>
+                <td class='price'>$3,500 – $6,000</td>
+                <td>7-9 hours</td>
+              </tr>
+              <tr>
+                <td>PRP Therapy</td>
+                <td>N/A</td>
+                <td class='price'>$300 – $500</td>
+                <td>45 min</td>
+              </tr>
+              <tr>
+                <td>Beard Transplant</td>
+                <td>Up to 3,000</td>
+                <td class='price'>$2,000 – $3,500</td>
+                <td>4-6 hours</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Results Gallery -->
+        <div class='detail-card fade-in'>
+          <h2>Patient Results</h2>
+          <div class='grid-2' style='margin-top: 16px;'>
+            {{#each latestHairResults}}
+              <div class='ba-card'>
+                <div class='ba-images'>
+                  <div class='ba-img'><img
+                      src='{{this.beforeImage}}'
+                      alt='Before'
+                    /><span class='ba-label before'>Before</span></div>
+                  <div class='ba-img'><img
+                      src='{{this.afterImage}}'
+                      alt='After'
+                    /><span class='ba-label after'>After</span></div>
+                  <div class='divider'></div>
+                </div>
+                <div class='ba-info'>
+                  <h4>{{this.technique}} — {{this.graftCount}} Grafts</h4>
+                  <div class='ba-meta'><span>👨‍⚕️ Dr. Mehmet Yilmaz</span><span
+                    >{{this.operationDateRelative}}</span></div>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+          <div style='text-align: center; margin-top: 20px;'>
+            <a
+              href='/results/?hospitalId={{hospital.id}}'
+              class='btn btn-outline btn-sm'
+            >View All Results →</a>
+          </div>
+        </div>
+
+        <!-- Doctor Team -->
+        <div class='detail-card fade-in'>
+          <h2>Our Medical Team</h2>
+          <div class='team-grid' style='margin-top: 16px;'>
+            <a href='doctor-detail.html' class='team-member'>
+              <div class='member-avatar'>MY</div>
+              <h4>Dr. Mehmet Yilmaz</h4>
+              <p>Chief Surgeon · FUE & DHI</p>
+              <div
+                class='stars'
+                style='justify-content: center; font-size: 12px; margin-top: 4px;'
+              >★★★★★</div>
+            </a>
+            <a href='doctor-detail.html' class='team-member'>
+              <div class='member-avatar'>AK</div>
+              <h4>Dr. Ayşe Kaya</h4>
+              <p>Senior Surgeon · Sapphire FUE</p>
+              <div
+                class='stars'
+                style='justify-content: center; font-size: 12px; margin-top: 4px;'
+              >★★★★★</div>
+            </a>
+            <a href='doctor-detail.html' class='team-member'>
+              <div class='member-avatar'>OD</div>
+              <h4>Dr. Osman Demir</h4>
+              <p>Surgeon · FUE & Beard</p>
+              <div
+                class='stars'
+                style='justify-content: center; font-size: 12px; margin-top: 4px;'
+              >★★★★<span class='empty'>★</span></div>
+            </a>
+            <a href='doctor-detail.html' class='team-member'>
+              <div class='member-avatar'>EY</div>
+              <h4>Dr. Elif Yıldız</h4>
+              <p>Surgeon · PRP & DHI</p>
+              <div
+                class='stars'
+                style='justify-content: center; font-size: 12px; margin-top: 4px;'
+              >★★★★★</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class='detail-sidebar'>
+        <div class='sidebar-card fade-in'>
+          <h3>Hospital Information</h3>
+          <div class='info-row'>
+            <div class='icon-sm'>📍</div>
+            <div><span class='info-label'>Location</span><span
+                class='info-value'
+              >Istanbul, Turkey</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>📞</div>
+            <div><span class='info-label'>Phone</span><span
+                class='info-value'
+              >+90 212 555 0123</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>✉️</div>
+            <div><span class='info-label'>Email</span><span
+                class='info-value'
+              ><a
+                  href='/cdn-cgi/l/email-protection'
+                  class='__cf_email__'
+                  data-cfemail='c9a0a7afa689a0babda8a7abbca5a1a8a0bbe7aaa6a4'
+                >[email&#160;protected]</a></span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>🌐</div>
+            <div><span class='info-label'>Website</span><span
+                class='info-value'
+              >www.istanbulhair.com</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>🕐</div>
+            <div><span class='info-label'>Hours</span><span
+                class='info-value'
+              >Mon-Sat: 8AM - 7PM</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>📅</div>
+            <div><span class='info-label'>Founded</span><span
+                class='info-value'
+              >2008</span></div>
+          </div>
+          <a
+            href='contact.html'
+            class='btn btn-primary'
+            style='width: 100%; margin-top: 16px;'
+          >Book Free Consultation</a>
+        </div>
+
+        <div class='sidebar-card fade-in'>
+          <h3>Specializations</h3>
+          <div
+            style='display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;'
+          >
+            {{#each hospital.techniques}}
+              <span class='badge badge-blue'>{{this}}</span>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class='sidebar-card fade-in'>
+          <h3>Quick Stats</h3>
+          <div class='info-row'>
+            <div class='icon-sm'>🏆</div>
+            <div><span class='info-label'>Total Reviews</span><span
+                class='info-value'
+              >{{hospital.reviewCount}}</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>🏆</div>
+            <div><span class='info-label'>Total Procedures</span><span
+                class='info-value'
+              >12,500+</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>⭐</div>
+            <div><span class='info-label'>Patient Rating</span><span
+                class='info-value'
+              >4.9 / 5.0</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>✅</div>
+            <div><span class='info-label'>Success Rate</span><span
+                class='info-value'
+              >98.5%</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>👨‍⚕️</div>
+            <div><span class='info-label'>Medical Staff</span><span
+                class='info-value'
+              >38 professionals</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>🌍</div>
+            <div><span class='info-label'>Countries Served</span><span
+                class='info-value'
+              >80+</span></div>
+          </div>
+        </div>
+
+        <div class='sidebar-card fade-in'>
+          <h3>Patient Testimonial</h3>
+          <p
+            style='font-style: italic; font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-top: 8px;'
+          >"Best decision I ever made. The team was professional, caring, and
+            the results speak for themselves. 10/10 would recommend!"</p>
+          <div
+            style='display: flex; align-items: center; gap: 10px; margin-top: 12px;'
+          >
+            <div
+              style='width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px;'
+            >J</div>
+            <div>
+              <div style='font-weight: 600; font-size: 14px;'>James T.</div>
+              <div class='stars' style='font-size: 11px;'>★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

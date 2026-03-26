@@ -38,6 +38,7 @@ export class HomeController {
     }));
 
     return res.render('index', {
+      currentPage: 'home',
       results,
       techniques,
       availableMonths,

@@ -1,63 +1,128 @@
-<div class="container">
+<!-- PAGE HEADER -->
+<section class='page-header'>
+  <div class='container'>
+    <h1>Hair Transplant Hospitals</h1>
+    <p>Browse our network of verified, world-class hair transplant clinics
+      across the globe.</p>
+    <div class='breadcrumb'>
+      <a href='/'>Home</a>
+      <span class='sep'>›</span>
+      <span>Hospitals</span>
+    </div>
+  </div>
+</section>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h3>Filters</h3>
-
-    <form method="GET">
-      <label>City</label>
-      <select name="city">
-        <option value="">All</option>
+<!-- FILTER + LISTING -->
+<section class='section'>
+  <div class='container'>
+    <form class='filter-bar' method='GET' action='hospitals'>
+      <div class='search-input'>
+        <svg
+          width='16'
+          height='16'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+        ><circle cx='11' cy='11' r='8' /><path d='m21 21-4.35-4.35' /></svg>
+        <input
+          type='text'
+          name='name'
+          value="{{filters.name}}"
+          placeholder='Search hospitals by name or location...'
+        />
+      </div>
+      <select name='city'>
+        <option value=''>All Locations</option>
         {{#each filters.cities}}
         <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
         {{/each}}
       </select>
-
-      <label>Rating</label>
-      <select name="rating">
-        <option value="">All</option>
-        {{#each filters.stars}}
+      <select name='location'>
+        <option value=''>All Locations</option>
+        <option value='turkey'>Turkey</option>
+        <option value='uk'>United Kingdom</option>
+        <option value='korea'>South Korea</option>
+        <option value='india'>India</option>
+        <option value='usa'>United States</option>
+        <option value='spain'>Spain</option>
+      </select>
+      <select name='rating'>
+        <option value=''>All Ratings</option>
+         {{#each filters.stars}}
         <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
         {{/each}}
       </select>
-
-      <label>Sort By</label>
-      <select name="sorting">
-        <option value="">Default</option>
-        {{#each filters.sorts}}
-        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
-        {{/each}}
-      </select>
-
-      <button type="submit">Apply Filters</button>
+      <button type='submit' class='btn btn-primary btn-sm'>Search</button>
     </form>
-  </div>
 
-  <!-- Content -->
-  <div class="content">
+    <div class='grid-3' id='hospitalsGrid'>
+      <!-- Hospital 1 -->
 
-    <div class="top-bar">
-      <div>Showing {{pagination.length}} of {{pagination.total}} hospitals</div>
-      <div>Sorted by: Rating High → Low</div>
+      {{#each hospitals}}
+        <a
+          href='/hospitals/{{this.id}}'
+          class='card filterable-card fade-in'
+          data-location='{{this.city}}'
+          data-technique='{{this.techniques}}'
+          data-rating="{{this.rating}}"
+        >
+          <div class='card-image'>
+            <img src='{{this.coverImageUrl}}' alt='{{this.name}}' />
+            <div class='overlay'>
+              <span class='badge badge-green'>Verified</span>
+            </div>
+          </div>
+          <div class='card-body'>
+            <h3>{{this.name}}</h3>
+            <div class='location'>
+              <svg
+                width='14'
+                height='14'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              ><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z' /><circle
+                  cx='12'
+                  cy='10'
+                  r='3'
+                /></svg>
+              {{this.city}}, {{this.country}}
+            </div>
+            <div class='tags'>
+              {{#each this.techniques}}
+                <span class='badge badge-blue'>{{this}}</span>
+              {{/each}}
+            </div>
+            <div class='meta'>
+              <div class='rating'><div class='stars'>★★★★★</div><span
+                  class='score'
+                >{{this.rating}}</span></div>
+              <span class='procedures'>12,500+ procedures</span>
+            </div>
+          </div>
+        </a>
+      {{/each}}
     </div>
-
-    <!-- Hospital 1 -->
-    {{#each hospitals}}
-    <div class="hospital-card">
-      <img src="{{coverImageUrl}}" alt="{{name}} hospital cover image in {{city}}">
-      <div class="card-content">
-        <h4>{{name}}</h4>
-        <p><strong>City:</strong> {{city}}</p>
-        <p><strong>Rating:</strong> {{rating}}</p>
-        <button class="view-btn" onclick="window.location.href='/hospitals/{{this.id}}'">View Profile</button>
-      </div>
-    </div>
-    {{/each}}
 
     <!-- Pagination -->
-
-    {{> pagination pagination=pagination }}
-
+    <div
+      class='pagination'
+      data-pagination='hospitalsGrid'
+      data-total-pages='{{pagination.totalPages}}'
+    ></div>
   </div>
+</section>
 
-</div>
+<!-- CTA -->
+<section class='cta-section'>
+  <div class='container'>
+    <h2>Are You a Hospital?</h2>
+    <p>Join our network and showcase your expertise to thousands of potential
+      patients worldwide.</p>
+    <div class='cta-actions'>
+      <a href='/contact' class='btn btn-primary'>Register Your Hospital</a>
+    </div>
+  </div>
+</section>
