@@ -1,6 +1,7 @@
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>{{#if seo.title}}{{seo.title}}{{else}}Hair Results Platform{{/if}}</title>
     <meta
       name='google-site-verification'
@@ -42,206 +43,138 @@
     {{#if seo.twitterImage}}
       <meta name='twitter:image' content='{{seo.twitterImage}}' />
     {{/if}}
-
-    <style>
-      :root {
-        --primary: #2563eb;
-        --bg: #f9fafb;
-        --surface: #ffffff;
-        --border: #e5e7eb;
-        --text: #111827;
-        --muted: #6b7280;
-        --radius: 12px;
-      }
-
-      * {
-        box-sizing: border-box;
-        font-family: Inter, system-ui, sans-serif;
-      }
-
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-      }
-
-      header {
-        background: white;
-        border-bottom: 1px solid var(--border);
-        padding: 16px 32px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: auto;
-        padding: 32px;
-      }
-
-      h1 {
-        font-size: 36px;
-        margin-bottom: 16px;
-      }
-      h2 {
-        margin: 32px 0 16px;
-      }
-
-      /* sections */
-      section {
-        margin-bottom: 64px;
-      }
-
-      /* layout */
-      .split {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        gap: 32px;
-      }
-
-      .sidebar {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 16px;
-      }
-
-      /* FOOTER */
-      footer {
-        margin-top: 80px;
-        padding: 30px;
-        background-color: #0d6efd;
-        color: white;
-        text-align: center;
-        font-size: 14px;
-      }
-
-      /* HEADER */
-
-      .header {
-        background: #0d6efd;
-        color: white;
-        padding: 40px 40px;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-      }
-
-      .nav-container {
-        max-width: 1100px;
-        margin: auto;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .logo {
-        font-weight: bold;
-        font-size: 20px;
-        margin-right: 5%;
-      }
-
-      /* NAV LINKS */
-      .nav-links {
-        display: flex;
-        gap: 20px;
-      }
-
-      .nav-links a {
-        color: white;
-        text-decoration: none;
-        font-size: 16px;
-      }
-
-      .nav-links a:hover {
-        text-decoration: underline;
-      }
-
-      /* MOBILE */
-      .menu-toggle {
-        display: none;
-        font-size: 24px;
-        cursor: pointer;
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 768px) {
-        .nav-links {
-          position: absolute;
-          top: 60px;
-          left: 0;
-          width: 100%;
-          background: #0d6efd;
-          flex-direction: column;
-          display: none;
-          padding: 15px 0;
-        }
-
-        .nav-links a {
-          padding: 10px 20px;
-          display: block;
-        }
-
-        .nav-links.active {
-          display: flex;
-        }
-
-        .menu-toggle {
-          display: block;
-        }
-      }
-
-      /* HEADER END */
-    </style>
-
-    {{#each styles}}
-      <link rel='stylesheet' href='/css/{{this}}' />
-    {{/each}}
+    <link
+      rel='icon'
+      href='https://public-frontend-cos.metadl.com/mgx/img/favicon_atoms.ico'
+      type='image/x-icon'
+    />
+    <title>HairRestore Hub — Top Hair Transplant Hospitals & Doctors</title>
+    <link rel='stylesheet' href='/css/style.css' />
 
   </head>
-
   <body>
 
-    <header class='header'>
-      <div class='nav-container'>
-
-        <!-- LOGO -->
-        <div class='logo'>
+    <!-- NAVBAR -->
+    <nav class='navbar' id='navbar'>
+      <div class='container'>
+        <a href='index.html' class='logo'>
+          <svg
+            viewBox='0 0 36 36'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <circle cx='18' cy='18' r='18' fill='#0A2540' />
+            <path
+              d='M10 24C10 24 12 14 18 12C24 14 26 24 26 24'
+              stroke='#2ECC71'
+              stroke-width='2.5'
+              stroke-linecap='round'
+            />
+            <path
+              d='M14 22C14 22 15 17 18 16C21 17 22 22 22 22'
+              stroke='#2ECC71'
+              stroke-width='2'
+              stroke-linecap='round'
+            />
+            <circle cx='18' cy='11' r='2' fill='#2ECC71' />
+          </svg>
           HairResult
-        </div>
-
-        <!-- DESKTOP NAV -->
-        <nav class='nav-links' id='navLinks'>
-          <a href='/'>Home</a>
+        </a>
+        <div class='nav-links' id='navLinks'>
+          <a href='/' class='active'>Home</a>
           <a href='/hospitals'>Hospitals</a>
+          <a href='/doctors'>Doctors</a>
           <a href='/results'>Results</a>
-          <a href='/blogs'>Blog</a>
-          <a href='/about'>About</a>
-        </nav>
-
-        <!-- MOBILE TOGGLE -->
-        <div class='menu-toggle' onclick='toggleMenu()'>
-          ☰
+          <a href='/blog'>Blog</a>
+          <a href='/contact'>Contact</a>
         </div>
-
+        <div class='nav-cta'>
+          <a href='/contact' class='btn btn-primary btn-sm'>Get Consultation</a>
+          <button class='mobile-toggle' id='mobileToggle' aria-label='Menu'>
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </div>
-    </header>
+    </nav>
 
-    <!-- HOMEPAGE -->
+    
     {{{body}}}
 
-    <footer>
-      © 2026 HairResults · Results may vary · Medical disclaimer
+
+    <!-- FOOTER -->
+    <footer class='footer'>
+      <div class='container'>
+        <div class='footer-grid'>
+          <div class='footer-brand'>
+            <div class='logo'>
+              <svg
+                viewBox='0 0 36 36'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+                width='32'
+                height='32'
+              >
+                <circle cx='18' cy='18' r='18' fill='#1B4D7A' />
+                <path
+                  d='M10 24C10 24 12 14 18 12C24 14 26 24 26 24'
+                  stroke='#2ECC71'
+                  stroke-width='2.5'
+                  stroke-linecap='round'
+                />
+                <path
+                  d='M14 22C14 22 15 17 18 16C21 17 22 22 22 22'
+                  stroke='#2ECC71'
+                  stroke-width='2'
+                  stroke-linecap='round'
+                />
+                <circle cx='18' cy='11' r='2' fill='#2ECC71' />
+              </svg>
+              HairRestore Hub
+            </div>
+            <p>Your trusted platform for finding the best hair transplant
+              hospitals and doctors worldwide. Verified clinics, real results.</p>
+            <div class='footer-social'>
+              <a href='#' aria-label='Facebook'>f</a>
+              <a href='#' aria-label='Twitter'>𝕏</a>
+              <a href='#' aria-label='Instagram'>📷</a>
+              <a href='#' aria-label='YouTube'>▶</a>
+            </div>
+          </div>
+          <div class='footer-col'>
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href='hospitals.html'>Hospitals</a></li>
+              <li><a href='doctors.html'>Doctors</a></li>
+              <li><a href='results.html'>Results Gallery</a></li>
+              <li><a href='contact.html'>Contact Us</a></li>
+            </ul>
+          </div>
+          <div class='footer-col'>
+            <h4>Procedures</h4>
+            <ul>
+              <li><a href='#'>FUE Transplant</a></li>
+              <li><a href='#'>DHI Technique</a></li>
+              <li><a href='#'>Sapphire FUE</a></li>
+              <li><a href='#'>PRP Therapy</a></li>
+            </ul>
+          </div>
+          <div class='footer-col'>
+            <h4>Support</h4>
+            <ul>
+              <li><a href='contact.html'>Help Center</a></li>
+              <li><a href='#'>Privacy Policy</a></li>
+              <li><a href='#'>Terms of Service</a></li>
+              <li><a href='#'>For Hospitals</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class='footer-bottom'>
+          <p>© 2026 HairRestore Hub. All rights reserved. Connecting patients
+            with world-class hair transplant care.</p>
+        </div>
+      </div>
     </footer>
 
-    <script>
-      function toggleMenu() {
-      document.getElementById("navLinks").classList.toggle("active"); }
-    </script>
-
-    {{#each scripts}}
-      <script src='/js/{{this}}'></script>
-    {{/each}}
+    <script type='module' src='/scripts/script.js'></script>
   </body>
 </html>

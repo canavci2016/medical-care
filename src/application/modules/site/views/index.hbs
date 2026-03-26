@@ -1,43 +1,476 @@
-    <div class='container'>
-      <section>
-        <form action="/results" method="GET">
-          <h1>Find Real Hair Transplant Results</h1>
-
-          <div class='search-box'>
-            <input name="name" placeholder='Search by hospital, city, technique...' />
-            <select name="technique">
-              {{#each techniques}}
-                <option value="{{value}}">{{label}}</option>
-              {{/each}}
-            </select>
-
-            <select name="duration">
-              {{#each availableMonths}}
-                <option value="{{value}}">{{label}}</option>
-              {{/each}}
-            </select>
-            <button type="submit" class='btn'>Search</button>
-          </div>
-        </form>    <h2>Latest Results</h2>
-        <div class='grid'>
-          {{#each results}}
-
-          <div class='card' onclick="window.location='/results/{{id}}'" style="cursor: pointer;">
-            <img
-              src='{{#if image}}{{image}}{{else}}https://via.placeholder.com/400x300?text=No+Image{{/if}}'
-              class='img'
-              style="width: 100%;"
-              alt='{{#if hospital.name}}Hair transplant before and after result from {{hospital.name}}{{else}}Hair transplant before and after result{{/if}}{{#if graftCount}} with {{graftCount}} grafts{{/if}}{{#if operationDateRelative}}, shared {{operationDateRelative}}{{/if}}'
-            />
-            <div class='card-body'>
-              <strong>{{hospital.name}}</strong>
-              {{#if verified}}
-              <span class='badge'>Verified</span>
-              {{/if}}
-              <div class='muted'>{{operationDateRelative}} · {{graftCount}} grafts</div>
-            </div>
-          </div>
-          {{/each}}
+<!-- HERO -->
+<section class='hero'>
+  <img
+    src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/06dea3e8-36a3-44d9-b7b8-3394e65e1d35.png'
+    alt='Hair transplant clinic'
+    class='hero-bg-image'
+  />
+  <div class='container'>
+    <div class='hero-content'>
+      <h1>Find the Best
+        <span>Hair Transplant</span>
+        Hospitals & Doctors</h1>
+      <p>Discover top-rated clinics, experienced surgeons, and real patient
+        results. Your journey to confidence starts here with verified hospitals
+        and proven outcomes.</p>
+      <div class='hero-actions'>
+        <a href='/hospitals' class='btn btn-primary'>Browse Hospitals</a>
+        <a
+          href='/results'
+          class='btn btn-outline'
+          style='border-color: #fff; color: #fff;'
+        >View Results</a>
+      </div>
+      <div class='hero-stats'>
+        <div class='hero-stat'>
+          <span class='number' data-count='150'>0</span>
+          <span class='label'>Partner Hospitals</span>
         </div>
-      </section>
+        <div class='hero-stat'>
+          <span class='number' data-count='320'>0</span>
+          <span class='label'>Expert Doctors</span>
+        </div>
+        <div class='hero-stat'>
+          <span class='number' data-count='50000'>0</span>
+          <span class='label'>Procedures Done</span>
+        </div>
+      </div>
     </div>
+    <div class='hero-image'>
+      <img
+        src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/bcdad408-8479-4318-8ce6-df46b8d4435e.png'
+        alt='Doctor consultation'
+      />
+      <div class='floating-card top-right'>
+        <div class='icon green'>✓</div>
+        <div class='info'>
+          <div class='value'>98.5%</div>
+          <div class='desc'>Success Rate</div>
+        </div>
+      </div>
+      <div class='floating-card bottom-left'>
+        <div class='icon blue'>★</div>
+        <div class='info'>
+          <div class='value'>4.9/5.0</div>
+          <div class='desc'>Patient Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section class='stats-bar'>
+  <div class='container'>
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='150'>0</span>
+      <span class='stat-label'>Partner Hospitals</span>
+    </div>
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='320'>0</span>
+      <span class='stat-label'>Expert Surgeons</span>
+    </div>
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='50000'>0</span>
+      <span class='stat-label'>Successful Procedures</span>
+    </div>
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='35'>0</span>
+      <span class='stat-label'>Countries Served</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED HOSPITALS -->
+<section class='section' id='hospitals'>
+  <div class='container'>
+    <div class='section-header fade-in'>
+      <span class='label'>Our Partners</span>
+      <h2>Featured Hospitals</h2>
+      <p>Explore world-class hair transplant clinics with proven track records
+        and cutting-edge technology.</p>
+    </div>
+    <div class='grid-3'>
+      <!-- Hospital 1 -->
+      <a href='hospital-detail.html' class='card fade-in'>
+        <div class='card-image'>
+          <img
+            src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/1adac7cd-fa9f-45ab-9ccd-785eed597067.png'
+            alt='Istanbul Hair Center'
+          />
+          <div class='overlay'>
+            <span class='badge badge-green'>Verified</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <h3>Istanbul Hair Center</h3>
+          <div class='location'>
+            <svg
+              width='14'
+              height='14'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+            ><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z' /><circle
+                cx='12'
+                cy='10'
+                r='3'
+              /></svg>
+            Istanbul, Turkey
+          </div>
+          <div class='tags'>
+            <span class='badge badge-blue'>FUE</span>
+            <span class='badge badge-blue'>DHI</span>
+            <span class='badge badge-blue'>Sapphire FUE</span>
+          </div>
+          <div class='meta'>
+            <div class='rating'>
+              <div class='stars'>★★★★★</div>
+              <span class='score'>4.9</span>
+            </div>
+            <span class='procedures'>12,500+ procedures</span>
+          </div>
+        </div>
+      </a>
+      <!-- Hospital 2 -->
+      <a href='hospital-detail.html' class='card fade-in'>
+        <div class='card-image'>
+          <img
+            src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/1adac7cd-fa9f-45ab-9ccd-785eed597067.png'
+            alt='London Hair Clinic'
+          />
+          <div class='overlay'>
+            <span class='badge badge-green'>Verified</span>
+            <span class='badge badge-gold'>Premium</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <h3>London Hair Restoration Clinic</h3>
+          <div class='location'>
+            <svg
+              width='14'
+              height='14'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+            ><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z' /><circle
+                cx='12'
+                cy='10'
+                r='3'
+              /></svg>
+            London, United Kingdom
+          </div>
+          <div class='tags'>
+            <span class='badge badge-blue'>FUE</span>
+            <span class='badge badge-blue'>FUT</span>
+            <span class='badge badge-blue'>PRP</span>
+          </div>
+          <div class='meta'>
+            <div class='rating'>
+              <div class='stars'>★★★★★</div>
+              <span class='score'>4.8</span>
+            </div>
+            <span class='procedures'>8,200+ procedures</span>
+          </div>
+        </div>
+      </a>
+      <!-- Hospital 3 -->
+      <a href='hospital-detail.html' class='card fade-in'>
+        <div class='card-image'>
+          <img
+            src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/1adac7cd-fa9f-45ab-9ccd-785eed597067.png'
+            alt='Seoul Derma Hair'
+          />
+          <div class='overlay'>
+            <span class='badge badge-green'>Verified</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <h3>Seoul Derma Hair Institute</h3>
+          <div class='location'>
+            <svg
+              width='14'
+              height='14'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+            ><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z' /><circle
+                cx='12'
+                cy='10'
+                r='3'
+              /></svg>
+            Seoul, South Korea
+          </div>
+          <div class='tags'>
+            <span class='badge badge-blue'>FUE</span>
+            <span class='badge badge-blue'>Robotic</span>
+            <span class='badge badge-blue'>Stem Cell</span>
+          </div>
+          <div class='meta'>
+            <div class='rating'>
+              <div class='stars'>★★★★<span class='empty'>★</span></div>
+              <span class='score'>4.7</span>
+            </div>
+            <span class='procedures'>6,800+ procedures</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div style='text-align: center; margin-top: 40px;'>
+      <a href='hospitals.html' class='btn btn-outline'>View All Hospitals →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED DOCTORS -->
+<section class='section' style='background: #fff;'>
+  <div class='container'>
+    <div class='section-header fade-in'>
+      <span class='label'>Expert Surgeons</span>
+      <h2>Featured Doctors</h2>
+      <p>Meet the world's leading hair transplant surgeons with years of
+        experience and thousands of successful procedures.</p>
+    </div>
+    <div class='grid-3'>
+      <!-- Doctor 1 -->
+      <a href='doctor-detail.html' class='card doctor-card fade-in'>
+        <div class='card-image'>
+          <img
+            src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/bcdad408-8479-4318-8ce6-df46b8d4435e.png'
+            alt='Dr. Mehmet Yilmaz'
+          />
+          <div class='overlay'>
+            <span class='badge badge-gold'>Top Rated</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <span class='specialty'>FUE & DHI Specialist</span>
+          <h3>Dr. Mehmet Yilmaz</h3>
+          <p class='hospital-name'>Istanbul Hair Center</p>
+          <div class='stars' style='justify-content: center;'>★★★★★</div>
+          <p class='experience'>18 years experience · 5,000+ procedures</p>
+        </div>
+      </a>
+      <!-- Doctor 2 -->
+      <a href='doctor-detail.html' class='card doctor-card fade-in'>
+        <div class='card-image'>
+          <img
+            src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/bcdad408-8479-4318-8ce6-df46b8d4435e.png'
+            alt='Dr. Sarah Mitchell'
+          />
+          <div class='overlay'>
+            <span class='badge badge-green'>Verified</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <span class='specialty'>FUE & PRP Specialist</span>
+          <h3>Dr. Sarah Mitchell</h3>
+          <p class='hospital-name'>London Hair Restoration Clinic</p>
+          <div class='stars' style='justify-content: center;'>★★★★★</div>
+          <p class='experience'>15 years experience · 3,800+ procedures</p>
+        </div>
+      </a>
+      <!-- Doctor 3 -->
+      <a href='doctor-detail.html' class='card doctor-card fade-in'>
+        <div class='card-image'>
+          <img
+            src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/bcdad408-8479-4318-8ce6-df46b8d4435e.png'
+            alt='Dr. Jin-Woo Park'
+          />
+          <div class='overlay'>
+            <span class='badge badge-blue'>Robotic Expert</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <span class='specialty'>Robotic & Stem Cell Specialist</span>
+          <h3>Dr. Jin-Woo Park</h3>
+          <p class='hospital-name'>Seoul Derma Hair Institute</p>
+          <div class='stars' style='justify-content: center;'>★★★★<span
+              class='empty'
+            >★</span></div>
+          <p class='experience'>12 years experience · 2,500+ procedures</p>
+        </div>
+      </a>
+    </div>
+    <div style='text-align: center; margin-top: 40px;'>
+      <a href='doctors.html' class='btn btn-outline'>View All Doctors →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER RESULTS PREVIEW -->
+<section class='section'>
+  <div class='container'>
+    <div class='section-header fade-in'>
+      <span class='label'>Real Transformations</span>
+      <h2>Patient Results</h2>
+      <p>See real before and after photos from verified patients across our
+        partner hospitals.</p>
+    </div>
+    <div class='grid-3'>
+      <div class='ba-card fade-in'>
+        <div class='ba-images'>
+          <div class='ba-img'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png'
+              alt='Before'
+            />
+            <span class='ba-label before'>Before</span>
+          </div>
+          <div class='ba-img'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png'
+              alt='After'
+            />
+            <span class='ba-label after'>After</span>
+          </div>
+          <div class='divider'></div>
+        </div>
+        <div class='ba-info'>
+          <h4>FUE Hair Transplant — 3,500 Grafts</h4>
+          <div class='ba-meta'>
+            <span>👨‍⚕️ Dr. Mehmet Yilmaz</span>
+            <span>🏥 Istanbul Hair Center</span>
+            <span>📅 12 months post-op</span>
+          </div>
+        </div>
+      </div>
+      <div class='ba-card fade-in'>
+        <div class='ba-images'>
+          <div class='ba-img'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png'
+              alt='Before'
+            />
+            <span class='ba-label before'>Before</span>
+          </div>
+          <div class='ba-img'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png'
+              alt='After'
+            />
+            <span class='ba-label after'>After</span>
+          </div>
+          <div class='divider'></div>
+        </div>
+        <div class='ba-info'>
+          <h4>DHI Technique — 2,800 Grafts</h4>
+          <div class='ba-meta'>
+            <span>👨‍⚕️ Dr. Sarah Mitchell</span>
+            <span>🏥 London Hair Clinic</span>
+            <span>📅 10 months post-op</span>
+          </div>
+        </div>
+      </div>
+      <div class='ba-card fade-in'>
+        <div class='ba-images'>
+          <div class='ba-img'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png'
+              alt='Before'
+            />
+            <span class='ba-label before'>Before</span>
+          </div>
+          <div class='ba-img'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png'
+              alt='After'
+            />
+            <span class='ba-label after'>After</span>
+          </div>
+          <div class='divider'></div>
+        </div>
+        <div class='ba-info'>
+          <h4>Sapphire FUE — 4,200 Grafts</h4>
+          <div class='ba-meta'>
+            <span>👨‍⚕️ Dr. Jin-Woo Park</span>
+            <span>🏥 Seoul Derma Hair</span>
+            <span>📅 14 months post-op</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style='text-align: center; margin-top: 40px;'>
+      <a href='results.html' class='btn btn-outline'>View All Results →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class='section' style='background: #fff;'>
+  <div class='container'>
+    <div class='section-header fade-in'>
+      <span class='label'>Patient Stories</span>
+      <h2>What Our Patients Say</h2>
+      <p>Real testimonials from patients who transformed their lives through our
+        partner hospitals.</p>
+    </div>
+    <div class='grid-3'>
+      <div class='testimonial-card fade-in'>
+        <span class='quote-icon'>"</span>
+        <div class='stars'>★★★★★</div>
+        <p class='testimonial-text'>The entire experience at Istanbul Hair
+          Center was incredible. Dr. Yilmaz and his team made me feel
+          comfortable throughout the procedure. 12 months later, I have a full
+          head of hair and my confidence is back!</p>
+        <div class='testimonial-author'>
+          <div class='author-avatar'>J</div>
+          <div>
+            <div class='author-name'>James Thompson</div>
+            <div class='author-detail'>FUE, 3,500 grafts · Istanbul</div>
+          </div>
+        </div>
+      </div>
+      <div class='testimonial-card fade-in'>
+        <span class='quote-icon'>"</span>
+        <div class='stars'>★★★★★</div>
+        <p class='testimonial-text'>After years of research, I chose London Hair
+          Clinic and it was the best decision. Dr. Mitchell's attention to
+          detail in designing my hairline was remarkable. The results exceeded
+          my expectations.</p>
+        <div class='testimonial-author'>
+          <div class='author-avatar'>M</div>
+          <div>
+            <div class='author-name'>Michael Chen</div>
+            <div class='author-detail'>DHI, 2,800 grafts · London</div>
+          </div>
+        </div>
+      </div>
+      <div class='testimonial-card fade-in'>
+        <span class='quote-icon'>"</span>
+        <div class='stars'>★★★★★</div>
+        <p class='testimonial-text'>The robotic procedure at Seoul Derma was
+          cutting-edge. Minimal pain, quick recovery, and the results are
+          absolutely natural. I can't recommend Dr. Park enough for anyone
+          considering this.</p>
+        <div class='testimonial-author'>
+          <div class='author-avatar'>R</div>
+          <div>
+            <div class='author-name'>Robert Kim</div>
+            <div class='author-detail'>Robotic FUE, 4,200 grafts · Seoul</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class='cta-section'>
+  <div class='container'>
+    <h2>Ready to Start Your Hair Restoration Journey?</h2>
+    <p>Connect with top-rated hospitals and experienced surgeons. Get a free
+      consultation and personalized treatment plan today.</p>
+    <div class='cta-actions'>
+      <a href='contact.html' class='btn btn-primary'>Get Free Consultation</a>
+      <a
+        href='hospitals.html'
+        class='btn btn-outline'
+        style='border-color: #fff; color: #fff;'
+      >Browse Hospitals</a>
+    </div>
+  </div>
+</section>

@@ -39,7 +39,6 @@ export class HomeController {
 
     return res.render('index', {
       results,
-      styles: ['home.css'],
       techniques,
       availableMonths,
       seo: {
