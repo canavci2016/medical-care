@@ -42,6 +42,30 @@ async function bootstrap() {
     return JSON.stringify(context);
   });
 
+  hbs.registerHelper('stars', function (rating: number) {
+    let result = '';
+
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.5;
+    const totalStars = 5;
+
+    for (let i = 0; i < fullStars; i++) {
+      result += '<i class="fa-solid fa-star"></i>';
+    }
+
+    if (hasHalf) {
+      result += '<i class="fa-solid fa-star-half-stroke"></i>';
+    }
+
+    const remaining = totalStars - fullStars - (hasHalf ? 1 : 0);
+
+    for (let i = 0; i < remaining; i++) {
+      result += '<i class="fa-regular fa-star"></i>';
+    }
+
+    return new hbs.handlebars.SafeString(result);
+  });
+
   app.use(
     session({
       secret: 'my-secret',

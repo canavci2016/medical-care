@@ -186,7 +186,6 @@ h1, h2, h3, h4, h5 {
 }
 
 .stars {
-  display: inline-flex;
   gap: 2px;
   color: var(--gold);
   font-size: 14px;
