@@ -1,311 +1,369 @@
-<html lang='en'>
-  <head>
-    <meta charset='UTF-8' />
-    <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <meta
-      name='keywords'
-      content='hair transplant, hair transplant results, before after hair transplant, FUE, DHI, hair restoration clinic, verified hair transplant case'
-    />
-    <meta
-      name='description'
-      content='{{result.technique}} hair transplant result from {{result.hospital.name}} with {{result.graftCount}} grafts and {{result.monthsAfter}}-month progress photos.'
-    />
-    <link rel='canonical' href='/results/{{result.id}}' />
-    <meta property='og:type' content='article' />
-    <meta property='og:title' content='Hair Transplant Result | {{result.hospital.name}}' />
-    <meta
-      property='og:description'
-      content='{{result.technique}} procedure, {{result.graftCount}} grafts, {{result.monthsAfter}} months after operation.'
-    />
-    <meta property='og:image' content='{{result.images.[0].imageUrl}}' />
-    <meta property='og:site_name' content='Medical Care' />
-    <meta name='twitter:card' content='summary_large_image' />
-    <meta name='twitter:title' content='Hair Transplant Result | {{result.hospital.name}}' />
-    <meta
-      name='twitter:description'
-      content='{{result.technique}} procedure with before and after results.'
-    />
-    <meta name='twitter:image' content='{{result.images.[0].imageUrl}}' />
-    <title>Hair Result Detail</title>
-    <style>
-      :root {
-        --primary: #2563eb;
-        --bg: #f8fafc;
-        --border: #e5e7eb;
-        --text: #0f172a;
-        --muted: #64748b;
-        --success: #16a34a;
-      }
+  <!-- DETAIL HERO -->
+  <section class="detail-hero">
+    <div class="container">
+      <div class="breadcrumb" style="margin-bottom: 16px;">
+        <a href="/" style="color: rgba(255,255,255,0.6);">Home</a>
+        <span class="sep" style="color: rgba(255,255,255,0.4);">›</span>
+        <a href="results" style="color: rgba(255,255,255,0.6);">Results</a>
+        <span class="sep" style="color: rgba(255,255,255,0.4);">›</span>
+        <span style="color: rgba(255,255,255,0.8);">{{result.technique}} — {{result.graftCount}} Grafts</span>
+      </div>
+    </div>
+  </section>
 
-      * {
-        box-sizing: border-box;
-      }
+  <!-- DETAIL CONTENT -->
+  <section class="detail-content">
+    <div class="container">
 
-      body {
-        margin: 0;
-        font-family: Inter, system-ui, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-      }
-
-      header {
-        background: white;
-        border-bottom: 1px solid var(--border);
-        padding: 16px 32px;
-        font-weight: 600;
-      }
-
-      .container {
-        max-width: 1100px;
-        margin: 32px auto;
-        padding: 0 16px;
-      }
-
-      .breadcrumb {
-        font-size: 14px;
-        color: var(--muted);
-        margin-bottom: 16px;
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        gap: 32px;
-      }
-
-      .card {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        overflow: hidden;
-      }
-
-      .images {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .images img {
-        width: 100%;
-        display: block;
-      }
-
-      .card-body {
-        padding: 16px;
-      }
-
-      .badge {
-        display: inline-block;
-        background: var(--success);
-        color: white;
-        font-size: 12px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        margin-left: 8px;
-      }
-
-      .meta {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin: 16px 0;
-        font-size: 14px;
-      }
-
-      .meta div {
-        background: var(--bg);
-        padding: 10px 12px;
-        border-radius: 8px;
-      }
-
-      .actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 16px;
-      }
-
-      .actions button {
-        flex: 1;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        background: white;
-        cursor: pointer;
-      }
-
-      .actions .primary {
-        background: var(--primary);
-        color: white;
-        border: none;
-      }
-
-      .hospital-card {
-        display: flex;
-        gap: 16px;
-        align-items: center;
-      }
-
-      .hospital-card img {
-        width: 64px;
-        height: 64px;
-        border-radius: 12px;
-        object-fit: cover;
-        border: 1px solid var(--border);
-      }
-
-      .hospital-meta {
-        font-size: 14px;
-        color: var(--muted);
-      }
-
-      .section {
-        margin-top: 24px;
-      }
-
-      @media (max-width: 900px) {
-        .layout {
-          grid-template-columns: 1fr;
-        }
-        .images {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .image-slider {
-        position: relative;
-      }
-
-      .image-slider img {
-        width: 100%;
-        border-radius: 8px;
-      }
-
-      .nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: none;
-        font-size: 20px;
-        padding: 10px 14px;
-        cursor: pointer;
-        border-radius: 50%;
-      }
-
-      .nav-btn.left {
-        left: 12px;
-      }
-      .nav-btn.right {
-        right: 12px;
-      }
-    </style>
-  </head>
-  <body>
-
-    <div class='container'>
-
-      <div class='breadcrumb'>Results → MediClinic → Case #4821</div>
-
-      <div class='layout'>
-
-        <!-- LEFT: IMAGES -->
-        <div class='card'>
-          <div class='image-slider'>
-            <button class='nav-btn left' aria-label='Previous image'>‹</button>
-            <img
-              width='500'
-              height='400'
-              id='sliderImage'
-              src='{{result.images.[0]}}'
-              alt='Result image'
-            />
-            <button class='nav-btn right' aria-label='Next image'>›</button>
-          </div>
-          <div class='card-body'>
-            <strong>Before & After Comparison</strong>
-            <p class='muted'>{{result.patientStory}}</p>
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="profile-image">
+          <img src="{{result.previewImageUrl}}" alt="Patient Result">
+        </div>
+        <div class="profile-info">
+          <h1>{{result.technique}} {{result.procedureType}} Transplant — {{result.graftCount}} Grafts</h1>
+          <p class="subtitle">Performed by Dr. Mehmet Yilmaz at {{result.hospital.name}}</p>
+          <div class="profile-badges">
+            <span class="badge badge-green">✓ Verified Result</span>
+            <span class="badge badge-blue">{{result.technique}} Technique</span>
+            <span class="badge badge-gold">⭐ Featured Case</span>
           </div>
         </div>
+        <div class="profile-actions">
+          <a href="contact.html" class="btn btn-primary btn-sm">Book Similar Procedure</a>
+          <a href="hospital-detail.html" class="btn btn-outline btn-sm">View Hospital</a>
+        </div>
+      </div>
 
-        <!-- RIGHT: DETAILS -->
-        <div>
+      <div class="detail-main">
+        <!-- LEFT COLUMN -->
+        <div class="detail-left">
 
-          <div class='card'>
-            <div class='card-body'>
-              <h2>Hair Transplant Result
-                {{#if result.verified}}
-                  <span class='badge'>Verified</span>
-                {{/if}}
-              </h2>
-
-              <p class='muted'>Submitted by {{result.hospital.name}}</p>
-
-              <div class='meta'>
-                <div><strong>Technique</strong><br />{{result.technique}}</div>
-                <div><strong>Grafts</strong><br />{{result.graftCount}}</div>
-                <div><strong>Months After</strong><br
-                  />{{result.monthsAfter}}</div>
-                <div><strong>Procedure Area</strong><br
-                  />{{result.procedureType}}</div>
+          <!-- Image Gallery -->
+          <div class="detail-card">
+            <h2>📸 Before & After Gallery</h2>
+            <div class="result-gallery">
+              <!-- Main Image Viewer -->
+              <div class="result-gallery-main">
+                <img id="galleryMainImg" src="{{result.previewImageUrl}}" alt="Before - Front View">
+                <span class="result-gallery-caption" id="galleryCaption">Before — Front View</span>
+                <button class="gallery-nav gallery-prev" id="galleryPrev">‹</button>
+                <button class="gallery-nav gallery-next" id="galleryNext">›</button>
               </div>
-
-              <div class='actions'>
-                <button>♡ Save</button>
-                <button>⇄ Compare</button>
-                <button
-                  class='primary'
-                  onclick="window.location.href='tel:{{result.phone}}'"
-                >Contact Hospital</button>
+              <!-- Thumbnail Strip -->
+              <div class="result-gallery-thumbs" id="galleryThumbs">
+                {{#each result.images}}
+                  <div class="result-thumb {{#if @first}}active{{/if}}" data-index="{{@index}}">
+                    <img src="{{this}}" alt="Gallery Image {{@index}}">
+                    <span class="thumb-label {{#if @first}}before{{else}}after{{/if}}">{{#if @first}}Before{{else}}After{{/if}}</span>
+                  </div>
+                {{/each}}
+              
               </div>
             </div>
           </div>
 
-          <!-- HOSPITAL -->
-          <div class='card section'>
-            <div class='card-body hospital-card'>
-              <img
-                src='{{result.hospital.coverImageUrl}}'
-                alt='{{result.hospital.name}}'
-              />
+          <!-- Case Overview -->
+          <div class="detail-card">
+            <h2>📋 Case Overview</h2>
+            <p>This patient presented with Norwood Scale Class III hair loss, primarily affecting the frontal hairline and temple areas. After thorough consultation and scalp analysis, a Follicular Unit Extraction (FUE) procedure was recommended.</p>
+            <p style="margin-top: 12px;">The procedure involved the extraction of 3,500 grafts from the donor area at the back of the scalp, which were then carefully implanted into the recipient areas to recreate a natural-looking hairline.</p>
+
+            <div class="result-stats-grid" style="margin-top: 24px;">
+              <div class="result-stat-item">
+                <span class="result-stat-icon">🔬</span>
+                <div>
+                  <span class="result-stat-value">{{result.graftCount}}</span>
+                  <span class="result-stat-label">Total Grafts</span>
+                </div>
+              </div>
+              <div class="result-stat-item">
+                <span class="result-stat-icon">⏱️</span>
+                <div>
+                  <span class="result-stat-value">7 Hours</span>
+                  <span class="result-stat-label">Procedure Duration</span>
+                </div>
+              </div>
+              <div class="result-stat-item">
+                <span class="result-stat-icon">📅</span>
+                <div>
+                  <span class="result-stat-value">{{result.operationDateRelative}}</span>
+                  <span class="result-stat-label">Photos Taken Post-Op</span>
+                </div>
+              </div>
+              <div class="result-stat-item">
+                <span class="result-stat-icon">📊</span>
+                <div>
+                  <span class="result-stat-value">Class III</span>
+                  <span class="result-stat-label">Norwood Scale</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Treatment Timeline -->
+          <div class="detail-card">
+            <h2>📅 Recovery Timeline</h2>
+            <div class="blog-timeline">
+              <div class="blog-timeline-item">
+                <div class="blog-timeline-marker"></div>
+                <div class="blog-timeline-content">
+                  <h4>Day 1 — Procedure Day</h4>
+                  <p>3,500 grafts extracted and implanted using FUE technique under local anesthesia. Patient was comfortable throughout the 7-hour procedure.</p>
+                </div>
+              </div>
+              <div class="blog-timeline-item">
+                <div class="blog-timeline-marker"></div>
+                <div class="blog-timeline-content">
+                  <h4>Week 1 — Initial Healing</h4>
+                  <p>Mild swelling and redness in the recipient area. Donor area healing well with minimal scabbing. Patient followed post-op care instructions carefully.</p>
+                </div>
+              </div>
+              <div class="blog-timeline-item">
+                <div class="blog-timeline-marker"></div>
+                <div class="blog-timeline-content">
+                  <h4>Month 1 — Shedding Phase</h4>
+                  <p>Transplanted hairs entered the normal shedding phase. This is expected and temporary. Scalp fully healed with no visible scarring in the donor area.</p>
+                </div>
+              </div>
+              <div class="blog-timeline-item">
+                <div class="blog-timeline-marker"></div>
+                <div class="blog-timeline-content">
+                  <h4>Month 3 — Early Growth</h4>
+                  <p>First signs of new hair growth appearing in the transplanted areas. Fine, thin hairs beginning to emerge from the follicles.</p>
+                </div>
+              </div>
+              <div class="blog-timeline-item">
+                <div class="blog-timeline-marker"></div>
+                <div class="blog-timeline-content">
+                  <h4>Month 6 — Visible Progress</h4>
+                  <p>Significant new growth visible. Hair becoming thicker and longer. Patient very pleased with the progress and density improvement.</p>
+                </div>
+              </div>
+              <div class="blog-timeline-item">
+                <div class="blog-timeline-marker"></div>
+                <div class="blog-timeline-content">
+                  <h4>Month 12 — Final Result</h4>
+                  <p>Full results achieved. Natural-looking hairline with excellent density. Patient reports a dramatic improvement in confidence and appearance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Patient Testimonial -->
+          <div class="detail-card">
+            <h2>💬 Patient Testimonial</h2>
+            <div class="testimonial-card" style="box-shadow: none; border: none; padding: 0;">
+              <div class="quote-icon">"</div>
+              <p class="testimonial-text">"I had been considering a hair transplant for years, and I'm so glad I chose Dr. Yilmaz at Istanbul Hair Center. The entire experience was professional and comfortable. After 12 months, I can honestly say this was the best decision I've ever made. My hairline looks completely natural, and I feel like myself again."</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">M</div>
+                <div>
+                  <span class="author-name">Michael T., Age 34</span>
+                  <span class="author-detail">United Kingdom · FUE 3,500 Grafts</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="detail-sidebar">
+
+          <!-- Procedure Details -->
+          <div class="sidebar-card">
+            <h3>Procedure Details</h3>
+            <div class="info-row">
+              <div class="icon-sm">🔬</div>
               <div>
-                <strong>{{result.hospital.name}}</strong>
-                <div class='hospital-meta'>{{result.hospital.city}}
-                  ,
-                  {{result.hospital.country}}
-                  · ⭐
-                  {{result.hospital.rating}}</div>
-                <a
-                  href='/hospitals/{{result.hospital.id}}'
-                  style='color:var(--primary); font-size:14px;'
-                >View hospital profile</a>
+                <span class="info-label">Technique</span>
+                <span class="info-value">FUE (Follicular Unit Extraction)</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="icon-sm">📊</div>
+              <div>
+                <span class="info-label">Graft Count</span>
+                <span class="info-value">{{result.graftCount}} Grafts</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="icon-sm">🎯</div>
+              <div>
+                <span class="info-label">Treatment Area</span>
+                <span class="info-value">Frontal Hairline & Temples</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="icon-sm">⏱️</div>
+              <div>
+                <span class="info-label">Duration</span>
+                <span class="info-value">7 Hours</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="icon-sm">💉</div>
+              <div>
+                <span class="info-label">Anesthesia</span>
+                <span class="info-value">Local Anesthesia</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="icon-sm">🏥</div>
+              <div>
+                <span class="info-label">Recovery Time</span>
+                <span class="info-value">7-10 Days</span>
               </div>
             </div>
           </div>
 
-          <!-- NOTES -->
-          <div class='card section'>
-            <div class='card-body'>
-              <strong>Case Notes</strong>
-              <p class='muted'>
-                {{result.doctorNotes}}
-              </p>
+          <!-- Doctor Info -->
+          <div class="sidebar-card">
+            <h3>Performing Doctor</h3>
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+              <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 20px; flex-shrink: 0;">MY</div>
+              <div>
+                <strong style="display: block; font-size: 15px;">Dr. Mehmet Yilmaz</strong>
+                <span style="font-size: 13px; color: var(--text-secondary);">FUE Specialist · 15+ Years</span>
+              </div>
             </div>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">Board-certified hair transplant surgeon with over 15 years of experience and 8,000+ successful procedures.</p>
+            <a href="doctor-detail.html" class="btn btn-outline btn-sm" style="width: 100%;">View Doctor Profile</a>
+          </div>
+
+          <!-- Hospital Info -->
+          <div class="sidebar-card">
+            <h3>Hospital</h3>
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+              <div style="width: 56px; height: 56px; border-radius: var(--radius-sm); background: var(--light-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">🏥</div>
+              <div>
+                <strong style="display: block; font-size: 15px;">{{result.hospital.name}}</strong>
+                <span style="font-size: 13px; color: var(--text-secondary);">{{result.hospital.city}}, {{result.hospital.country}}</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <span class="stars">★★★★★</span>
+              <span style="font-weight: 700; font-size: 14px;">{{result.hospital.rating}}</span>
+              <span style="font-size: 13px; color: var(--text-light);">({{result.hospital.reviewCount}} reviews)</span>
+            </div>
+            <a href="/hospitals/{{result.hospital.id}}" class="btn btn-outline btn-sm" style="width: 100%;">View Hospital</a>
+          </div>
+
+          <!-- CTA -->
+          <div class="sidebar-card" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none;">
+            <h3 style="color: #fff;">Want Similar Results?</h3>
+            <p style="font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 16px;">Get a free consultation with our expert surgeons and start your hair restoration journey today.</p>
+            <a href="contact.html" class="btn btn-primary" style="width: 100%; background: var(--accent);">Get Free Consultation</a>
           </div>
 
         </div>
+      </div>
 
+      <!-- Related Results -->
+      <div class="detail-card" style="margin-top: 32px;">
+        <h2>🔗 Similar Results</h2>
+        <div class="grid-3" style="margin-top: 20px;">
+          <a href="result-detail.html" class="ba-card">
+            <div class="ba-images">
+              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
+              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
+              <div class="divider"></div>
+            </div>
+            <div class="ba-info">
+              <h4>DHI Technique — 2,800 Grafts</h4>
+              <div class="ba-meta">
+                <span>👨‍⚕️ Dr. Sarah Mitchell</span>
+                <span>📅 10 months post-op</span>
+              </div>
+              <span class="view-detail-link">View Full Case →</span>
+            </div>
+          </a>
+          <a href="result-detail.html" class="ba-card">
+            <div class="ba-images">
+              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
+              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
+              <div class="divider"></div>
+            </div>
+            <div class="ba-info">
+              <h4>Sapphire FUE — 4,200 Grafts</h4>
+              <div class="ba-meta">
+                <span>👨‍⚕️ Dr. Ayşe Kaya</span>
+                <span>📅 14 months post-op</span>
+              </div>
+              <span class="view-detail-link">View Full Case →</span>
+            </div>
+          </a>
+          <a href="result-detail.html" class="ba-card">
+            <div class="ba-images">
+              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
+              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
+              <div class="divider"></div>
+            </div>
+            <div class="ba-info">
+              <h4>FUE + PRP — 3,200 Grafts</h4>
+              <div class="ba-meta">
+                <span>👨‍⚕️ Dr. Rajesh Sharma</span>
+                <span>📅 9 months post-op</span>
+              </div>
+              <span class="view-detail-link">View Full Case →</span>
+            </div>
+          </a>
+        </div>
       </div>
 
     </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Start Your Transformation?</h2>
+      <p>Join thousands of satisfied patients who have restored their confidence with our partner hospitals.</p>
+      <div class="cta-actions">
+        <a href="contact.html" class="btn btn-primary">Get Free Consultation</a>
+        <a href="results.html" class="btn btn-outline" style="border-color: #fff; color: #fff;">View More Results</a>
+      </div>
+    </div>
+  </section>
 
     <script>
-      const images ={{{json result.images}}}
-      ; let index = 0; document.querySelector('.nav-btn.left').onclick = () => {
-      index = (index - 1 + images.length) % images.length; sliderImage.src =
-      images[index]; }; document.querySelector('.nav-btn.right').onclick = () => {
-      index = (index + 1) % images.length; sliderImage.src = images[index]; };
-    </script>
+    // Result Detail Gallery
+    document.addEventListener('DOMContentLoaded', () => {
+      const galleryImages ={{{json imagesAsJsArray}}};
 
-  </body>
-</html>
+      let currentIndex = 0;
+      const mainImg = document.getElementById('galleryMainImg');
+      const caption = document.getElementById('galleryCaption');
+      const thumbs = document.querySelectorAll('.result-thumb');
+      const prevBtn = document.getElementById('galleryPrev');
+      const nextBtn = document.getElementById('galleryNext');
+
+      function updateGallery(index) {
+        currentIndex = index;
+        if (mainImg) mainImg.src = galleryImages[index].src;
+        if (caption) caption.textContent = galleryImages[index].caption;
+        thumbs.forEach((t, i) => {
+          t.classList.toggle('active', i === index);
+        });
+      }
+
+      thumbs.forEach((thumb, i) => {
+        thumb.addEventListener('click', () => updateGallery(i));
+      });
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          const newIndex = currentIndex > 0 ? currentIndex - 1 : galleryImages.length - 1;
+          updateGallery(newIndex);
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const newIndex = currentIndex < galleryImages.length - 1 ? currentIndex + 1 : 0;
+          updateGallery(newIndex);
+        });
+      }
+    });
+  </script>

@@ -1,224 +1,105 @@
-<section class="page-header">
-    <div class="container">
-      <h1>Patient Results Gallery</h1>
-      <p>Real before and after photos from verified patients. See the transformations achieved by our partner hospitals.</p>
-      <div class="breadcrumb">
-        <a href="index.html">Home</a>
-        <span class="sep">›</span>
-        <span>Results</span>
-      </div>
+<!-- PAGE HEADER -->
+<section class='page-header'>
+  <div class='container'>
+    <h1>Patient Results Gallery</h1>
+    <p>Real before and after photos from verified patients. See the
+      transformations achieved by our partner hospitals.</p>
+    <div class='breadcrumb'>
+      <a href='index.html'>Home</a>
+      <span class='sep'>›</span>
+      <span>Results</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FILTER + RESULTS -->
-  <section class="section">
-    <div class="container">
-      <div class="filter-bar">
-        <div class="search-input">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="text" placeholder="Search by doctor, hospital, or technique...">
-        </div>
-        <select data-filter="technique">
-          <option value="">All Techniques</option>
-          <option value="fue">FUE</option>
-          <option value="dhi">DHI</option>
-          <option value="sapphire">Sapphire FUE</option>
-          <option value="robotic">Robotic</option>
-        </select>
-        <select data-filter="grafts">
-          <option value="">All Graft Counts</option>
-          <option value="2000">2,000 - 3,000</option>
-          <option value="3000">3,000 - 4,000</option>
-          <option value="4000">4,000+</option>
-        </select>
-        <select data-filter="hospital">
-          <option value="">All Hospitals</option>
-          <option value="istanbul">Istanbul Hair Center</option>
-          <option value="london">London Hair Clinic</option>
-          <option value="seoul">Seoul Derma Hair</option>
-          <option value="mumbai">Mumbai Hair Science</option>
-          <option value="beverly">Beverly Hills Hair</option>
-        </select>
+<!-- FILTER + RESULTS -->
+<section class='section'>
+  <div class='container'>
+    <div class='filter-bar'>
+      <div class='search-input'>
+        <svg
+          width='16'
+          height='16'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+        ><circle cx='11' cy='11' r='8' /><path d='m21 21-4.35-4.35' /></svg>
+        <input
+          type='text'
+          placeholder='Search by doctor, hospital, or technique...'
+        />
       </div>
-      
+      <select data-filter='technique'>
+        <option value=''>All Techniques</option>
+      {{#each filters.techniques}}
+        <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+      {{/each}}
+      </select>
+      <select data-filter='grafts'>
+        <option value=''>All Graft Counts</option>
+        <option value='2000'>2,000 - 3,000</option>
+        <option value='3000'>3,000 - 4,000</option>
+        <option value='4000'>4,000+</option>
+      </select>
+      <select data-filter='hospital'>
+        <option value=''>All Hospitals</option>
+        <option value='istanbul'>Istanbul Hair Center</option>
+        <option value='london'>London Hair Clinic</option>
+        <option value='seoul'>Seoul Derma Hair</option>
+        <option value='mumbai'>Mumbai Hair Science</option>
+        <option value='beverly'>Beverly Hills Hair</option>
+      </select>
+    </div>
 
-      <div class="grid-3" id="resultsGrid">
-        <!-- Result 1 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="fue" data-grafts="3000" data-hospital="istanbul">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
+    <div class='grid-3' id='resultsGrid'>
+
+      {{#each results}}
+  
+     <a href="/results/{{this.id}}" class="card filterable-card fade-in" data-technique="{{this.technique}}" data-grafts="{{this.graftCount}}" data-hospital="{{this.hospital.name}}">
+          <div class="card-image">
+            <img src="{{this.imageUrl}}" alt="{{this.technique}} Hair Transplant Result">
+            <div class="overlay">
+              <span class="badge badge-blue">{{this.technique}}</span>
+              <span class="badge badge-green">{{this.graftCount}} Grafts</span>
+            </div>
           </div>
-          <div class="ba-info">
-            <h4>FUE Hair Transplant — 3,500 Grafts</h4>
+          <div class="card-body">
+            <h3>{{this.technique}} Hair Transplant — {{this.graftCount}} Grafts</h3>
             <div class="ba-meta">
               <span>👨‍⚕️ Dr. Mehmet Yilmaz</span>
-              <span>🏥 Istanbul Hair Center</span>
-              <span>📅 12 months post-op</span>
+              <span>🏥 {{this.hospital.name}}</span>
+              <span>📅 {{this.operationDateRelative}}</span>
             </div>
             <span class="view-detail-link">View Full Case →</span>
           </div>
         </a>
+      {{/each}}
 
-        <!-- Result 2 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="dhi" data-grafts="2000" data-hospital="london">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>DHI Technique — 2,800 Grafts</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Sarah Mitchell</span>
-              <span>🏥 London Hair Clinic</span>
-              <span>📅 10 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 3 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="sapphire" data-grafts="4000" data-hospital="istanbul">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>Sapphire FUE — 4,200 Grafts</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Ayşe Kaya</span>
-              <span>🏥 Istanbul Hair Center</span>
-              <span>📅 14 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 4 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="robotic" data-grafts="4000" data-hospital="seoul">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>Robotic FUE — 4,500 Grafts</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Jin-Woo Park</span>
-              <span>🏥 Seoul Derma Hair</span>
-              <span>📅 11 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 5 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="fue" data-grafts="3000" data-hospital="mumbai">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>FUE + PRP — 3,200 Grafts</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Rajesh Sharma</span>
-              <span>🏥 Mumbai Hair Science</span>
-              <span>📅 9 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 6 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="fue" data-grafts="4000" data-hospital="beverly">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>FUE — 4,000 Grafts · Celebrity Style</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. David Williams</span>
-              <span>🏥 Beverly Hills Hair</span>
-              <span>📅 13 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 7 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="dhi" data-grafts="2000" data-hospital="istanbul">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>DHI — 2,500 Grafts · Crown Restoration</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Mehmet Yilmaz</span>
-              <span>🏥 Istanbul Hair Center</span>
-              <span>📅 8 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 8 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="fue" data-grafts="3000" data-hospital="london">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>FUE — 3,000 Grafts · Hairline Redesign</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Sarah Mitchell</span>
-              <span>🏥 London Hair Clinic</span>
-              <span>📅 15 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <!-- Result 9 -->
-        <a href="hospital-detail.html" class="ba-card filterable-card fade-in" data-technique="sapphire" data-grafts="3000" data-hospital="istanbul">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-            <div class="divider"></div>
-          </div>
-          <div class="ba-info">
-            <h4>Sapphire FUE — 3,800 Grafts · Full Coverage</h4>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Elif Yıldız</span>
-              <span>🏥 Istanbul Hair Center</span>
-              <span>📅 11 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- Pagination -->
-      <div class="pagination" data-pagination="resultsGrid" data-per-page="6"></div>
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="cta-section">
-    <div class="container">
-      <h2>Want Results Like These?</h2>
-      <p>Book a free consultation with one of our expert surgeons and start your transformation journey today.</p>
-      <div class="cta-actions">
-        <a href="contact.html" class="btn btn-primary">Get Free Consultation</a>
-        <a href="doctors.html" class="btn btn-outline" style="border-color: #fff; color: #fff;">Browse Doctors</a>
-      </div>
+    <!-- Pagination -->
+    <div
+      class='pagination'
+      data-pagination='resultsGrid'
+      data-total-pages='{{pagination.totalPages}}'
+    ></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class='cta-section'>
+  <div class='container'>
+    <h2>Want Results Like These?</h2>
+    <p>Book a free consultation with one of our expert surgeons and start your
+      transformation journey today.</p>
+    <div class='cta-actions'>
+      <a href='contact.html' class='btn btn-primary'>Get Free Consultation</a>
+      <a
+        href='doctors.html'
+        class='btn btn-outline'
+        style='border-color: #fff; color: #fff;'
+      >Browse Doctors</a>
     </div>
-  </section>
+  </div>
+</section>

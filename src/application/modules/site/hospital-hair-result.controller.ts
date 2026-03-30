@@ -8,11 +8,9 @@ import {
 } from '@nestjs/common';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import type { Response } from 'express';
-import { formatDistanceToNow } from 'date-fns';
 import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
-import { buildPagination } from './pagination.util';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
 
 @Controller('results')
@@ -29,7 +27,7 @@ export class HospitalHairResultController {
         hospitalId: query.hospitalId,
         page: {
           page: query.page ? parseInt(query.page, 10) : 1,
-          limit: 10,
+          limit: 9,
         },
         procedureType: query.procedure,
         technique: query.technique,
@@ -59,19 +57,26 @@ export class HospitalHairResultController {
     });
 
     const results = latestHairResults.map((result) => {
+      const sortedImages = result.images.sort((a, b) => a.month - b.month);
+      let beforeImageUrl = sortedImages.find((img) => img.isBefore)?.imageUrl;
+
+      if (!beforeImageUrl) {
+        beforeImageUrl = sortedImages.find((img) => img.month === 0)?.imageUrl;
+      }
+
+      if (!beforeImageUrl && sortedImages.length > 0) {
+        beforeImageUrl = sortedImages[0].imageUrl;
+      }
+
       return {
         id: result.id,
         hospital: hospitals.find((hos) => hos.id === result.hospitalId),
         verified: result.verified,
         graftCount: result.graftCount,
         technique: result.technique,
-        procedure: result.procedureType,
-        operationDateRelative: result.operationDate
-          ? formatDistanceToNow(new Date(result.operationDate), {
-            addSuffix: true,
-          })
-          : '',
-        image: result?.images[0]?.imageUrl || null,
+        procedure: result.procedureType.toUpperCase(),
+        operationDateRelative: result.operationDateRelative,
+        imageUrl: beforeImageUrl,
       };
     });
 
@@ -120,11 +125,10 @@ export class HospitalHairResultController {
       })),
     };
 
-    const newPagination = buildPagination(pagination, query);
-
     return res.render('results', {
+      currentPage: 'results',
       results,
-      pagination: newPagination,
+      pagination: pagination,
       filters,
       seo: {
         title: 'Hair Transplant Results | Medical Care',
@@ -152,15 +156,21 @@ export class HospitalHairResultController {
       id: result.hospitalId,
     });
 
+    const sortedImages = result.images.sort((a, b) => a.month - b.month);
+
     const newResult = {
       ...result,
       hospital: hospital[0] || null,
-      images: result.images
-        .sort((a, b) => a.month - b.month)
-        .map((img) => img.imageUrl),
+      previewImageUrl: sortedImages[0]?.imageUrl || null,
+      images: sortedImages.map((img) => img.imageUrl),
     };
 
     return res.render('result-detail', {
+      currentPage: 'results',
+      imagesAsJsArray: sortedImages.map((img, i) => ({
+        src: img.imageUrl,
+        caption: i === 0 ? 'Before — Front View' : `After — Image ${i}`,
+      })),
       result: newResult,
     });
   }
