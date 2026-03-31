@@ -94,12 +94,6 @@ export class DoctorService {
     return doctor;
   }
 
-  async findByHospital(hospitalId: string): Promise<Doctor[]> {
-    return this.doctorRepository.find({
-      where: { hospitalId },
-    });
-  }
-
   async count(): Promise<number> {
     return this.doctorRepository.count();
   }
