@@ -57,7 +57,9 @@ export class HospitalHairResultService {
       fullImages.push(...imageUrls);
     }
 
-    if (createHospitalHairResultDto.original_url?.includes('instagram.com')) {
+    if (
+      createHospitalHairResultDto.original_url?.includes('instagramdddd.com')
+    ) {
       const data = await instagramGetUrl(
         createHospitalHairResultDto.original_url,
       );
