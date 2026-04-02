@@ -44,7 +44,7 @@ export class HospitalHairResultController {
               ? false
               : undefined,
         ageRange: query.ageRange,
-        orderBy: query.orderBy || 'operationDate',
+        orderBy: query.orderBy || 'createdAt',
         orderDirection: query.orderDirection || 'desc',
       });
 
@@ -58,7 +58,13 @@ export class HospitalHairResultController {
 
     const results = latestHairResults.map((result) => {
       const sortedImages = result.images.sort((a, b) => a.month - b.month);
-      let beforeImageUrl = sortedImages.find((img) => img.isBefore)?.imageUrl;
+      let beforeImageUrl = sortedImages.find(
+        (img) => img.isBefore && img.isAfter,
+      )?.imageUrl;
+
+      if (!beforeImageUrl) {
+        beforeImageUrl = sortedImages.find((img) => img.isBefore)?.imageUrl;
+      }
 
       if (!beforeImageUrl) {
         beforeImageUrl = sortedImages.find((img) => img.month === 0)?.imageUrl;
@@ -156,7 +162,13 @@ export class HospitalHairResultController {
       id: result.hospitalId,
     });
 
-    const sortedImages = result.images.sort((a, b) => a.month - b.month);
+    const sortedImages = result.images.sort((a, b) => {
+
+      if (a.isBefore && a.isAfter) return -1;
+      if (b.isBefore && b.isAfter) return 1;
+      if (a.isBefore) return -1;
+      return a.month - b.month;
+    });
 
     const newResult = {
       ...result,

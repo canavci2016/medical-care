@@ -10,16 +10,8 @@ import {
 import { HospitalHairResultImage } from './entities/hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { instagramGetUrl } from 'instagram-url-direct';
+import { Query } from 'src/application/shared/interfaces/query.interface';
 
-export interface Filter {
-  gt?: number;
-
-  gte?: number;
-
-  lt?: number;
-
-  lte?: number;
-}
 
 export interface Pagination {
   page: number;
@@ -106,9 +98,9 @@ export class HospitalHairResultService {
   async findAll(
     options: Partial<{
       hospitalId: string | string[];
-      procedureType: string | Filter;
-      technique: string | Filter;
-      graftCount: Pick<Filter, 'gte'>;
+      procedureType: string | Query;
+      technique: string | Query;
+      graftCount: Pick<Query, 'gte'>;
       verified?: boolean;
       page: Pagination;
       orderBy: string;

@@ -15,7 +15,8 @@
 <!-- FILTER + RESULTS -->
 <section class='section'>
   <div class='container'>
-    <div class='filter-bar'>
+
+   <form class='filter-bar' method='GET' action='/results'>
       <div class='search-input'>
         <svg
           width='16'
@@ -27,30 +28,37 @@
         ><circle cx='11' cy='11' r='8' /><path d='m21 21-4.35-4.35' /></svg>
         <input
           type='text'
-          placeholder='Search by doctor, hospital, or technique...'
+          name='name'
+          value="{{filters.name}}"
+          placeholder='Search hospitals by name or location...'
         />
       </div>
-      <select data-filter='technique'>
+      <select name='procedure'>
+        <option value=''>All Procedures</option>
+      {{#each filters.procedures}}
+        <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+      {{/each}}
+      </select>
+      <select name='technique'>
         <option value=''>All Techniques</option>
       {{#each filters.techniques}}
         <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
       {{/each}}
       </select>
-      <select data-filter='grafts'>
+      <select name='graftCount'>
         <option value=''>All Graft Counts</option>
-        <option value='2000'>2,000 - 3,000</option>
-        <option value='3000'>3,000 - 4,000</option>
-        <option value='4000'>4,000+</option>
+     {{#each filters.graftCounts}}
+        <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
+      {{/each}}
       </select>
-      <select data-filter='hospital'>
-        <option value=''>All Hospitals</option>
-        <option value='istanbul'>Istanbul Hair Center</option>
-        <option value='london'>London Hair Clinic</option>
-        <option value='seoul'>Seoul Derma Hair</option>
-        <option value='mumbai'>Mumbai Hair Science</option>
-        <option value='beverly'>Beverly Hills Hair</option>
+      <select name='ageRange'>
+        <option value=''>All Age ranges</option>
+         {{#each filters.ageRanges}}
+        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
       </select>
-    </div>
+      <button type='submit' class='btn btn-primary btn-sm'>Search</button>
+    </form>
 
     <div class='grid-3' id='resultsGrid'>
 

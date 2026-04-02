@@ -40,6 +40,10 @@ export class HairResultQueryDto {
 
   @IsOptional()
   @IsString()
+  hospitalId?: string;
+
+  @IsOptional()
+  @IsString()
   ageRange?: string;
 
   @IsOptional()

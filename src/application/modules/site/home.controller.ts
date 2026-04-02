@@ -3,13 +3,20 @@ import { HomeService } from './home.service';
 import type { Response } from 'express';
 import { formatDistanceToNow } from 'date-fns';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { HospitalService } from '../hospital/hospital.service';
 
 @Controller('/')
 export class HomeController {
-  constructor(private readonly homeService: HomeService) { }
+  constructor(
+    private readonly hospitalService: HospitalService,
+    private readonly homeService: HomeService,
+  ) { }
 
   @Get()
   async getHomeData(@Res() res: Response) {
+    const {
+      pagination: { total: hospitalCount },
+    } = await this.hospitalService.paginated({});
     const latestHairResults = await this.homeService.getLatestHairResults();
 
     const results = latestHairResults.map((result) => ({
@@ -39,6 +46,7 @@ export class HomeController {
 
     return res.render('index', {
       currentPage: 'home',
+      hospitalCount,
       results,
       techniques,
       availableMonths,
@@ -59,10 +67,5 @@ export class HomeController {
           'Discover real before-and-after hair transplant cases from trusted clinics.',
       },
     });
-  }
-
-  @Get('home2')
-  getHomeData2(@Res() res: Response) {
-    return res.render('application/modules/home/views/index-full');
   }
 }

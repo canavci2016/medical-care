@@ -3,7 +3,8 @@ import type { Response } from 'express';
 
 @Controller()
 export class OtherController {
-  @Get('about')
+  @Get('/contact')
+  @Get('/about')
   about(@Req() req, @Res() res: Response) {
     return res.render('about', {
       styles: ['about.css'],
@@ -28,6 +29,7 @@ export class OtherController {
   }
 
   @Post('contact')
+  @Post('about')
   contact(
     @Req() req,
     @Body()

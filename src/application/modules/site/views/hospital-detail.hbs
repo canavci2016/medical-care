@@ -208,7 +208,7 @@
             <div class='icon-sm'>📞</div>
             <div><span class='info-label'>Phone</span><span
                 class='info-value'
-              >+90 212 555 0123</span></div>
+              >{{hospital.phone}}</span></div>
           </div>
           <div class='info-row'>
             <div class='icon-sm'>✉️</div>
@@ -224,7 +224,7 @@
             <div class='icon-sm'>🌐</div>
             <div><span class='info-label'>Website</span><span
                 class='info-value'
-              >www.istanbulhair.com</span></div>
+              ><a href='{{hospital.website}}' target='_blank'>{{hospital.website}}</a></span></div>
           </div>
           <div class='info-row'>
             <div class='icon-sm'>🕐</div>
@@ -239,7 +239,7 @@
               >2008</span></div>
           </div>
           <a
-            href='contact.html'
+            href='/contact'
             class='btn btn-primary'
             style='width: 100%; margin-top: 16px;'
           >Book Free Consultation</a>
