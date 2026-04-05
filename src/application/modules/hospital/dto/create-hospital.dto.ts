@@ -116,4 +116,8 @@ export class CreateHospitalDto {
   @IsArray()
   @IsString({ each: true })
   weekDayOpenings?: string[];
+
+  @IsOptional()
+  @IsString()
+  directionsUri?: string;
 }

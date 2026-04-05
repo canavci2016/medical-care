@@ -23,6 +23,9 @@ export class GooglePlaceService {
       regularOpeningHours: {
         weekdayDescriptions: string[];
       };
+      googleMapsLinks: {
+        directionsUri: string;
+      };
     }>(url, {
       params: {
         fields: '*',

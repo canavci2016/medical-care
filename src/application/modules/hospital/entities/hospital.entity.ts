@@ -106,6 +106,9 @@ export class Hospital {
   @Column({ type: 'simple-array', nullable: true })
   weekDayOpenings?: string[];
 
+  @Column({ nullable: true })
+  directionsUri?: string;
+
   /* ===============================
      TIMESTAMPS
   =============================== */

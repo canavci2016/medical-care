@@ -174,6 +174,7 @@ export class HospitalService {
       updateHospitalDto.website = details.websiteUri;
       updateHospitalDto.phone = details.internationalPhoneNumber;
       updateHospitalDto.weekDayOpenings = details.regularOpeningHours?.weekdayDescriptions || [];
+      updateHospitalDto.directionsUri = details.googleMapsLinks?.directionsUri || undefined;
     }
 
     const hospital = await this.findOne(id);
