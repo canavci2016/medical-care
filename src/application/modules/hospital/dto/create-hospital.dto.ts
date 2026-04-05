@@ -111,4 +111,9 @@ export class CreateHospitalDto {
   @IsArray()
   @IsString({ each: true })
   techniques?: HairTransplantTechnique[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  weekDayOpenings?: string[];
 }

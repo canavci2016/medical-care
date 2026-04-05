@@ -173,6 +173,7 @@ export class HospitalService {
       updateHospitalDto.name = details.displayName?.text || '';
       updateHospitalDto.website = details.websiteUri;
       updateHospitalDto.phone = details.internationalPhoneNumber;
+      updateHospitalDto.weekDayOpenings = details.regularOpeningHours?.weekdayDescriptions || [];
     }
 
     const hospital = await this.findOne(id);

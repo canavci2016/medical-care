@@ -20,6 +20,9 @@ export class GooglePlaceService {
       websiteUri: string;
       internationalPhoneNumber: string;
       displayName: { text: string };
+      regularOpeningHours: {
+        weekdayDescriptions: string[];
+      };
     }>(url, {
       params: {
         fields: '*',

@@ -230,7 +230,11 @@
             <div class='icon-sm'>🕐</div>
             <div><span class='info-label'>Hours</span><span
                 class='info-value'
-              >Mon-Sat: 8AM - 7PM</span></div>
+              >
+              {{#each hospital.weekDayOpenings}}
+                {{this}} <br />
+              {{/each}}
+             </span></div>
           </div>
           <div class='info-row'>
             <div class='icon-sm'>📅</div>
@@ -268,7 +272,7 @@
             <div class='icon-sm'>🏆</div>
             <div><span class='info-label'>Total Procedures</span><span
                 class='info-value'
-              >12,500+</span></div>
+              >{{totalProcedures}}</span></div>
           </div>
           <div class='info-row'>
             <div class='icon-sm'>⭐</div>

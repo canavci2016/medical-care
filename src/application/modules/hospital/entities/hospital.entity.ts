@@ -103,6 +103,9 @@ export class Hospital {
   doctors: Doctor[];
   */
 
+  @Column({ type: 'simple-array', nullable: true })
+  weekDayOpenings?: string[];
+
   /* ===============================
      TIMESTAMPS
   =============================== */
