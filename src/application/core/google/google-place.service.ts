@@ -25,7 +25,24 @@ export class GooglePlaceService {
       };
       googleMapsLinks: {
         directionsUri: string;
+        reviewsUri: string;
       };
+      reviews: [
+        {
+          authorAttribution: {
+            displayName: string;
+            photoUri: string;
+          };
+          originalText: { text: string };
+          flagContentUri: string;
+          googleMapsUri: string;
+          authorName: string;
+          authorPhoto: string;
+          comment: string;
+          publishTime: string;
+          rating: number;
+        },
+      ];
     }>(url, {
       params: {
         fields: '*',

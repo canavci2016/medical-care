@@ -8,6 +8,14 @@ import {
   Index,
 } from 'typeorm';
 
+export interface HospitalReview {
+  authorName: string;
+  authorPhoto: string;
+  comment: string;
+  publishTime: string;
+  rating?: number;
+}
+
 @Entity('hospitals')
 export class Hospital {
   @PrimaryGeneratedColumn('uuid')
@@ -108,6 +116,12 @@ export class Hospital {
 
   @Column({ nullable: true })
   directionsUri?: string;
+
+  @Column({ nullable: true })
+  reviewUri?: string;
+
+  @Column({ type: 'json', nullable: true })
+  reviews?: HospitalReview[];
 
   /* ===============================
      TIMESTAMPS

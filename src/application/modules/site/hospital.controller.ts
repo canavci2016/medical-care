@@ -29,7 +29,7 @@ export class HospitalController {
         name: query.name,
         city: query.city,
         rating: query.rating ? parseInt(query.rating, 10) : undefined,
-        page: { limit: 6, page: query.page ? parseInt(query.page, 10) : 1 },
+        page: { limit: 12, page: query.page ? parseInt(query.page, 10) : 1 },
         orderBy: orderCollumn,
         orderDirection: orderDirection as 'asc' | 'desc',
       });

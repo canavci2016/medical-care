@@ -11,8 +11,29 @@ import {
   Min,
   Max,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+
+export class HospitalReviewDto {
+  @IsString()
+  authorName: string;
+
+  @IsString()
+  authorPhoto: string;
+
+  @IsString()
+  comment: string;
+
+  @IsNumber()
+  @Min(0)
+  @Max(5)
+  rating?: number;
+
+  @IsString()
+  publishTime: string;
+}
 
 export class CreateHospitalDto {
   /* ===============================
@@ -120,4 +141,14 @@ export class CreateHospitalDto {
   @IsOptional()
   @IsString()
   directionsUri?: string;
+
+  @IsOptional()
+  @IsString()
+  reviewUri?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => HospitalReviewDto)
+  reviews?: HospitalReviewDto[];
 }

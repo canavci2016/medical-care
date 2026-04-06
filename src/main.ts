@@ -66,6 +66,13 @@ async function bootstrap() {
     return new hbs.handlebars.SafeString(result);
   });
 
+  hbs.registerHelper(
+    'slice',
+    function (str: string, index: number, length: number) {
+      return str.slice(index, index + length);
+    },
+  );
+
   app.use(
     session({
       secret: 'my-secret',

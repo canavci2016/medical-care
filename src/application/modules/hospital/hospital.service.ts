@@ -175,6 +175,15 @@ export class HospitalService {
       updateHospitalDto.phone = details.internationalPhoneNumber;
       updateHospitalDto.weekDayOpenings = details.regularOpeningHours?.weekdayDescriptions || [];
       updateHospitalDto.directionsUri = details.googleMapsLinks?.directionsUri || undefined;
+      updateHospitalDto.reviewUri = details.googleMapsLinks?.reviewsUri || undefined;
+      updateHospitalDto.reviews =
+        details.reviews?.map((r) => ({
+          authorName: r.authorAttribution.displayName,
+          authorPhoto: r.authorAttribution.photoUri,
+          comment: r.originalText?.text || '',
+          publishTime: r.publishTime,
+          rating: r.rating,
+        })) || [];
     }
 
     const hospital = await this.findOne(id);
