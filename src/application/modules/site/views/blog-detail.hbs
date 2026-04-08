@@ -1,70 +1,133 @@
-<div class='container'>
-
-  <!-- Main Content -->
-  <div class='content'>
-
-    <div class='blog-hero'>
-      <img src='{{blog.featuredImage}}' alt='Featured image for {{blog.title}}' />
-    </div>
-
-    <div class='blog-meta'>
-      Published on
-      {{blog.publishedAt}}
-      •
-      {{blog.readingTime}}
-      min read • Category:
-      {{blog.category.name}}
-    </div>
-
-    <h1 class='blog-title'>
-      {{blog.title}}
-    </h1>
-
-    <div class='blog-body'>
-      {{{blog.content}}}
-    </div>
-
-    <!-- Related Posts -->
-    <div class='related'>
-      <h3>Related Articles</h3>
-
-      {{#each popularBlogs}}
-        <div class='related-post'>
-          <img
-            src='{{this.featuredImage}}'
-            alt=''
-          />
+  <!-- ARTICLE HEADER -->
+  <section class="page-header" style="padding: 80px 0;">
+    <div class="container" style="max-width: 800px;">
+      <div class="breadcrumb" style="margin-bottom: 16px;">
+        <a href="index.html">Home</a>
+        <span class="sep">›</span>
+        <a href="/blogs">Blog</a>
+        <span class="sep">›</span>
+        <span>FUE Guide</span>
+      </div>
+      <span class="badge badge-green" style="margin-bottom: 12px;">Techniques</span>
+      <h1 style="font-size: 38px; line-height: 1.25;">{{blog.title}}</h1>
+      <div style="display: flex; align-items: center; gap: 16px; margin-top: 20px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px;">MY</div>
           <div>
-            <a href='/blogs/{{this.slug}}'>{{this.title}}</a>
-            <div style='font-size:13px;color:#666;'>{{this.publishedAt}}</div>
+            <div style="font-weight: 600; color: #fff; font-size: 15px;">Dr. Mehmet Yilmaz</div>
+            <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Chief Surgeon, Istanbul Hair Center</div>
           </div>
         </div>
-      {{/each}}
-  
+        <div style="display: flex; gap: 16px; font-size: 13px; color: rgba(255,255,255,0.6);">
+          <span>📅 March 20, 2026</span>
+          <span>⏱ 8 min read</span>
+          <span>💬 24 comments</span>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Comments -->
+  <!-- ARTICLE CONTENT -->
+  <section class="section" style="padding-top: 48px;">
+    <div class="container">
+      <div class="detail-main" style="grid-template-columns: 1fr 340px;">
+        <div class="detail-left">
+          <!-- Hero Image -->
+          <div style="border-radius: var(--radius-md); overflow: hidden; margin-bottom: 32px;">
+            <img src="{{blog.featuredImage}}" alt="FUE Hair Transplant Procedure" style="width: 100%; height: 400px; object-fit: cover;">
+          </div>
 
-  </div>
+          <!-- Article Body -->
+          <article class="blog-article">
+            <p class="blog-intro">{{blog.excerpt}}</p>
 
-  <!-- Sidebar -->
-  <div class='sidebar'>
-    <h3>Search</h3>
-    <input type='text' placeholder='Search articles...' />
+            <h2>{{blog.title}}</h2>
+            <p>{{{blog.content}}}</p>
 
-    <h3>Categories</h3>
-    <ul>
-      {{#each categories}}
-        <li><a href='/blogs?cat={{this.id}}'>{{this.name}}</a></li>
-      {{/each}}
-    </ul>
+            <div class="blog-callout">
+              <div class="blog-callout-icon">💡</div>
+              <div>
+                <strong>Key Fact:</strong> Modern FUE procedures have a success rate of 95-98% when performed by experienced surgeons, with transplanted hair lasting a lifetime.
+              </div>
+            </div>
 
-    <h3>Recent Posts</h3>
-    <ul>
-      {{#each recentBlogs}}
-        <li><a href='/blogs/{{this.slug}}'>{{this.title}}</a></li>
-      {{/each}}
-    </ul>
-  </div>
 
-</div>
+            <div class="blog-callout" style="background: rgba(27,77,122,0.06); border-color: var(--secondary);">
+              <div class="blog-callout-icon">🔍</div>
+              <div>
+                <strong>Need Help?</strong> Our team at HairRestore Hub can match you with a verified surgeon based on your specific needs, budget, and location. <a href="contact.html" style="color: var(--accent); font-weight: 600;">Get a free consultation →</a>
+              </div>
+            </div>
+
+            <!-- Share -->
+            <div class="blog-share">
+              <span style="font-weight: 600; font-size: 14px; color: var(--text-primary);">Share this article:</span>
+              <div class="blog-share-buttons">
+                <a href="#" class="blog-share-btn">𝕏 Twitter</a>
+                <a href="#" class="blog-share-btn">f Facebook</a>
+                <a href="#" class="blog-share-btn">in LinkedIn</a>
+                <a href="#" class="blog-share-btn">📧 Email</a>
+              </div>
+            </div>
+
+            <!-- Author Box -->
+            <div class="blog-author-box">
+              <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 24px; flex-shrink: 0;">MY</div>
+              <div>
+                <h4 style="font-size: 18px; margin-bottom: 4px;">Dr. Mehmet Yilmaz</h4>
+                <p style="font-size: 14px; color: var(--secondary); font-weight: 500; margin-bottom: 8px;">Chief Hair Transplant Surgeon · Istanbul Hair Center</p>
+                <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">Dr. Yilmaz is a board-certified hair transplant surgeon with 18 years of experience and over 5,000 successful procedures. He specializes in FUE and DHI techniques and is a member of ISHRS.</p>
+                <a href="doctor-detail.html" style="color: var(--accent); font-weight: 600; font-size: 14px; margin-top: 8px; display: inline-block;">View Full Profile →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="detail-sidebar">
+          <!-- Table of Contents -->
+          <div class="sidebar-card fade-in" style="position: sticky; top: 88px;">
+            <h3>Table of Contents</h3>
+            <nav class="blog-toc">
+              <a href="#" class="blog-toc-link">What Is FUE Hair Transplant?</a>
+              <a href="#" class="blog-toc-link">How Does the Procedure Work?</a>
+              <a href="#" class="blog-toc-link">FUE Recovery Timeline</a>
+              <a href="#" class="blog-toc-link">How Much Does FUE Cost?</a>
+              <a href="#" class="blog-toc-link">Who Is a Good Candidate?</a>
+              <a href="#" class="blog-toc-link">Choosing the Right Surgeon</a>
+              <a href="#" class="blog-toc-link">Final Thoughts</a>
+            </nav>
+          </div>
+  
+
+          <!-- Related Posts -->
+          <div class="sidebar-card fade-in" style="margin-top: 20px;">
+            <h3>Related Articles</h3>
+            <div class="blog-related-list">
+              <a href="blog-detail.html" class="blog-related-item">
+                <img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/9373eeaa-ccdf-4f3b-bb0d-70a576dcfcf8.png" alt="DHI vs FUE">
+                <div>
+                  <h4>DHI vs FUE: Which Is Right for You?</h4>
+                  <span>6 min read</span>
+                </div>
+              </a>
+              <a href="blog-detail.html" class="blog-related-item">
+                <img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/bcdad408-8479-4318-8ce6-df46b8d4435e.png" alt="Recovery">
+                <div>
+                  <h4>Recovery Timeline: Month by Month</h4>
+                  <span>5 min read</span>
+                </div>
+              </a>
+              <a href="blog-detail.html" class="blog-related-item">
+                <img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/9373eeaa-ccdf-4f3b-bb0d-70a576dcfcf8.png" alt="Sapphire FUE">
+                <div>
+                  <h4>Sapphire FUE Explained</h4>
+                  <span>5 min read</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

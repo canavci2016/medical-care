@@ -1,68 +1,62 @@
-    <div class='container'>
+<!-- PAGE HEADER -->
+<section class='page-header'>
+  <div class='container'>
+    <h1>Blog & Insights</h1>
+    <p>Expert articles, patient stories, and the latest advancements in hair
+      transplant technology.</p>
+    <div class='breadcrumb'>
+      <a href='/'>Home</a>
+      <span class='sep'>›</span>
+      <span>Blog</span>
+    </div>
+  </div>
+</section>
 
-      <!-- Sidebar -->
-      <aside>
-      <div class='sidebar'>
-        <h3>Search</h3>
-        <form method='get' action='/blogs'>
-          <input
-            type='text'
-            name='title'
-            value='{{pagination.query.title}}'
-            placeholder='Search articles...'
-          />
-          {{#if pagination.query.cat}}
-            <input type='hidden' name='cat' value='{{pagination.query.cat}}' />
-          {{/if}}
-          <button type='submit'>Search</button>
-        </form>
+<!-- BLOG FILTER + GRID -->
+<section class='section'>
+  <div class='container'>
+    <!-- Category Tabs -->
+    <div class='blog-tabs fade-in'>
+      <button class='blog-tab active' data-category='all'>All Posts</button>
+      {{#each categories}}
+        <a
+          class='blog-tab'
+          href='/blogs?cat={{this.id}}'
+          data-category='{{this.slug}}'
+        >{{this.name}}</a>
+      {{/each}}
+    </div>
 
-        <h3>Categories</h3>
-        <ul>
-          {{#each categories}}
-            <li>
-              <a href='?cat={{this.id}}' >{{this.name}}</a>
-            </li>
-          {{/each}}
-        </ul>
-
-        <h3>Recent Posts</h3>
-        <ul>
-          {{#each recentBlogs}}
-            <li>
-              <a href='/blogs/{{this.slug}}'>{{this.title}}</a>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
-     </aside>
-      <!-- Content -->
-      <div class='content'>
-
-<div class="blog-header">
-  <p>Showing <strong>{{pagination.length}} of {{pagination.total}}</strong> articles</p>
-</div>
-        <!-- Blog 1 -->
-        {{#each blogs}}
-          <div class='blog-card'>
-            <img src='{{this.featuredImage}}' alt='Featured image for {{this.title}}' />
-            <div class='blog-content'>
-              <h2>{{this.title}}</h2>
-              <div class='blog-meta'>Published on
-                {{this.publishedAt}}
-                •
-                {{this.readingTime}}
-                min read</div>
-              <p>
-                {{this.excerpt}}
-              </p>
-              <a href='/blogs/{{this.slug}}' class='read-more'>Read More</a>
-            </div>
+    <div class='grid-3' id='blogGrid'>
+      {{#each blogs}}
+        <a
+          href='/blogs/{{this.slug}}'
+          class='blog-card fade-in'
+          data-category='{{this.category.slug}}'
+        >
+          <div class='blog-card-image'>
+            <img src='{{this.featuredImage}}' alt='{{this.title}}' />
+            <span class='blog-category-badge'>{{this.category.name}}</span>
           </div>
-        {{/each}}
-      
-    {{> pagination pagination=pagination }}
-     
-      </div>
+          <div class='blog-card-body'>
+            <div class='blog-meta'>
+              <span class='blog-date'>{{relative_date this.publishedAt}}</span>
+              <span class='blog-read'>{{this.readingTime}} min read</span>
+            </div>
+            <h3>{{this.title}}</h3>
+            <p>{{slice this.excerpt 0 150}}</p>
+
+          </div>
+        </a>
+      {{/each}}
 
     </div>
+
+    <!-- Pagination -->
+    <div
+      class='pagination'
+      data-pagination='blogGrid'
+      data-total-pages='{{pagination.totalPages}}'
+    ></div>
+  </div>
+</section>

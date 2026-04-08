@@ -33,14 +33,14 @@ export class BlogController {
   async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
     const cacheKey = this.buildBlogListCacheKey(query);
     const cachedHtml = await this.cacheManager.get<string>(cacheKey);
-    if (cachedHtml) {
+    /*if (cachedHtml) {
       return res.send(cachedHtml);
-    }
+    }*/
 
     const { data: blogs, pagination } = await this.blogService.paginated({
       page: {
         page: query.page ? parseInt(query.page, 10) : 1,
-        limit: 5,
+        limit: 12,
       },
       orderBy: 'publishedAt',
       order: 'DESC',
@@ -65,6 +65,7 @@ export class BlogController {
     const newPagination = buildPagination(pagination, query);
 
     const viewModel = {
+      currentPage: 'blogs',
       blogs: blogs,
       categories: categories,
       recentBlogs: recentBlogs,
