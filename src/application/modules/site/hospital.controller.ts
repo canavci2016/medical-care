@@ -10,12 +10,14 @@ import { HospitalService } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { HospitalQueryDto } from './dto/hospital-query.dto';
+import { DoctorService } from '../doctor/doctor.service';
 
 @Controller('hospitals')
 export class HospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
+    private readonly doctorService: DoctorService,
   ) { }
 
   @Get()
@@ -94,6 +96,12 @@ export class HospitalController {
       return res.status(404).send('Hospital not found');
     }
 
+    const doctors = await this.doctorService.paginated({
+      hospitalId: id,
+      page: 1,
+      limit: 5,
+    });
+
     const procedureTypes =
       await this.hospitalHairResultService.getProcedureTypes({
         hospitalId: id,
@@ -109,6 +117,7 @@ export class HospitalController {
       currentPage: 'hospitals',
       hospital: hospital,
       procedureTypes: procedureTypes,
+      doctors: doctors,
       latestHairResults: latestHairResults
         .map((hr) => ({
           id: hr.id,

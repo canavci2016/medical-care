@@ -22,7 +22,7 @@
         </div>
         <div class="profile-info">
           <h1>{{result.technique}} {{result.procedureType}} Transplant — {{result.graftCount}} Grafts</h1>
-          <p class="subtitle">Performed by Dr. Mehmet Yilmaz at {{result.hospital.name}}</p>
+          <p class="subtitle">Performed at {{result.hospital.name}}</p>
           <div class="profile-badges">
             <span class="badge badge-green">✓ Verified Result</span>
             <span class="badge badge-blue">{{result.technique}} Technique</span>
@@ -30,8 +30,8 @@
           </div>
         </div>
         <div class="profile-actions">
-          <a href="contact.html" class="btn btn-primary btn-sm">Book Similar Procedure</a>
-          <a href="hospital-detail.html" class="btn btn-outline btn-sm">View Hospital</a>
+          <a href="/results?procedure={{result.procedureType}}&technique={{result.technique}}&graftCount={{result.graftCount}}" class="btn btn-primary btn-sm">Book Similar Procedure</a>
+          <a href="/hospitals/{{result.hospital.id}}" class="btn btn-outline btn-sm">View Hospital</a>
         </div>
       </div>
 
@@ -66,8 +66,7 @@
           <!-- Case Overview -->
           <div class="detail-card">
             <h2>📋 Case Overview</h2>
-            <p>This patient presented with Norwood Scale Class III hair loss, primarily affecting the frontal hairline and temple areas. After thorough consultation and scalp analysis, a Follicular Unit Extraction (FUE) procedure was recommended.</p>
-            <p style="margin-top: 12px;">The procedure involved the extraction of 3,500 grafts from the donor area at the back of the scalp, which were then carefully implanted into the recipient areas to recreate a natural-looking hairline.</p>
+            <p>{{result.patientStory}}</p>
 
             <div class="result-stats-grid" style="margin-top: 24px;">
               <div class="result-stat-item">
@@ -96,71 +95,6 @@
                 <div>
                   <span class="result-stat-value">Class III</span>
                   <span class="result-stat-label">Norwood Scale</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Treatment Timeline -->
-          <div class="detail-card">
-            <h2>📅 Recovery Timeline</h2>
-            <div class="blog-timeline">
-              <div class="blog-timeline-item">
-                <div class="blog-timeline-marker"></div>
-                <div class="blog-timeline-content">
-                  <h4>Day 1 — Procedure Day</h4>
-                  <p>3,500 grafts extracted and implanted using FUE technique under local anesthesia. Patient was comfortable throughout the 7-hour procedure.</p>
-                </div>
-              </div>
-              <div class="blog-timeline-item">
-                <div class="blog-timeline-marker"></div>
-                <div class="blog-timeline-content">
-                  <h4>Week 1 — Initial Healing</h4>
-                  <p>Mild swelling and redness in the recipient area. Donor area healing well with minimal scabbing. Patient followed post-op care instructions carefully.</p>
-                </div>
-              </div>
-              <div class="blog-timeline-item">
-                <div class="blog-timeline-marker"></div>
-                <div class="blog-timeline-content">
-                  <h4>Month 1 — Shedding Phase</h4>
-                  <p>Transplanted hairs entered the normal shedding phase. This is expected and temporary. Scalp fully healed with no visible scarring in the donor area.</p>
-                </div>
-              </div>
-              <div class="blog-timeline-item">
-                <div class="blog-timeline-marker"></div>
-                <div class="blog-timeline-content">
-                  <h4>Month 3 — Early Growth</h4>
-                  <p>First signs of new hair growth appearing in the transplanted areas. Fine, thin hairs beginning to emerge from the follicles.</p>
-                </div>
-              </div>
-              <div class="blog-timeline-item">
-                <div class="blog-timeline-marker"></div>
-                <div class="blog-timeline-content">
-                  <h4>Month 6 — Visible Progress</h4>
-                  <p>Significant new growth visible. Hair becoming thicker and longer. Patient very pleased with the progress and density improvement.</p>
-                </div>
-              </div>
-              <div class="blog-timeline-item">
-                <div class="blog-timeline-marker"></div>
-                <div class="blog-timeline-content">
-                  <h4>Month 12 — Final Result</h4>
-                  <p>Full results achieved. Natural-looking hairline with excellent density. Patient reports a dramatic improvement in confidence and appearance.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Patient Testimonial -->
-          <div class="detail-card">
-            <h2>💬 Patient Testimonial</h2>
-            <div class="testimonial-card" style="box-shadow: none; border: none; padding: 0;">
-              <div class="quote-icon">"</div>
-              <p class="testimonial-text">"I had been considering a hair transplant for years, and I'm so glad I chose Dr. Yilmaz at Istanbul Hair Center. The entire experience was professional and comfortable. After 12 months, I can honestly say this was the best decision I've ever made. My hairline looks completely natural, and I feel like myself again."</p>
-              <div class="testimonial-author">
-                <div class="author-avatar">M</div>
-                <div>
-                  <span class="author-name">Michael T., Age 34</span>
-                  <span class="author-detail">United Kingdom · FUE 3,500 Grafts</span>
                 </div>
               </div>
             </div>
@@ -229,7 +163,7 @@
               </div>
             </div>
             <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
-              <span class="stars">★★★★★</span>
+              <span class="stars">{{{stars result.hospital.rating}}}</span>
               <span style="font-weight: 700; font-size: 14px;">{{result.hospital.rating}}</span>
               <span style="font-size: 13px; color: var(--text-light);">({{result.hospital.reviewCount}} reviews)</span>
             </div>
@@ -240,7 +174,7 @@
           <div class="sidebar-card" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none;">
             <h3 style="color: #fff;">Want Similar Results?</h3>
             <p style="font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 16px;">Get a free consultation with our expert surgeons and start your hair restoration journey today.</p>
-            <a href="contact.html" class="btn btn-primary" style="width: 100%; background: var(--accent);">Get Free Consultation</a>
+            <a href="/contact" class="btn btn-primary" style="width: 100%; background: var(--accent);">Get Free Consultation</a>
           </div>
 
         </div>

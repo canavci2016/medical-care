@@ -36,6 +36,7 @@ export class DoctorService {
 
   async paginated(
     options: Partial<{
+      hospitalId: string;
       page: number;
       limit: number;
       orderBy: keyof Doctor;
@@ -58,7 +59,13 @@ export class DoctorService {
     const page = options.page || 1;
     const limit = options.limit || 20;
 
+    const whereQuery: Partial<Doctor> = {};
+    if (options.hospitalId) {
+      whereQuery.hospitalId = options.hospitalId;
+    }
+
     const [items, total] = await this.doctorRepository.findAndCount({
+      where: whereQuery,
       skip: (page - 1) * limit,
       take: limit,
       order: options.orderBy
