@@ -1,7 +1,6 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { HomeService } from './home.service';
 import type { Response } from 'express';
-import { formatDistanceToNow } from 'date-fns';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HospitalService } from '../hospital/hospital.service';
 
@@ -24,11 +23,6 @@ export class HomeController {
       hospital: result.hospital,
       verified: result.verified,
       graftCount: result.graftCount,
-      operationDateRelative: result.operationDate
-        ? formatDistanceToNow(new Date(result.operationDate), {
-          addSuffix: true,
-        })
-        : '',
       image: result?.images[0]?.imageUrl || null,
     }));
 

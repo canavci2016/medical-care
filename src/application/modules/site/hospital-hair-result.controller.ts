@@ -81,7 +81,7 @@ export class HospitalHairResultController {
         graftCount: result.graftCount,
         technique: result.technique,
         procedure: result.procedureType.toUpperCase(),
-        operationDateRelative: result.operationDateRelative,
+        operationDate: result.operationDate,
         imageUrl: beforeImageUrl,
       };
     });

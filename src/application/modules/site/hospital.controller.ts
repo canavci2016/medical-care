@@ -116,7 +116,7 @@ export class HospitalController {
           afterImage: hr.images[1]?.imageUrl || hr.images[0]?.imageUrl || null,
           graftCount: hr.graftCount,
           technique: hr.procedureType,
-          operationDateRelative: hr.operationDateRelative,
+          operationDate: hr.operationDate,
         }))
         .filter((hr) => hr.beforeImage && hr.afterImage),
       totalProcedures: procedureTypes.reduce(

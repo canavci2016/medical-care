@@ -6,11 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
-  AfterLoad,
 } from 'typeorm';
 import { HospitalHairResultImage } from './hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
-import { formatDistanceToNow } from 'date-fns';
 
 export enum HairProcedureType {
   HAIR = 'hair',
@@ -164,19 +162,4 @@ export class HospitalHairResult {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  /* ===============================
-   COMPUTED PROPERTIES
-=============================== */
-
-  operationDateRelative: string;
-
-  @AfterLoad()
-  setOperationDateRelative() {
-    this.operationDateRelative = this.operationDate
-      ? formatDistanceToNow(new Date(this.operationDate), {
-        addSuffix: true,
-        })
-      : '';
-  }
 }
