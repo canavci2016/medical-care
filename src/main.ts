@@ -6,6 +6,7 @@ import hbs from 'hbs';
 import session from 'express-session';
 import flash from 'connect-flash';
 import { ValidationPipe } from '@nestjs/common';
+import { formatDistanceToNow } from 'date-fns';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -72,6 +73,14 @@ async function bootstrap() {
       return str.slice(index, index + length);
     },
   );
+
+  hbs.registerHelper('relative_date', function (date: string) {
+    return date
+      ? formatDistanceToNow(new Date(date), {
+        addSuffix: true,
+      })
+      : '';
+  });
 
   app.use(
     session({
