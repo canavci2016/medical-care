@@ -3,12 +3,14 @@ import { HomeService } from './home.service';
 import type { Response } from 'express';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HospitalService } from '../hospital/hospital.service';
+import { DoctorService } from '../doctor/doctor.service';
 
 @Controller('/')
 export class HomeController {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly homeService: HomeService,
+    private readonly doctorService: DoctorService,
   ) { }
 
   @Get()
@@ -26,6 +28,12 @@ export class HomeController {
       image: result?.images[0]?.imageUrl || null,
     }));
 
+    const {
+      pagination: { total: doctorCount },
+    } = await this.doctorService.paginated({
+      orderDirection: 'desc',
+    });
+
     const techniques = Object.entries(HairTransplantTechnique).map(
       ([key, value]) => ({
         label: key,
@@ -41,6 +49,7 @@ export class HomeController {
     return res.render('index', {
       currentPage: 'home',
       hospitalCount,
+      doctorCount,
       results,
       techniques,
       availableMonths,
