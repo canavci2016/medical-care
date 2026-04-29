@@ -70,7 +70,7 @@ async function bootstrap() {
   hbs.registerHelper(
     'slice',
     function (str: string, index: number, length: number) {
-      return str.slice(index, index + length);
+      return str?.slice(index, index + length) || str;
     },
   );
 

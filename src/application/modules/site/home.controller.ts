@@ -1,58 +1,59 @@
 import { Controller, Get, Res } from '@nestjs/common';
-import { HomeService } from './home.service';
 import type { Response } from 'express';
-import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HospitalService } from '../hospital/hospital.service';
-import { DoctorService } from '../doctor/doctor.service';
+import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 
 @Controller('/')
 export class HomeController {
   constructor(
     private readonly hospitalService: HospitalService,
-    private readonly homeService: HomeService,
-    private readonly doctorService: DoctorService,
+    private readonly hospitalHairResultService: HospitalHairResultService,
   ) { }
 
   @Get()
   async getHomeData(@Res() res: Response) {
     const {
       pagination: { total: hospitalCount },
-    } = await this.hospitalService.paginated({});
-    const latestHairResults = await this.homeService.getLatestHairResults();
+      data: hospitals,
+    } = await this.hospitalService.paginated({
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
+      page: { limit: 3, page: 1 },
+    });
 
-    const results = latestHairResults.map((result) => ({
+    const { data: randomHairResults } =
+      await this.hospitalHairResultService.findAll({
+        random: true,
+        page: { limit: 3, page: 1 },
+      });
+
+    const randomHospitals = await this.hospitalService.findAll({
+      id: randomHairResults.map((r) => r.hospitalId),
+    });
+
+    const results = randomHairResults.map((result) => ({
       id: result.id,
-      hospital: result.hospital,
+      hospital: randomHospitals.find((h) => h.id === result.hospitalId) || null,
       verified: result.verified,
       graftCount: result.graftCount,
       image: result?.images[0]?.imageUrl || null,
     }));
 
-    const {
-      pagination: { total: doctorCount },
-    } = await this.doctorService.paginated({
-      orderDirection: 'desc',
-    });
+    const reviews: any[] = [];
+    for (const hospital of hospitals) {
+      reviews.push(...(hospital.reviews || []));
+    }
 
-    const techniques = Object.entries(HairTransplantTechnique).map(
-      ([key, value]) => ({
-        label: key,
-        value,
-      }),
-    );
-
-    const availableMonths = [0, 3, 6, 9, 12].map((month) => ({
-      label: month === 0 ? 'Before' : `${month} months after`,
-      value: month,
-    }));
+    for (const hospital of randomHospitals) {
+      reviews.push(...(hospital.reviews || []));
+    }
 
     return res.render('index', {
       currentPage: 'home',
       hospitalCount,
-      doctorCount,
+      hospitals,
       results,
-      techniques,
-      availableMonths,
+      reviews: reviews.filter(r => r.comment).slice(0, 3),
       seo: {
         title: 'Real Hair Transplant Results | Medical Care',
         keywords:
