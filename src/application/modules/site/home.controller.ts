@@ -21,11 +21,13 @@ export class HomeController {
       page: { limit: 3, page: 1 },
     });
 
-    const { data: randomHairResults } =
-      await this.hospitalHairResultService.findAll({
-        random: true,
-        page: { limit: 3, page: 1 },
-      });
+    const {
+      data: randomHairResults,
+      pagination: { total: hairResultCount },
+    } = await this.hospitalHairResultService.findAll({
+      random: true,
+      page: { limit: 3, page: 1 },
+    });
 
     const randomHospitals = await this.hospitalService.findAll({
       id: randomHairResults.map((r) => r.hospitalId),
@@ -53,7 +55,8 @@ export class HomeController {
       hospitalCount,
       hospitals,
       results,
-      reviews: reviews.filter(r => r.comment).slice(0, 3),
+      hairResultCount,
+      reviews: reviews.filter((r) => r!.comment).slice(0, 3),
       seo: {
         title: 'Real Hair Transplant Results | Medical Care',
         keywords:
