@@ -8,7 +8,6 @@ export class OtherController {
   about(@Req() req, @Res() res: Response) {
     return res.render('about', {
       styles: ['about.css'],
-      success: req.flash('success'),
       seo: {
         title: 'About Us | Medical Care',
         keywords:
@@ -34,15 +33,19 @@ export class OtherController {
     @Req() req,
     @Body()
     body: {
-      name?: string;
+      firstName: string;
+      lastName: string;
       email?: string;
       subject?: string;
+      technique?: string; //interested technique
       message?: string;
     },
     @Res() res: Response,
   ) {
-    req.flash('success', 'We have received your message.');
-
-    return res.redirect('/about');
+    return {
+      success: true,
+      message:
+        'Your message has been received. We will get back to you shortly.',
+    };
   }
 }

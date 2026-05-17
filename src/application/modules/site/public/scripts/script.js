@@ -121,13 +121,20 @@ function initContactForm() {
     e.preventDefault();
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
-    
     // Show success message
     const successMsg = document.createElement('div');
     successMsg.style.cssText = 'background: #2ECC71; color: #fff; padding: 16px 24px; border-radius: 8px; margin-top: 16px; font-weight: 600; text-align: center;';
     successMsg.textContent = '✓ Thank you! Your message has been sent successfully. We will get back to you within 24 hours.';
     form.appendChild(successMsg);
     form.reset();
+
+    fetch('/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    },{})
 
     setTimeout(() => {
       successMsg.remove();

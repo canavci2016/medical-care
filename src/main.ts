@@ -4,7 +4,6 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import hbs from 'hbs';
 import session from 'express-session';
-import flash from 'connect-flash';
 import { ValidationPipe } from '@nestjs/common';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -92,8 +91,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  app.use(flash());
 
   app.useGlobalPipes(
     new ValidationPipe({

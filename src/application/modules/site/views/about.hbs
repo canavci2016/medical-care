@@ -1,87 +1,336 @@
-<div class='container'>
-
-  <!-- ABOUT -->
-  <section class='about-section'>
-    <h2>Who We Are</h2>
-    <p>
-      MedicalCare connects patients with trusted hospitals, doctors, and
-      healthcare services. Our platform provides reliable medical information,
-      hospital ratings, and healthcare articles.
-    </p>
-    <p>
-      We aim to make healthcare decisions easier through transparent information
-      and user-friendly digital experiences.
-    </p>
-  </section>
-
-  <!-- CONTACT -->
-  <div class='contact-wrapper'>
-
-    <!-- COMPANY INFO -->
-    <div class='card'>
-      <h3>Company Information</h3>
-
-      <div class='info-item'>
-        <strong>Address</strong>
-        Sefaköy<br />
-        Küçükçekmece<br />
-        Istanbul, Turkey
-      </div>
-
-      <div class='info-item'>
-        <strong>Phone</strong>
-        +90 212 123 45 67
-      </div>
-
-      <div class='info-item'>
-        <strong>Email</strong>
-        canavci2016@gmail.com
-      </div>
-
-      <div class='info-item'>
-        <strong>Working Hours</strong>
-        Monday – Friday: 09:00 – 18:00
-      </div>
+<!-- PAGE HEADER -->
+<section class='page-header'>
+  <div class='container'>
+    <h1>Contact Us</h1>
+    <p>Have questions? Get in touch with our team for a free consultation or to
+      learn more about our partner hospitals.</p>
+    <div class='breadcrumb'>
+      <a href='index.html'>Home</a>
+      <span class='sep'>›</span>
+      <span>Contact</span>
     </div>
-
-    <!-- CONTACT FORM -->
-    <div class='card'>
-
-      {{#if success.length}}
-
-        <div class='alert alert-success'>
-          <strong>Success!</strong>
-          {{success.[0]}}
-        </div>
-      {{/if}}
-
-      <h3>Send Us a Message</h3>
-
-      <form action='/contact' method='POST'>
-        <div class='form-group'>
-          <label for='name'>Full Name</label>
-          <input type='text' id='name' name='name' required />
-        </div>
-
-        <div class='form-group'>
-          <label for='email'>Email Address</label>
-          <input type='email' id='email' name='email' required />
-        </div>
-
-        <div class='form-group'>
-          <label for='subject'>Subject</label>
-          <input type='text' id='subject' name='subject' required />
-        </div>
-
-        <div class='form-group'>
-          <label for='message'>Message</label>
-          <textarea id='message' name='message' required></textarea>
-        </div>
-
-        <button type='submit'>Send Message</button>
-      </form>
-    </div>
-
   </div>
+</section>
 
-</div>
+<!-- CONTACT SECTION -->
+<section class='section'>
+  <div class='container'>
+    <div class='detail-main'>
+      <div class='detail-left'>
+        <!-- Contact Form -->
+        <div class='detail-card fade-in'>
+          <h2>Send Us a Message</h2>
+          <p style='margin-bottom: 24px;'>Fill out the form below and our team
+            will get back to you within 24 hours with personalized
+            recommendations.</p>
+          <form id='contactForm'>
+            <div class='form-row'>
+              <div class='form-group'>
+                <label for='firstName'>First Name *</label>
+                <input
+                  type='text'
+                  id='firstName'
+                  name='firstName'
+                  required
+                  placeholder='John'
+                />
+              </div>
+              <div class='form-group'>
+                <label for='lastName'>Last Name *</label>
+                <input
+                  type='text'
+                  id='lastName'
+                  name='lastName'
+                  required
+                  placeholder='Doe'
+                />
+              </div>
+            </div>
+            <div class='form-row'>
+              <div class='form-group'>
+                <label for='email'>Email Address *</label>
+                <input
+                  type='email'
+                  id='email'
+                  name='email'
+                  required
+                  placeholder='john@example.com'
+                />
+              </div>
+              <div class='form-group'>
+                <label for='phone'>Phone Number</label>
+                <input
+                  type='tel'
+                  id='phone'
+                  name='phone'
+                  placeholder='+1 (555) 000-0000'
+                />
+              </div>
+            </div>
+
+            <div class='form-row'>
+              <div class='form-group'>
+                <label for='subject'>Subject *</label>
+                <select id='subject' name='subject' required>
+                  <option value=''>Select a subject</option>
+                  <option value='consultation'>Free Consultation Request</option>
+                  <option value='hospital-info'>Hospital Information</option>
+                  <option value='doctor-inquiry'>Doctor Inquiry</option>
+                  <option value='pricing'>Pricing & Packages</option>
+                  <option value='register-hospital'>Register My Hospital</option>
+                  <option value='register-doctor'>Register as a Doctor</option>
+                  <option value='other'>Other</option>
+                </select>
+              </div>
+              <div class='form-group'>
+                <label for='technique'>Interested Technique</label>
+                <select id='technique' name='technique'>
+                  <option value=''>Select technique</option>
+                  <option value='fue'>FUE</option>
+                  <option value='dhi'>DHI</option>
+                  <option value='sapphire'>Sapphire FUE</option>
+                  <option value='robotic'>Robotic FUE</option>
+                  <option value='prp'>PRP Therapy</option>
+                  <option value='unsure'>Not sure yet</option>
+                </select>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label for='message'>Your Message *</label>
+              <textarea
+                id='message'
+                name='message'
+                required
+                placeholder="Tell us about your hair loss situation, what you're looking for, and any questions you have..."
+              ></textarea>
+            </div>
+            <button
+              type='submit'
+              class='btn btn-primary'
+              style='width: 100%;'
+            >Send Message</button>
+          </form>
+        </div>
+
+        <!-- FAQ -->
+        <div class='detail-card fade-in'>
+          <h2>Frequently Asked Questions</h2>
+          <div style='margin-top: 16px;'>
+            <div class='faq-item active'>
+              <div class='faq-question'>
+                <span>What is the cost of a hair transplant?</span>
+                <span class='faq-toggle'>+</span>
+              </div>
+              <div class='faq-answer'>
+                <p>Hair transplant costs vary depending on the technique, number
+                  of grafts, and location. On average, FUE procedures range from
+                  $2,000 to $15,000. Turkey offers some of the most competitive
+                  pricing ($2,500-$5,000), while the US and UK tend to be higher
+                  ($8,000-$15,000). We can help you find the best option for
+                  your budget.</p>
+              </div>
+            </div>
+            <div class='faq-item'>
+              <div class='faq-question'>
+                <span>How long does a hair transplant procedure take?</span>
+                <span class='faq-toggle'>+</span>
+              </div>
+              <div class='faq-answer'>
+                <p>Most hair transplant procedures take between 6-9 hours,
+                  depending on the number of grafts and technique used. FUE
+                  typically takes 6-8 hours, while DHI may take 7-9 hours. The
+                  procedure is performed under local anesthesia, so you'll be
+                  comfortable throughout.</p>
+              </div>
+            </div>
+            <div class='faq-item'>
+              <div class='faq-question'>
+                <span>What is the recovery time?</span>
+                <span class='faq-toggle'>+</span>
+              </div>
+              <div class='faq-answer'>
+                <p>Most patients can return to work within 3-5 days after the
+                  procedure. The transplanted area will form small scabs that
+                  fall off within 10-14 days. Full results are typically visible
+                  after 12-18 months as the transplanted hair grows naturally.</p>
+              </div>
+            </div>
+            <div class='faq-item'>
+              <div class='faq-question'>
+                <span>What's the difference between FUE and DHI?</span>
+                <span class='faq-toggle'>+</span>
+              </div>
+              <div class='faq-answer'>
+                <p>FUE (Follicular Unit Extraction) involves extracting
+                  individual follicles and creating channels before implanting
+                  them. DHI (Direct Hair Implantation) uses a Choi pen to
+                  extract and implant in one step, allowing for more precise
+                  angle control and higher density. DHI is generally more
+                  expensive but offers slightly faster recovery.</p>
+              </div>
+            </div>
+            <div class='faq-item'>
+              <div class='faq-question'>
+                <span>Are the results permanent?</span>
+                <span class='faq-toggle'>+</span>
+              </div>
+              <div class='faq-answer'>
+                <p>Yes, hair transplant results are permanent. The transplanted
+                  hair follicles are taken from the donor area (back and sides
+                  of the head), which is genetically resistant to hair loss.
+                  These follicles maintain their characteristics even after
+                  transplantation, meaning they will continue to grow for a
+                  lifetime.</p>
+              </div>
+            </div>
+            <div class='faq-item'>
+              <div class='faq-question'>
+                <span>How do I choose the right hospital?</span>
+                <span class='faq-toggle'>+</span>
+              </div>
+              <div class='faq-answer'>
+                <p>We recommend considering: the surgeon's experience and
+                  qualifications, the clinic's accreditation, before/after
+                  results from real patients, patient reviews, the techniques
+                  offered, and the overall care package. Our platform verifies
+                  all partner hospitals to ensure they meet high standards of
+                  quality and safety.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class='detail-sidebar'>
+        <div class='sidebar-card fade-in'>
+          <h3>Contact Information</h3>
+          <div class='info-row'>
+            <div class='icon-sm'>📧</div>
+            <div><span class='info-label'>Email</span><span
+                class='info-value'
+              ><a
+                  href='/cdn-cgi/l/email-protection'
+                  class='__cf_email__'
+                  data-cfemail='3f575a5353507f575e564d4d5a4c4b504d5a574a5d115c5052'
+                >[email&#160;protected]</a></span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>📞</div>
+            <div><span class='info-label'>Phone</span><span
+                class='info-value'
+              >+1 (800) 555-HAIR</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>💬</div>
+            <div><span class='info-label'>WhatsApp</span><span
+                class='info-value'
+              >+1 (800) 555-4247</span></div>
+          </div>
+          <div class='info-row'>
+            <div class='icon-sm'>🕐</div>
+            <div><span class='info-label'>Hours</span><span
+                class='info-value'
+              >Mon-Fri: 9AM - 8PM EST</span></div>
+          </div>
+        </div>
+
+        <div class='sidebar-card fade-in'>
+          <h3>Why Choose Us?</h3>
+          <div
+            style='display: flex; flex-direction: column; gap: 12px; margin-top: 8px;'
+          >
+            <div style='display: flex; align-items: flex-start; gap: 10px;'>
+              <span
+                style='color: var(--accent); font-size: 18px; flex-shrink: 0;'
+              >✓</span>
+              <div>
+                <strong style='font-size: 14px; display: block;'>Verified
+                  Hospitals</strong>
+                <span style='font-size: 13px; color: var(--text-secondary);'>All
+                  clinics are vetted and accredited</span>
+              </div>
+            </div>
+            <div style='display: flex; align-items: flex-start; gap: 10px;'>
+              <span
+                style='color: var(--accent); font-size: 18px; flex-shrink: 0;'
+              >✓</span>
+              <div>
+                <strong style='font-size: 14px; display: block;'>Free
+                  Consultation</strong>
+                <span
+                  style='font-size: 13px; color: var(--text-secondary);'
+                >No-obligation consultation with experts</span>
+              </div>
+            </div>
+            <div style='display: flex; align-items: flex-start; gap: 10px;'>
+              <span
+                style='color: var(--accent); font-size: 18px; flex-shrink: 0;'
+              >✓</span>
+              <div>
+                <strong style='font-size: 14px; display: block;'>Real Results</strong>
+                <span
+                  style='font-size: 13px; color: var(--text-secondary);'
+                >Verified before/after photos</span>
+              </div>
+            </div>
+            <div style='display: flex; align-items: flex-start; gap: 10px;'>
+              <span
+                style='color: var(--accent); font-size: 18px; flex-shrink: 0;'
+              >✓</span>
+              <div>
+                <strong style='font-size: 14px; display: block;'>Personalized
+                  Match</strong>
+                <span style='font-size: 13px; color: var(--text-secondary);'>We
+                  match you with the right doctor</span>
+              </div>
+            </div>
+            <div style='display: flex; align-items: flex-start; gap: 10px;'>
+              <span
+                style='color: var(--accent); font-size: 18px; flex-shrink: 0;'
+              >✓</span>
+              <div>
+                <strong style='font-size: 14px; display: block;'>Aftercare
+                  Support</strong>
+                <span
+                  style='font-size: 13px; color: var(--text-secondary);'
+                >Post-procedure follow-up assistance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class='sidebar-card fade-in'
+          style='background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff;'
+        >
+          <h3 style='color: #fff;'>For Hospitals & Doctors</h3>
+          <p
+            style='font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.7; margin-top: 8px;'
+          >Want to join our network? Register your hospital or practice and
+            connect with thousands of potential patients worldwide.</p>
+          <a
+            href='#'
+            class='btn btn-primary'
+            style='width: 100%; margin-top: 16px;'
+          >Register Now</a>
+        </div>
+
+        <div class='sidebar-card fade-in'>
+          <h3>Quick Response</h3>
+          <div style='text-align: center; padding: 16px 0;'>
+            <img
+              src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/360d2563-93ab-47a6-baeb-f0fbe962d6e8.png'
+              alt='Support team'
+              style='width: 100%; border-radius: var(--radius-sm); margin-bottom: 12px;'
+            />
+            <p style='font-size: 14px; color: var(--text-secondary);'>Our
+              support team typically responds within
+              <strong style='color: var(--accent-dark);'>2-4 hours</strong>
+              during business hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
