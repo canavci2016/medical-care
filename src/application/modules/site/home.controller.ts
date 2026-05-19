@@ -33,13 +33,32 @@ export class HomeController {
       id: randomHairResults.map((r) => r.hospitalId),
     });
 
-    const results = randomHairResults.map((result) => ({
-      id: result.id,
-      hospital: randomHospitals.find((h) => h.id === result.hospitalId) || null,
-      verified: result.verified,
-      graftCount: result.graftCount,
-      image: result?.images[0]?.imageUrl || null,
-    }));
+    const results = randomHairResults.map((result) => {
+      const images = result.images || [];
+
+      let image = images.find((img) => img.isBefore && img.isAfter);
+
+      if (!image) {
+        image = images
+          .filter((img) => img.isBefore)
+          .sort((a, b) => b.month - a.month)[0];
+      }
+
+      if (!image) {
+        image = images[0] || null;
+      }
+
+      return {
+        id: result.id,
+        hospital:
+          randomHospitals.find((h) => h.id === result.hospitalId) || null,
+        verified: result.verified,
+        graftCount: result.graftCount,
+        image: image?.imageUrl || null,
+        technique: result.technique,
+        operationDate: result.operationDate,
+      };
+    });
 
     const reviews: any[] = [];
     for (const hospital of hospitals) {

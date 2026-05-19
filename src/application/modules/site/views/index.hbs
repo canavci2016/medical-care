@@ -84,49 +84,46 @@
     </div>
     <div class='grid-3'>
       {{#each hospitals}}
-      <!-- Hospital 1 -->
-      <a href='/hospitals/{{this.id}}' class='card fade-in'>
-        <div class='card-image'>
-          <img
-            src='{{this.coverImageUrl}}'
-            alt='{{this.name}}'
-          />
-          <div class='overlay'>
-            <span class='badge badge-green'>Verified</span>
-          </div>
-        </div>
-        <div class='card-body'>
-          <h3>{{this.name}}</h3>
-          <div class='location'>
-            <svg
-              width='14'
-              height='14'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              stroke-width='2'
-            ><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z' /><circle
-                cx='12'
-                cy='10'
-                r='3'
-              /></svg>
-            {{this.city}},
-          {{this.country}}
-          </div>
-          <div class='tags'>
-            {{#each this.techniques}}
-            <span class='badge badge-blue'>{{this}}</span>
-            {{/each}}
-          </div>
-          <div class='meta'>
-            <div class='rating'>
-              <div class='stars'>{{{stars this.rating}}}</div>
-              <span class='score'>{{this.rating}}</span>
+        <!-- Hospital 1 -->
+        <a href='/hospitals/{{this.id}}' class='card fade-in'>
+          <div class='card-image'>
+            <img src='{{this.coverImageUrl}}' alt='{{this.name}}' />
+            <div class='overlay'>
+              <span class='badge badge-green'>Verified</span>
             </div>
-            <span class='procedures'>{{this.procedures}}+ procedures</span>
           </div>
-        </div>
-      </a>
+          <div class='card-body'>
+            <h3>{{this.name}}</h3>
+            <div class='location'>
+              <svg
+                width='14'
+                height='14'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              ><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z' /><circle
+                  cx='12'
+                  cy='10'
+                  r='3'
+                /></svg>
+              {{this.city}},
+              {{this.country}}
+            </div>
+            <div class='tags'>
+              {{#each this.techniques}}
+                <span class='badge badge-blue'>{{this}}</span>
+              {{/each}}
+            </div>
+            <div class='meta'>
+              <div class='rating'>
+                <div class='stars'>{{{stars this.rating}}}</div>
+                <span class='score'>{{this.rating}}</span>
+              </div>
+              <span class='procedures'>{{this.procedures}}+ procedures</span>
+            </div>
+          </div>
+        </a>
       {{/each}}
     </div>
     <div style='text-align: center; margin-top: 40px;'>
@@ -135,44 +132,36 @@
   </div>
 </section>
 
-<!-- BEFORE/AFTER RESULTS PREVIEW -->
 <section class='section'>
   <div class='container'>
     <div class='section-header fade-in'>
       <span class='label'>Real Transformations</span>
       <h2>Patient Results</h2>
-      <p>See real before and after photos from verified patients across our
-        partner hospitals.</p>
+      <p>See real photos from verified patients across our partner hospitals.</p>
     </div>
     <div class='grid-3'>
       {{#each results}}
-      <div class='ba-card fade-in'>
-        <div class='ba-images'>
-          <div class='ba-img'>
-            <img
-              src='{{this.image}}'
-              alt='Before'
-            />
-            <span class='ba-label before'>Before</span>
+      <a href='/results/{{this.id}}' class='card fade-in'>
+        <div class='card-image'>
+          <img
+            src='{{this.image}}'
+            alt='FUE Hair Transplant Result'
+          />
+          <div class='overlay'>
+            <span class='badge badge-blue'>{{this.technique}}</span>
+            <span class='badge badge-green'>{{this.graftCount}} Grafts</span>
           </div>
-          <div class='ba-img'>
-            <img
-              src='{{this.image}}'
-              alt='After'
-            />
-            <span class='ba-label after'>After</span>
-          </div>
-          <div class='divider'></div>
         </div>
-        <div class='ba-info'>
-          <h4>{{this.technique}} Hair Transplant — {{this.graftCount}} Grafts</h4>
+        <div class='card-body'>
+          <h3>{{this.technique}} — {{this.graftCount}} Grafts</h3>
           <div class='ba-meta'>
             <span>👨‍⚕️ Dr. {{this.doctor}}</span>
             <span>🏥 {{this.hospital.name}}</span>
-            <span>📅 {{this.postOpDuration}} months post-op</span>
+            <span>📅  {{relative_date this.operationDate}}</span>
           </div>
+          <span class='view-detail-link'>View Full Case →</span>
         </div>
-      </div>
+      </a>
       {{/each}}
     </div>
     <div style='text-align: center; margin-top: 40px;'>
@@ -192,20 +181,20 @@
     </div>
     <div class='grid-3'>
       {{#each reviews}}
-      <div class='testimonial-card fade-in'>
-        <span class='quote-icon'>"</span>
-        <div class='stars'>{{{stars this.rating}}}</div>
-        <p class='testimonial-text'>{{slice this.comment 0 150}}</p>
-        <div class='testimonial-author'>
-          <div class='author-avatar'>J</div>
-          <div>
-            <div class='author-name'>{{this.authorName}}</div>
-            <div class='author-detail'>{{this.detail}}</div>
+        <div class='testimonial-card fade-in'>
+          <span class='quote-icon'>"</span>
+          <div class='stars'>{{{stars this.rating}}}</div>
+          <p class='testimonial-text'>{{slice this.comment 0 150}}</p>
+          <div class='testimonial-author'>
+            <div class='author-avatar'>J</div>
+            <div>
+              <div class='author-name'>{{this.authorName}}</div>
+              <div class='author-detail'>{{this.detail}}</div>
+            </div>
           </div>
         </div>
-      </div>
       {{/each}}
-    
+
     </div>
   </div>
 </section>
