@@ -12,6 +12,7 @@ import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
+import { be } from 'date-fns/locale/be';
 
 @Controller('results')
 export class HospitalHairResultController {
@@ -58,9 +59,16 @@ export class HospitalHairResultController {
 
     const results = latestHairResults.map((result) => {
       const sortedImages = result.images.sort((a, b) => a.month - b.month);
+
       let beforeImageUrl = sortedImages.find(
-        (img) => img.isBefore && img.isAfter,
+        (img) => img.isBefore && img.isAfter && img.angle === 'front',
       )?.imageUrl;
+
+      if (!beforeImageUrl) {
+        beforeImageUrl = sortedImages.find(
+          (img) => img.isBefore && img.isAfter,
+        )?.imageUrl;
+      }
 
       if (!beforeImageUrl) {
         beforeImageUrl = sortedImages.find((img) => img.isBefore)?.imageUrl;

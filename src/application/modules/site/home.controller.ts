@@ -36,7 +36,13 @@ export class HomeController {
     const results = randomHairResults.map((result) => {
       const images = result.images || [];
 
-      let image = images.find((img) => img.isBefore && img.isAfter);
+      let image = images.find(
+        (img) => img.isBefore && img.isAfter && img.angle == 'front',
+      );
+
+      if (!image) {
+        image = images.find((img) => img.isBefore && img.isAfter);
+      }
 
       if (!image) {
         image = images
