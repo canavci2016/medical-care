@@ -12,7 +12,6 @@ import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
-import { be } from 'date-fns/locale/be';
 
 @Controller('results')
 export class HospitalHairResultController {
@@ -171,7 +170,6 @@ export class HospitalHairResultController {
     });
 
     const sortedImages = result.images.sort((a, b) => {
-
       if (a.isBefore && a.isAfter) return -1;
       if (b.isBefore && b.isAfter) return 1;
       if (a.isBefore) return -1;
