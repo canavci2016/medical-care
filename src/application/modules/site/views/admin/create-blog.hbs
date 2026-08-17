@@ -149,9 +149,9 @@
                       <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select class="form-select" id="status" name="status" required>
-                          <option value="" disabled selected>Select status</option>
-                          <option value="draft">Draft</option>
-                          <option value="published">Published</option>
+                          <option value="" disabled >Select status</option>
+                          <option value="draft" >Draft</option>
+                          <option value="published" selected>Published</option>
                         </select>
                       </div>
 
@@ -308,8 +308,17 @@
         const featuredImageInput = document.getElementById('featuredImage');
         const featuredImagePreview = document.getElementById('featuredImagePreview');
         const featuredImagePreviewWrapper = document.getElementById('featuredImagePreviewWrapper');
+        const publishedAtInput = document.getElementById('publishedAt');
         let featuredImageObjectUrl = null;
         let contentEditor = null;
+
+        if (publishedAtInput && !publishedAtInput.value) {
+          const now = new Date();
+          const localValue = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+            .toISOString()
+            .slice(0, 16);
+          publishedAtInput.value = localValue;
+        }
 
         if (
           !form ||

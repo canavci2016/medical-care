@@ -34,9 +34,6 @@ export class Hospital {
   @Column({ nullable: true })
   coverImageUrl?: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
-
   @Column({ nullable: true })
   city?: string;
 
@@ -55,9 +52,6 @@ export class Hospital {
 
   @Column({ nullable: true })
   phone?: string;
-
-  @Column({ nullable: true })
-  email?: string;
 
   @Column({ nullable: true })
   website?: string;

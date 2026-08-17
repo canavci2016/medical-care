@@ -26,7 +26,6 @@ export class BlogService {
     if (!payload.id) {
       const requiredFields: (keyof Blog)[] = [
         'title',
-        'slug',
         'excerpt',
         'content',
         'featuredImage',
@@ -35,7 +34,6 @@ export class BlogService {
         'metaKeywords',
         'status',
         'isFeatured',
-        'publishedAt',
         'category',
         'viewCount',
         'readingTime',
@@ -64,6 +62,10 @@ export class BlogService {
           `All blog properties must be entered. Missing fields: ${missingFields.join(', ')}`,
         );
       }
+    }
+
+    if (!payload.publishedAt) {
+      payload.publishedAt = new Date();
     }
 
     const item = this.blogRepository.create(payload);

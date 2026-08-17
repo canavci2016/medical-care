@@ -20,6 +20,7 @@ import { buildPagination } from './pagination.util';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { randomUUID } from 'node:crypto';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { GooglePlaceService } from 'src/application/core/google/google-place.service';
 
 @UseGuards(AdminAuthGuard)
 @Controller('admin/hospitals')
@@ -27,6 +28,7 @@ export class AdminHospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly awsS3Service: AwsS3Service,
+    private readonly googlePlaceService: GooglePlaceService,
   ) {}
 
   @Get()
@@ -89,6 +91,13 @@ export class AdminHospitalController {
       styles: ['create-blog.css'],
       layout: false,
     });
+  }
+
+  @Get(':id/google-map-place-details')
+  async getDetailThroughPlaceId(@Param('id') id: string) {
+    const details = await this.googlePlaceService.getPlaceDetails(id);
+
+    return details;
   }
 
   @Post()

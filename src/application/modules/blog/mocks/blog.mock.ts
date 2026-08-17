@@ -17,7 +17,9 @@ const keywordPool = [
   'before after',
 ];
 
-const generateBlog = (overrides?: Partial<Blog>): Blog => {
+const generateBlog = (
+  overrides?: Partial<Omit<Blog, 'setSlugFromTitle'>>,
+): Blog => {
   const title = faker.lorem.sentence({ min: 4, max: 8 }).replace('.', '');
   const createdAt = faker.date.past({ years: 1 });
   const updatedAt = faker.date.between({ from: createdAt, to: new Date() });
@@ -44,7 +46,7 @@ const generateBlog = (overrides?: Partial<Blog>): Blog => {
     updatedAt,
     deletedAt: undefined,
     ...overrides,
-  };
+  } as Blog;
 };
 
 export const generateBlogMockData = (count: number = 10): Blog[] =>

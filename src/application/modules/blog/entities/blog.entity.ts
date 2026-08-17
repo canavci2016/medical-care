@@ -9,6 +9,8 @@ import {
   DeleteDateColumn,
   ManyToOne,
   Index,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { BlogCategory } from './blog-category.entity';
 
@@ -20,23 +22,39 @@ export enum BlogStatus {
 @Entity('blogs')
 export class Blog {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  setSlugFromTitle(): void {
+    if (!this.title) {
+      return;
+    }
+
+    this.slug = this.title
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .trim();
+  }
 
   // -------- BASIC INFO --------
 
   @Column({ length: 200 })
   @Index()
-  title: string;
+  title!: string;
 
   @Column({ unique: true })
   @Index()
-  slug: string;
+  slug!: string;
 
   @Column({ type: 'text' })
-  excerpt: string;
+  excerpt!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({ type: 'uuid' })
   categoryId?: string;
@@ -44,18 +62,18 @@ export class Blog {
   // -------- MEDIA --------
 
   @Column({ nullable: true })
-  featuredImage: string;
+  featuredImage!: string;
 
   // -------- SEO --------
 
   @Column({ nullable: true })
-  metaTitle: string;
+  metaTitle!: string;
 
   @Column({ nullable: true })
-  metaDescription: string;
+  metaDescription!: string;
 
   @Column('simple-array', { nullable: true })
-  metaKeywords: string[];
+  metaKeywords!: string[];
 
   // -------- STATUS --------
 
@@ -64,36 +82,36 @@ export class Blog {
     enum: BlogStatus,
     default: BlogStatus.DRAFT,
   })
-  status: BlogStatus;
+  status!: BlogStatus;
 
   @Column({ default: false })
-  isFeatured: boolean;
+  isFeatured!: boolean;
 
-  @Column({ type: 'timestamp', nullable: true })
-  publishedAt: Date;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  publishedAt!: Date;
 
   // -------- RELATIONS --------
 
   @ManyToOne(() => BlogCategory, (category) => category.blogs, {
     eager: true,
   })
-  category: BlogCategory;
+  category!: BlogCategory;
 
   // -------- ANALYTICS --------
 
   @Column({ default: 0 })
-  viewCount: number;
+  viewCount!: number;
 
   @Column({ default: 0 })
-  readingTime: number; // minutes
+  readingTime!: number; // minutes
 
   // -------- TIMESTAMPS --------
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @DeleteDateColumn()
   deletedAt?: Date;

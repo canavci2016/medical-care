@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsString,
-  IsEmail,
   IsOptional,
   IsBoolean,
   IsUrl,
@@ -54,10 +53,6 @@ export class CreateHospitalDto {
 
   @IsOptional()
   @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsString()
   city?: string;
 
   @IsOptional()
@@ -79,10 +74,6 @@ export class CreateHospitalDto {
   @IsOptional()
   @IsString()
   phone?: string;
-
-  @IsOptional()
-  @IsEmail()
-  email?: string;
 
   @IsOptional()
   @IsUrl()

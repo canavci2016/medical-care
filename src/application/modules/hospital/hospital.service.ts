@@ -42,20 +42,6 @@ export class HospitalService {
     const hospital = this.hospitalRepository.create(createHospitalDto);
     const createdHosp = await this.hospitalRepository.save(hospital);
 
-    if (createHospitalDto.googlePlaceId) {
-      const details = await this.googlePlaceService.getPlaceDetails(
-        createHospitalDto.googlePlaceId,
-      );
-      await this.update(createdHosp.id, {
-        rating: details.rating,
-        reviewCount: details.userRatingCount,
-        address: details.formattedAddress,
-        name: details.displayName?.text || '',
-        website: details.websiteUri,
-        phone: details.internationalPhoneNumber,
-      });
-    }
-
     return createdHosp;
   }
 

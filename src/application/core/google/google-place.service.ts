@@ -19,6 +19,11 @@ export class GooglePlaceService {
       formattedAddress: string;
       websiteUri: string;
       internationalPhoneNumber: string;
+      addressComponents?: Array<{
+        longText?: string;
+        shortText?: string;
+        types: string[];
+      }>;
       displayName: { text: string };
       regularOpeningHours: {
         weekdayDescriptions: string[];
