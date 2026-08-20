@@ -118,6 +118,7 @@ export class HospitalService {
       };
     }
 
+    //TODO:  read hospital along with its procedure counts
     const [items, total] = await this.hospitalRepository.findAndCount({
       ...optionsTyped,
     });

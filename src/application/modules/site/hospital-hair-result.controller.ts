@@ -136,6 +136,7 @@ export class HospitalHairResultController {
         value: month.month,
         selected: query.duration === month.month.toString(),
       })),
+      hospitalId: query.hospitalId || '',
     };
 
     return res.render('results', {

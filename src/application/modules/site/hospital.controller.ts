@@ -20,6 +20,40 @@ export class HospitalController {
     private readonly doctorService: DoctorService,
   ) { }
 
+  @Get('/api')
+  async apiFindPaginated(
+    @Res() res: Response,
+    @Query() query: HospitalQueryDto,
+  ) {
+    const [orderCollumn, orderDirection] = query.sorting
+      ? query.sorting.split('_')
+      : ['rating', 'desc'];
+
+    const response = await this.hospitalService.paginated({
+      name: query.name,
+      city: query.city,
+      rating: query.rating ? parseInt(query.rating, 10) : undefined,
+      page: {
+        limit: query.limit ? parseInt(query.limit, 10) : 12,
+        page: query.page ? parseInt(query.page, 10) : 1,
+      },
+      orderBy: orderCollumn,
+      orderDirection: orderDirection as 'asc' | 'desc',
+    });
+
+    return res.json(response);
+  }
+
+  @Get('/api/:id')
+  async apiFindOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() res: Response,
+  ) {
+    const hospital = await this.hospitalService.findOne(id);
+
+    return res.json({ data: hospital });
+  }
+
   @Get()
   async findAll(@Res() res: Response, @Query() query: HospitalQueryDto) {
     const [orderCollumn, orderDirection] = query.sorting

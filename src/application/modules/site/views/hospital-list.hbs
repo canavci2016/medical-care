@@ -32,20 +32,20 @@
           placeholder='Search hospitals by name or location...'
         />
       </div>
-      <select name='city'>
-        <option value=''>All Locations</option>
-        {{#each filters.cities}}
-        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
-        {{/each}}
-      </select>
       <select name='location'>
-        <option value=''>All Locations</option>
+        <option value=''>Countries</option>
         <option value='turkey'>Turkey</option>
         <option value='uk'>United Kingdom</option>
         <option value='korea'>South Korea</option>
         <option value='india'>India</option>
         <option value='usa'>United States</option>
         <option value='spain'>Spain</option>
+      </select>
+      <select name='city'>
+        <option value=''>Cities</option>
+        {{#each filters.cities}}
+        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
       </select>
       <select name='rating'>
         <option value=''>All Ratings</option>

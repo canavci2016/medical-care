@@ -12,7 +12,6 @@ import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransp
 import { instagramGetUrl } from 'instagram-url-direct';
 import { Query } from 'src/application/shared/interfaces/query.interface';
 
-
 export interface Pagination {
   page: number;
   limit: number;
@@ -25,7 +24,7 @@ export class HospitalHairResultService {
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
     @InjectRepository(HospitalHairResultImage)
     private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
-  ) { }
+  ) {}
 
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
@@ -191,22 +190,22 @@ export class HospitalHairResultService {
 
     const [results, total] = shouldRandomize
       ? await Promise.all([
-        this.hospitalHairResultRepository
-          .createQueryBuilder('hr')
-          .setFindOptions({
+          this.hospitalHairResultRepository
+            .createQueryBuilder('hr')
+            .setFindOptions({
+              where: optionsTyped.where,
+              skip: optionsTyped.skip,
+              take: optionsTyped.take,
+            })
+            .orderBy('RANDOM()')
+            .getMany(),
+          this.hospitalHairResultRepository.count({
             where: optionsTyped.where,
-            skip: optionsTyped.skip,
-            take: optionsTyped.take,
-          })
-          .orderBy('RANDOM()')
-          .getMany(),
-        this.hospitalHairResultRepository.count({
-          where: optionsTyped.where,
-        }),
-      ])
+          }),
+        ])
       : await this.hospitalHairResultRepository.findAndCount({
-        ...optionsTyped,
-      });
+          ...optionsTyped,
+        });
 
     const images = await this.hospitalHairResultImageRepository.find({
       where: { resultId: In(results.map((r) => r.id)) },

@@ -17,24 +17,8 @@
   <div class='container'>
 
    <form class='filter-bar' method='GET' action='/results'>
-      <div class='search-input'>
-        <svg
-          width='16'
-          height='16'
-          viewBox='0 0 24 24'
-          fill='none'
-          stroke='currentColor'
-          stroke-width='2'
-        ><circle cx='11' cy='11' r='8' /><path d='m21 21-4.35-4.35' /></svg>
-        <input
-          type='text'
-          name='name'
-          value="{{filters.name}}"
-          placeholder='Search hospitals by name or location...'
-        />
-      </div>
       <select name='procedure'>
-        <option value=''>All Procedures</option>
+        <option value=''>Procedures</option>
       {{#each filters.procedures}}
         <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
       {{/each}}
@@ -46,7 +30,7 @@
       {{/each}}
       </select>
       <select name='graftCount'>
-        <option value=''>All Graft Counts</option>
+        <option value=''>Graft Counts</option>
      {{#each filters.graftCounts}}
         <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
       {{/each}}
@@ -57,6 +41,9 @@
         <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
         {{/each}}
       </select>
+      <select class="hospital-list select2" name="hospitalId" data-placeholder="Hospitals">
+      </select>
+
       <button type='submit' class='btn btn-primary btn-sm'>Search</button>
     </form>
 
@@ -110,3 +97,71 @@
     </div>
   </div>
 </section>
+
+<script>
+
+  $(document).ready(function() {
+
+  $('.hospital-list').select2({
+    theme: 'select2',
+    ajax: {
+        url: '/hospitals/api',
+        dataType: 'json',
+        delay: 250, // wait 250 milliseconds before triggering the request
+        data: function(params) {
+            var query = {
+                name: params.term,
+                page: params.page || 1,
+                limit: 10,
+            }
+
+            // Query parameters will be ?search=[term]&page=[page]
+            return query;
+        },
+        processResults: function(data) {
+            // Transforms the top-level key of the response object from 'items' to 'results'
+            return {
+                results: data.data.map(function(hospital) {
+                    return {
+                        id: hospital.id,
+                        text: hospital.name
+                    };
+                }),
+                pagination: {
+                   more: data.pagination.hasNext
+                 }
+            };
+        }
+        // Additional AJAX parameters go here; see the end of this page for the full code of this example
+    }
+});
+
+
+const selectedHospitalId = '{{filters.hospitalId}}';
+var hospitalSelect = $('#hospitalId');
+if (selectedHospitalId) {
+    // Fetch the hospital data for the selected hospital ID
+$.ajax({
+    type: 'GET',
+    url: '/hospitals/api/' + selectedHospitalId,
+}).then(function(data) {
+  const res=data.data;
+    // create the option and append to Select2
+    var option = new Option(res.name, res.id, true, true);
+    hospitalSelect.append(option);
+
+    // manually trigger the `select2:select` event
+    hospitalSelect.trigger({
+        type: 'select2:select',
+        params: {
+            data: res
+        }
+    });
+});
+
+}
+
+
+});
+
+</script>

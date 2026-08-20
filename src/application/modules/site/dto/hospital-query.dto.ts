@@ -13,6 +13,10 @@ export class HospitalQueryDto {
   page?: string;
 
   @IsOptional()
+  @IsNumberString()
+  limit?: string;
+
+  @IsOptional()
   @IsString()
   city?: string;
 
