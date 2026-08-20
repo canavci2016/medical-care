@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   Between,
+  DataSource,
+  EntityTarget,
   FindManyOptions,
   ILike,
   In,
@@ -82,54 +84,92 @@ export class HospitalService {
       orderDirection: 'asc' | 'desc';
     }> = {},
   ) {
-    const optionsTyped: FindManyOptions<Hospital> = {};
-    optionsTyped.where = {};
+    const queryBuilder = this.hospitalRepository.createQueryBuilder('hospital');
+
+    queryBuilder.addSelect(
+      '(select count(*) from hospital_hair_results as hhr where "hhr"."hospitalId" = hospital.id)',
+      'procedureCount',
+    );
+
     if (options.city) {
-      optionsTyped.where['city'] = options.city;
+      queryBuilder.andWhere('hospital.city = :city', { city: options.city });
     }
     if (options.rating) {
       if (options.rating === 5) {
-        optionsTyped.where['rating'] = Between(5, 5.99);
+        queryBuilder.andWhere('hospital.rating >= :rating', { rating: 5 });
       }
       if (options.rating === 4) {
-        optionsTyped.where['rating'] = Between(4, 4.99);
+        queryBuilder.andWhere(
+          'hospital.rating >= :rating AND hospital.rating < :nextRating',
+          {
+            rating: 4,
+            nextRating: 4.99,
+          },
+        );
       }
       if (options.rating === 3) {
-        optionsTyped.where['rating'] = Between(3, 3.99);
+        queryBuilder.andWhere(
+          'hospital.rating >= :rating AND hospital.rating < :nextRating',
+          {
+            rating: 3,
+            nextRating: 3.99,
+          },
+        );
       }
       if (options.rating === 2) {
-        optionsTyped.where['rating'] = Between(2, 2.99);
+        queryBuilder.andWhere(
+          'hospital.rating >= :rating AND hospital.rating < :nextRating',
+          {
+            rating: 2,
+            nextRating: 2.99,
+          },
+        );
       }
     }
 
     if (options.name) {
-      optionsTyped.where['name'] = ILike(`%${options.name}%`);
+      queryBuilder.andWhere('hospital.name ILIKE :name', {
+        name: `%${options.name}%`,
+      });
     }
 
     const page = options.page?.page || 1;
     const limit = options.page?.limit || 10;
 
-    optionsTyped.skip = (page - 1) * limit;
-    optionsTyped.take = limit;
-
     if (options.orderBy) {
-      optionsTyped.order = {
-        [options.orderBy]: options.orderDirection || 'ASC',
-      };
+      const direction = (options.orderDirection || 'ASC').toUpperCase() as
+        | 'ASC'
+        | 'DESC';
+      queryBuilder.orderBy(`hospital.${options.orderBy}`, direction);
     }
 
-    //TODO:  read hospital along with its procedure counts
-    const [items, total] = await this.hospitalRepository.findAndCount({
-      ...optionsTyped,
-    });
+    queryBuilder.skip((page - 1) * limit).take(limit);
+
+    const total = await queryBuilder.getCount();
+    const items = await queryBuilder.getRawMany();
 
     const totalPages = Math.ceil(total / limit);
 
+    const formattedItems = items.map((item) => {
+      const obj = {};
+
+      for (const key in item) {
+        if (key.startsWith('hospital_')) {
+          const newKey = key.replace('hospital_', '');
+          obj[newKey] = item[key];
+        } else {
+          obj[key] = item[key];
+        }
+      }
+
+      return obj as Hospital;
+    });
+
     return {
-      data: items,
+      data: formattedItems,
       pagination: {
         total,
-        length: items.length,
+        length: formattedItems.length,
         page: page,
         limit: limit,
         totalPages: totalPages,
@@ -160,9 +200,12 @@ export class HospitalService {
       updateHospitalDto.name = details.displayName?.text || '';
       updateHospitalDto.website = details.websiteUri;
       updateHospitalDto.phone = details.internationalPhoneNumber;
-      updateHospitalDto.weekDayOpenings = details.regularOpeningHours?.weekdayDescriptions || [];
-      updateHospitalDto.directionsUri = details.googleMapsLinks?.directionsUri || undefined;
-      updateHospitalDto.reviewUri = details.googleMapsLinks?.reviewsUri || undefined;
+      updateHospitalDto.weekDayOpenings =
+        details.regularOpeningHours?.weekdayDescriptions || [];
+      updateHospitalDto.directionsUri =
+        details.googleMapsLinks?.directionsUri || undefined;
+      updateHospitalDto.reviewUri =
+        details.googleMapsLinks?.reviewsUri || undefined;
       updateHospitalDto.reviews =
         details.reviews?.map((r) => ({
           authorName: r.authorAttribution.displayName,

@@ -126,4 +126,6 @@ export class Hospital {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  procedureCount?: number;
 }

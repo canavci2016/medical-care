@@ -196,6 +196,7 @@ export class HospitalHairResultService {
               where: optionsTyped.where,
               skip: optionsTyped.skip,
               take: optionsTyped.take,
+              relations: ['images'],
             })
             .orderBy('RANDOM()')
             .getMany(),
@@ -205,6 +206,7 @@ export class HospitalHairResultService {
         ])
       : await this.hospitalHairResultRepository.findAndCount({
           ...optionsTyped,
+          relations: ['images'],
         });
 
     const images = await this.hospitalHairResultImageRepository.find({

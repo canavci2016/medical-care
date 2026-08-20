@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  AfterLoad,
 } from 'typeorm';
 import { HospitalHairResultImage } from './hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
@@ -162,4 +163,19 @@ export class HospitalHairResult {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  sortedImages: HospitalHairResultImage[];
+  previewImageUrl: string | null;
+
+  @AfterLoad()
+  calculateFullName() {
+    const sortedImages = this?.images?.sort((a, b) => {
+      if (a.isBefore && a.isAfter) return -1;
+      if (b.isBefore && b.isAfter) return 1;
+      if (a.isBefore) return -1;
+      return a.month - b.month;
+    });
+    this.sortedImages = sortedImages || [];
+    this.previewImageUrl = sortedImages[0]?.imageUrl || null;
+  }
 }

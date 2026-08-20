@@ -57,39 +57,10 @@ export class HospitalHairResultController {
     });
 
     const results = latestHairResults.map((result) => {
-      const sortedImages = result.images.sort((a, b) => a.month - b.month);
-
-      let beforeImageUrl = sortedImages.find(
-        (img) => img.isBefore && img.isAfter && img.angle === 'front',
-      )?.imageUrl;
-
-      if (!beforeImageUrl) {
-        beforeImageUrl = sortedImages.find(
-          (img) => img.isBefore && img.isAfter,
-        )?.imageUrl;
-      }
-
-      if (!beforeImageUrl) {
-        beforeImageUrl = sortedImages.find((img) => img.isBefore)?.imageUrl;
-      }
-
-      if (!beforeImageUrl) {
-        beforeImageUrl = sortedImages.find((img) => img.month === 0)?.imageUrl;
-      }
-
-      if (!beforeImageUrl && sortedImages.length > 0) {
-        beforeImageUrl = sortedImages[0].imageUrl;
-      }
-
       return {
-        id: result.id,
+        ...result,
         hospital: hospitals.find((hos) => hos.id === result.hospitalId),
-        verified: result.verified,
-        graftCount: result.graftCount,
-        technique: result.technique,
         procedure: result.procedureType.toUpperCase(),
-        operationDate: result.operationDate,
-        imageUrl: beforeImageUrl,
       };
     });
 
@@ -169,28 +140,37 @@ export class HospitalHairResultController {
     const hospital = await this.hospitalService.findAll({
       id: result.hospitalId,
     });
-
-    const sortedImages = result.images.sort((a, b) => {
-      if (a.isBefore && a.isAfter) return -1;
-      if (b.isBefore && b.isAfter) return 1;
-      if (a.isBefore) return -1;
-      return a.month - b.month;
+    const similarResults = await this.hospitalHairResultService.findAll({
+      hospitalId: result.hospitalId,
+      procedureType: result.procedureType,
+      technique: result.technique,
+      page: { page: 1, limit: 3 },
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
     });
 
-    const newResult = {
-      ...result,
-      hospital: hospital[0] || null,
-      previewImageUrl: sortedImages[0]?.imageUrl || null,
-      images: sortedImages.map((img) => img.imageUrl),
-    };
-
     return res.render('result-detail', {
+      similarResults: similarResults.data.map((r) => ({
+        id: r.id,
+        hospital: hospital.find((hos) => hos.id === r.hospitalId),
+        verified: r.verified,
+        graftCount: r.graftCount,
+        technique: r.technique,
+        procedure: r.procedureType.toUpperCase(),
+        operationDate: r.operationDate,
+        imageUrl: r,
+        sortedImages: r.sortedImages,
+      })),
       currentPage: 'results',
-      imagesAsJsArray: sortedImages.map((img, i) => ({
+      imagesAsJsArray: result.sortedImages.map((img, i) => ({
         src: img.imageUrl,
         caption: i === 0 ? 'Before — Front View' : `After — Image ${i}`,
       })),
-      result: newResult,
+      result: {
+        ...result,
+        hospital: hospital[0] || null,
+        images: result.sortedImages.map((img) => img.imageUrl),
+      },
     });
   }
 }

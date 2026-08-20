@@ -184,14 +184,15 @@
       <div class="detail-card" style="margin-top: 32px;">
         <h2>🔗 Similar Results</h2>
         <div class="grid-3" style="margin-top: 20px;">
-          <a href="result-detail.html" class="ba-card">
+          {{#each similarResults}}
+          <a href="/results/{{id}}" class="ba-card">
             <div class="ba-images">
-              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
+              <div class="ba-img"><img src="{{sortedImages.[0].imageUrl}}" alt="Before"><span class="ba-label before">Before</span></div>
+              <div class="ba-img"><img src="{{sortedImages.[1].imageUrl}}" alt="After"><span class="ba-label after">After</span></div>
               <div class="divider"></div>
             </div>
             <div class="ba-info">
-              <h4>DHI Technique — 2,800 Grafts</h4>
+              <h4>{{technique}} Technique — {{graftCount}} Grafts</h4>
               <div class="ba-meta">
                 <span>👨‍⚕️ Dr. Sarah Mitchell</span>
                 <span>📅 10 months post-op</span>
@@ -199,36 +200,7 @@
               <span class="view-detail-link">View Full Case →</span>
             </div>
           </a>
-          <a href="result-detail.html" class="ba-card">
-            <div class="ba-images">
-              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-              <div class="divider"></div>
-            </div>
-            <div class="ba-info">
-              <h4>Sapphire FUE — 4,200 Grafts</h4>
-              <div class="ba-meta">
-                <span>👨‍⚕️ Dr. Ayşe Kaya</span>
-                <span>📅 14 months post-op</span>
-              </div>
-              <span class="view-detail-link">View Full Case →</span>
-            </div>
-          </a>
-          <a href="result-detail.html" class="ba-card">
-            <div class="ba-images">
-              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before"><span class="ba-label before">Before</span></div>
-              <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After"><span class="ba-label after">After</span></div>
-              <div class="divider"></div>
-            </div>
-            <div class="ba-info">
-              <h4>FUE + PRP — 3,200 Grafts</h4>
-              <div class="ba-meta">
-                <span>👨‍⚕️ Dr. Rajesh Sharma</span>
-                <span>📅 9 months post-op</span>
-              </div>
-              <span class="view-detail-link">View Full Case →</span>
-            </div>
-          </a>
+          {{/each}}
         </div>
       </div>
 
