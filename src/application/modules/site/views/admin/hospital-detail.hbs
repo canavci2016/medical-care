@@ -80,6 +80,11 @@
                     </div>
 
                     <div class='mb-3'>
+                      <label for='description' class='form-label'>Description</label>
+                      <textarea class='form-control' id='description' rows='4'>{{hospital.description}}</textarea>
+                    </div>
+
+                    <div class='mb-3'>
                       <label for='googlePlaceId' class='form-label'>Google Place ID</label>
                       <input
                         type='text'
@@ -170,6 +175,64 @@
                           <option value='{{this.value}}' {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
                         {{/each}}
                       </select>
+                    </div>
+
+                    <div class='mb-3'>
+                      <label class='form-label d-block mb-2'>Facilities</label>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityMultilingualStaff'
+                          {{#if hospital.facility.multilingualStaff}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityMultilingualStaff'>Multilingual Staff</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityAirportTransferService'
+                          {{#if hospital.facility.airportTransferService}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityAirportTransferService'>Airport Transfer Service</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityDigitalHairAnalysis'
+                          {{#if hospital.facility.digitalHairAnalysis}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityDigitalHairAnalysis'>Digital Hair Analysis</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityPrivateRecoveryRooms'
+                          {{#if hospital.facility.privateRecoveryRooms}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityPrivateRecoveryRooms'>Private Recovery Rooms</label>
+                      </div>
+                      <div class='form-check'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityHotelAccommodation'
+                          {{#if hospital.facility.hotelAccommodation}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityHotelAccommodation'>Hotel Accommodation</label>
+                      </div>
+                      <div class='form-check mt-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityAcceptCreditCard'
+                          {{#if hospital.facility.acceptCreditCard}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityAcceptCreditCard'>Accept Credit Card</label>
+                      </div>
                     </div>
 
                     <div class='form-check mb-2'>
@@ -293,6 +356,7 @@
           city: String(document.getElementById('city').value || '').trim() || undefined,
           country: String(document.getElementById('country').value || '').trim() || undefined,
           address: String(document.getElementById('address').value || '').trim() || undefined,
+          description: String(document.getElementById('description').value || '').trim() || undefined,
           googlePlaceId: String(document.getElementById('googlePlaceId').value || '').trim() || undefined,
           phone: String(document.getElementById('phone').value || '').trim() || undefined,
           website: String(document.getElementById('website').value || '').trim() || undefined,
@@ -302,6 +366,14 @@
           reviewCount: Number(document.getElementById('reviewCount').value || 0),
           isVerified: document.getElementById('isVerified').checked,
           instagramVerified: document.getElementById('instagramVerified').checked,
+          facility: {
+            multilingualStaff: document.getElementById('facilityMultilingualStaff').checked,
+            airportTransferService: document.getElementById('facilityAirportTransferService').checked,
+            digitalHairAnalysis: document.getElementById('facilityDigitalHairAnalysis').checked,
+            privateRecoveryRooms: document.getElementById('facilityPrivateRecoveryRooms').checked,
+            hotelAccommodation: document.getElementById('facilityHotelAccommodation').checked,
+            acceptCreditCard: document.getElementById('facilityAcceptCreditCard').checked,
+          },
           techniques: Array.from(document.getElementById('techniques').selectedOptions).map(
             (option) => option.value,
           ),

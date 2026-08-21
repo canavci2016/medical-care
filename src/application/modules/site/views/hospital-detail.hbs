@@ -39,24 +39,46 @@
         <div class='detail-card fade-in'>
           <h2>Facilities & Equipment</h2>
           <div class='facilities-grid' style='margin-top: 16px;'>
+            {{#if hospital.facilities.jciAccredited}}
             <div class='facility-item'><div class='facility-icon'>🏥</div>
               JCI Accredited Facility</div>
+            {{/if}}
+            {{#if hospital.facilities.sapphireFueBlades}}
             <div class='facility-item'><div class='facility-icon'>💎</div>
               Sapphire FUE Blades</div>
+            {{/if}}
+            {{#if hospital.facilities.dhiChoiImplanterPens}}
             <div class='facility-item'><div class='facility-icon'>🔬</div>
               DHI Choi Implanter Pens</div>
+            {{/if}}
+            {{#if hospital.facility.prpTherapyLab}}
             <div class='facility-item'><div class='facility-icon'>🧬</div>
               PRP Therapy Lab</div>
+            {{/if}}
+            {{#if hospital.facility.digitalHairAnalysis}}
             <div class='facility-item'><div class='facility-icon'>🖥️</div>
               Digital Hair Analysis</div>
+            {{/if}}
+            {{#if hospital.facility.privateRecoveryRooms}}
             <div class='facility-item'><div class='facility-icon'>🛏️</div>
               Private Recovery Rooms</div>
+            {{/if}}
+            {{#if hospital.facility.multilingualStaff}}
             <div class='facility-item'><div class='facility-icon'>🌐</div>
               Multilingual Staff</div>
+            {{/if}}
+            {{#if hospital.facility.airportTransferService}}
             <div class='facility-item'><div class='facility-icon'>✈️</div>
               Airport Transfer Service</div>
+            {{/if}}
+            {{#if hospital.facility.hotelAccommodation}}
             <div class='facility-item'><div class='facility-icon'>🏨</div>
               Hotel Accommodation</div>
+            {{/if}}
+            {{#if hospital.facility.acceptCreditCard}}
+            <div class='facility-item'><div class='facility-icon'>💳</div>
+              Accept Credit Card</div>
+            {{/if}}
           </div>
         </div>
 

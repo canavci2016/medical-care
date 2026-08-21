@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsString,
   IsOptional,
@@ -34,6 +33,32 @@ export class HospitalReviewDto {
   publishTime: string;
 }
 
+export class HospitalFacilityDto {
+  @IsOptional()
+  @IsBoolean()
+  multilingualStaff?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  airportTransferService?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  digitalHairAnalysis?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  privateRecoveryRooms?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  hotelAccommodation?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  acceptCreditCard?: boolean;
+}
+
 export class CreateHospitalDto {
   /* ===============================
      BASIC INFO
@@ -62,6 +87,10 @@ export class CreateHospitalDto {
   @IsOptional()
   @IsString()
   address?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
 
   @IsOptional()
   @IsString()
@@ -142,4 +171,9 @@ export class CreateHospitalDto {
   @ValidateNested({ each: true })
   @Type(() => HospitalReviewDto)
   reviews?: HospitalReviewDto[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => HospitalFacilityDto)
+  facility?: HospitalFacilityDto;
 }

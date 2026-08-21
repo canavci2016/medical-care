@@ -16,6 +16,15 @@ export interface HospitalReview {
   rating?: number;
 }
 
+export interface HospitalFacility {
+  multilingualStaff?: boolean;
+  airportTransferService?: boolean;
+  digitalHairAnalysis?: boolean;
+  privateRecoveryRooms?: boolean;
+  hotelAccommodation?: boolean;
+  acceptCreditCard?: boolean;
+}
+
 @Entity('hospitals')
 export class Hospital {
   @PrimaryGeneratedColumn('uuid')
@@ -42,6 +51,9 @@ export class Hospital {
 
   @Column({ nullable: true })
   address?: string;
+
+   @Column({ type: 'text', nullable: true })
+   description?: string;
 
   @Column({ nullable: true })
   googlePlaceId?: string;
@@ -116,6 +128,9 @@ export class Hospital {
 
   @Column({ type: 'json', nullable: true })
   reviews?: HospitalReview[];
+
+  @Column({ type: 'json', nullable: true })
+  facility?: HospitalFacility;
 
   /* ===============================
      TIMESTAMPS
