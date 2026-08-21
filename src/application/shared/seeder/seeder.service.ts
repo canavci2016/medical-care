@@ -126,7 +126,6 @@ export class SeederService {
     const countries = countryMock.map((item) =>
       this.countryRepository.create({
         name: item.english_name,
-        code: item.alpha2_code,
         isActive: true,
       }),
     );

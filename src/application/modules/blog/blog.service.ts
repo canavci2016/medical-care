@@ -8,11 +8,7 @@ import { ILike, Repository } from 'typeorm';
 import { Blog } from './entities/blog.entity';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { randomUUID } from 'node:crypto';
-
-export interface Pagination {
-  page?: number;
-  limit?: number;
-}
+import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
 
 @Injectable()
 export class BlogService {

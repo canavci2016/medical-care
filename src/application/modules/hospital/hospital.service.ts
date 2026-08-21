@@ -1,35 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Between,
-  DataSource,
-  EntityTarget,
-  FindManyOptions,
-  ILike,
-  In,
-  IsNull,
-  Not,
-  Repository,
-} from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
-import { Query } from 'src/application/shared/interfaces/query.interface';
+import {
+  OrderDirection,
+  Query,
+} from 'src/application/shared/interfaces/query.interface';
 import { GooglePlaceService } from 'src/application/core/google/google-place.service';
+import { CountryService } from 'src/application/shared/modules/country/country.service';
+import { CityService } from 'src/application/shared/modules/city/city.service';
+import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
 
-export interface Pagination {
-  page?: number;
-  limit?: number;
-}
-
-export interface Filter {
-  gt?: number;
-
-  gte?: number;
-
-  lt?: number;
-
-  lte?: number;
+export enum RatingFilter {
+  'FIVE' = '5',
+  'FOUR_PLUS' = '4',
+  'THREE_PLUS' = '3',
+  'TWO_PLUS' = '2',
 }
 
 @Injectable()
@@ -38,10 +26,25 @@ export class HospitalService {
     @InjectRepository(Hospital)
     private readonly hospitalRepository: Repository<Hospital>,
     private readonly googlePlaceService: GooglePlaceService,
+    private readonly countryService: CountryService,
+    private readonly cityService: CityService,
   ) { }
 
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
     const hospital = this.hospitalRepository.create(createHospitalDto);
+
+    if (hospital.country) {
+      hospital.countryId = (
+        await this.countryService.findCountryOrCreate(hospital.country)
+      ).id;
+    }
+
+    if (hospital.city) {
+      hospital.cityId = (
+        await this.cityService.findCityOrCreate(hospital.city)
+      ).id;
+    }
+
     const createdHosp = await this.hospitalRepository.save(hospital);
 
     return createdHosp;
@@ -76,12 +79,13 @@ export class HospitalService {
 
   async paginated(
     options: Partial<{
-      rating: number;
-      city: string;
+      rating: RatingFilter | '';
+      cityId: string;
+      countryId: Query<Hospital['countryId']>;
       name: string;
       page: Pagination;
       orderBy: string;
-      orderDirection: 'asc' | 'desc';
+      orderDirection: OrderDirection;
     }> = {},
   ) {
     const queryBuilder = this.hospitalRepository.createQueryBuilder('hospital');
@@ -91,45 +95,32 @@ export class HospitalService {
       'procedureCount',
     );
 
-    if (options.city) {
-      queryBuilder.andWhere('hospital.city = :city', { city: options.city });
+    if (options.cityId) {
+      queryBuilder.andWhere('hospital.cityId = :cityId', {
+        cityId: options.cityId,
+      });
     }
     if (options.rating) {
-      if (options.rating === 5) {
-        queryBuilder.andWhere('hospital.rating >= :rating', { rating: 5 });
-      }
-      if (options.rating === 4) {
-        queryBuilder.andWhere(
-          'hospital.rating >= :rating AND hospital.rating < :nextRating',
-          {
-            rating: 4,
-            nextRating: 4.99,
-          },
-        );
-      }
-      if (options.rating === 3) {
-        queryBuilder.andWhere(
-          'hospital.rating >= :rating AND hospital.rating < :nextRating',
-          {
-            rating: 3,
-            nextRating: 3.99,
-          },
-        );
-      }
-      if (options.rating === 2) {
-        queryBuilder.andWhere(
-          'hospital.rating >= :rating AND hospital.rating < :nextRating',
-          {
-            rating: 2,
-            nextRating: 2.99,
-          },
-        );
-      }
+      const rating = parseFloat(options.rating as string);
+      const nextRating = rating + 0.99;
+      queryBuilder.andWhere(
+        'hospital.rating >= :rating AND hospital.rating < :nextRating',
+        {
+          rating: rating,
+          nextRating: nextRating,
+        },
+      );
     }
 
     if (options.name) {
       queryBuilder.andWhere('hospital.name ILIKE :name', {
         name: `%${options.name}%`,
+      });
+    }
+
+    if (options.countryId?.eq) {
+      queryBuilder.andWhere('hospital.countryId = :countryId', {
+        countryId: options.countryId.eq,
       });
     }
 
@@ -218,6 +209,21 @@ export class HospitalService {
 
     const hospital = await this.findOne(id);
     Object.assign(hospital, updateHospitalDto);
+
+    if (updateHospitalDto.country) {
+      const country = await this.countryService.findCountryOrCreate(
+        updateHospitalDto.country,
+      );
+      hospital.countryId = country.id;
+    }
+
+    if (updateHospitalDto.city) {
+      const city = await this.cityService.findCityOrCreate(
+        updateHospitalDto.city,
+      );
+      hospital.cityId = city.id;
+    }
+
     const updatedHospital = await this.hospitalRepository.save(hospital);
 
     return updatedHospital;
@@ -226,16 +232,5 @@ export class HospitalService {
   async remove(id: string): Promise<void> {
     const hospital = await this.findOne(id);
     await this.hospitalRepository.remove(hospital);
-  }
-
-  async getCities() {
-    const result: { city: string; count: number }[] =
-      await this.hospitalRepository
-        .createQueryBuilder('hr')
-        .select('hr.city', 'city')
-        .addSelect('COUNT(*)', 'count')
-        .groupBy('hr.city')
-        .getRawMany();
-    return result;
   }
 }

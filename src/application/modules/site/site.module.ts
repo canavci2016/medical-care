@@ -16,9 +16,18 @@ import { AdminHospitalController } from './admin-hospital.controller';
 import { AdminDoctorController } from './admin-doctor.controller';
 import { AdminAuthController } from './admin-auth.controller';
 import { SitemapController } from './sitemap.controller';
+import { CountryModule } from 'src/application/shared/modules/country/country.module';
+import { CityModule } from 'src/application/shared/modules/city/city.module';
 
 @Module({
-  imports: [HospitalModule, DoctorModule, HospitalHairResultModule, BlogModule],
+  imports: [
+    HospitalModule,
+    DoctorModule,
+    HospitalHairResultModule,
+    BlogModule,
+    CountryModule,
+    CityModule,
+  ],
   controllers: [
     HomeController,
     HospitalHairResultController,
@@ -36,4 +45,4 @@ import { SitemapController } from './sitemap.controller';
   providers: [HomeService],
   exports: [HomeService],
 })
-export class SiteModule {}
+export class SiteModule { }

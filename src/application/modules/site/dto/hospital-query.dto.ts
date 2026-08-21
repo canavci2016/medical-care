@@ -3,7 +3,10 @@ import {
   IsString,
   IsNumberString,
   ValidateIf,
+  IsUUID,
+  IsEnum,
 } from 'class-validator';
+import { RatingFilter } from '../../hospital/hospital.service';
 
 export class HospitalQueryDto {
   [key: string]: string | undefined;
@@ -13,17 +16,23 @@ export class HospitalQueryDto {
   page?: string;
 
   @IsOptional()
+  @ValidateIf((o: HospitalQueryDto) => o.limit !== '')
   @IsNumberString()
   limit?: string;
 
   @IsOptional()
-  @IsString()
+  @ValidateIf((o: HospitalQueryDto) => o.city !== '')
+  @IsUUID()
   city?: string;
 
   @IsOptional()
   @ValidateIf((o: HospitalQueryDto) => o.rating !== '')
-  @IsNumberString()
-  rating?: string;
+  @IsEnum(RatingFilter, {
+    message: `rating must be one of the following values: ${Object.values(
+      RatingFilter,
+    ).join(', ')}`,
+  })
+  rating?: RatingFilter | '';
 
   @IsOptional()
   @IsString()
@@ -32,4 +41,9 @@ export class HospitalQueryDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @IsOptional()
+  @ValidateIf((o: HospitalQueryDto) => o.country !== '')
+  @IsUUID()
+  country?: string;
 }

@@ -9,6 +9,7 @@ import { HospitalHairResultModule } from './modules/hospital-hair-result/hospita
 import { SiteModule } from './modules/site/site.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { CountryModule } from './shared/modules/country/country.module';
+import { CityModule } from './shared/modules/city/city.module';
 import { SeederModule } from './shared/seeder/seeder.module';
 import { AwsModule } from './shared/modules/aws/aws.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -59,6 +60,7 @@ import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
     SiteModule,
     BlogModule,
     CountryModule,
+    CityModule,
     SeederModule,
     AwsModule,
     CronjobModule,

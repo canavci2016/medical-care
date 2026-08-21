@@ -6,11 +6,14 @@ import {
   Query,
   Res,
 } from '@nestjs/common';
-import { HospitalService } from '../hospital/hospital.service';
+import { HospitalService, RatingFilter } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { HospitalQueryDto } from './dto/hospital-query.dto';
 import { DoctorService } from '../doctor/doctor.service';
+import { CountryService } from 'src/application/shared/modules/country/country.service';
+import { CityService } from 'src/application/shared/modules/city/city.service';
+import { StringHelper } from 'src/application/shared/helpers/String';
 
 @Controller('hospitals')
 export class HospitalController {
@@ -18,7 +21,9 @@ export class HospitalController {
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly doctorService: DoctorService,
-  ) { }
+    private readonly countryService: CountryService,
+    private readonly cityService: CityService,
+  ) {}
 
   @Get('/api')
   async apiFindPaginated(
@@ -31,8 +36,8 @@ export class HospitalController {
 
     const response = await this.hospitalService.paginated({
       name: query.name,
-      city: query.city,
-      rating: query.rating ? parseInt(query.rating, 10) : undefined,
+      cityId: query.cityId,
+      rating: query.rating,
       page: {
         limit: query.limit ? parseInt(query.limit, 10) : 12,
         page: query.page ? parseInt(query.page, 10) : 1,
@@ -63,28 +68,40 @@ export class HospitalController {
     const { data: hospitals, pagination } =
       await this.hospitalService.paginated({
         name: query.name,
-        city: query.city,
-        rating: query.rating ? parseInt(query.rating, 10) : undefined,
-        page: { limit: 12, page: query.page ? parseInt(query.page, 10) : 1 },
+        cityId: query.city,
+        countryId: { eq: query.country },
+        rating: query.rating,
+        page: {
+          limit: query.limit ? parseInt(query.limit, 10) : 12,
+          page: query.page ? parseInt(query.page, 10) : 1,
+        },
         orderBy: orderCollumn,
         orderDirection: orderDirection as 'asc' | 'desc',
       });
 
-    const cities = await this.hospitalService.getCities();
+    const cities = await this.cityService.findAll({
+      isActive: true,
+      take: 500,
+    });
+    const countries = await this.countryService.findAll({ isActive: true });
 
     const filters = {
       name: query.name || '',
       cities: cities.map((city) => ({
-        label: city.city + ` (${city.count})`,
-        value: city.city,
-        count: city.count,
-        selected: query.city === city.city,
+        label: StringHelper.capitalizeFirstLetter(city.name),
+        value: city.id,
+        selected: query.city === city.id,
+      })),
+      countries: countries.map((country) => ({
+        label: StringHelper.capitalizeFirstLetter(country.name),
+        value: country.id,
+        selected: query.country === country.id,
       })),
       stars: Object.entries({
-        '5': '5',
-        '4+': '4',
-        '3+': '3',
-        '2+': '2',
+        '5': RatingFilter.FIVE,
+        '4+': RatingFilter.FOUR_PLUS,
+        '3+': RatingFilter.THREE_PLUS,
+        '2+': RatingFilter.TWO_PLUS,
       }).map(([key, value]) => ({
         label: key,
         value,

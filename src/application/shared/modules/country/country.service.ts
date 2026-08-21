@@ -2,13 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Country } from './entities/country.entity';
+import { Query } from '../../interfaces/query.interface';
 
 @Injectable()
 export class CountryService {
   constructor(
     @InjectRepository(Country)
     private readonly countryRepository: Repository<Country>,
-  ) {}
+  ) { }
 
   async create(payload: Partial<Country>): Promise<Country> {
     const country = this.countryRepository.create(payload);
@@ -16,13 +17,19 @@ export class CountryService {
   }
 
   async findAll(
-    params: Partial<{ skip: number; take: number; id: string | string[] }> = {},
+    params: Partial<{
+      skip: number;
+      take: number;
+      id: Query<string>;
+      isActive;
+    }> = {},
   ): Promise<Country[]> {
     const where = {};
 
-    if (params.id) {
-      const idList = Array.isArray(params.id) ? params.id : [params.id];
-      where['id'] = In(idList);
+    if (params.id?.eq) {
+      where['id'] = params.id.eq;
+    } else if (params.id?.in) {
+      where['id'] = In(params.id.in);
     }
 
     return this.countryRepository.find({
@@ -52,5 +59,18 @@ export class CountryService {
   async remove(id: string): Promise<void> {
     const country = await this.findOne(id);
     await this.countryRepository.remove(country);
+  }
+
+  async findCountryOrCreate(name: string): Promise<Country> {
+    const lowerCaseName = name.toLowerCase();
+    let country = await this.countryRepository.findOne({
+      where: { name: lowerCaseName },
+    });
+
+    if (!country) {
+      country = await this.create({ name: lowerCaseName });
+    }
+
+    return country;
   }
 }

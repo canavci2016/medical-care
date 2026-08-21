@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsString,
   IsOptional,
@@ -82,10 +81,6 @@ export class CreateHospitalHairResultDto {
 
   @IsOptional()
   @IsString()
-  donorAreaQuality?: string;
-
-  @IsOptional()
-  @IsString()
   hairType?: string;
 
   /* ===============================
@@ -95,14 +90,6 @@ export class CreateHospitalHairResultDto {
   @IsOptional()
   @IsBoolean()
   verified?: boolean;
-
-  @IsOptional()
-  @IsString()
-  verifiedBy?: string;
-
-  @IsOptional()
-  @IsDateString()
-  verifiedAt?: Date;
 
   @IsOptional()
   @IsBoolean()
@@ -119,10 +106,6 @@ export class CreateHospitalHairResultDto {
   @IsOptional()
   @IsBoolean()
   featured?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  sharedOnInstagram?: boolean;
 
   @IsOptional()
   @IsUrl()

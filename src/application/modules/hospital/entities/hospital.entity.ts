@@ -46,14 +46,20 @@ export class Hospital {
   @Column({ nullable: true })
   city?: string;
 
+  @Column({ type: 'uuid', nullable: true })
+  cityId?: string;
+
   @Column({ nullable: true })
   country?: string;
+
+  @Column({ type: 'uuid', nullable: true })
+  countryId?: string;
 
   @Column({ nullable: true })
   address?: string;
 
-   @Column({ type: 'text', nullable: true })
-   description?: string;
+  @Column({ type: 'text', nullable: true })
+  description?: string;
 
   @Column({ nullable: true })
   googlePlaceId?: string;

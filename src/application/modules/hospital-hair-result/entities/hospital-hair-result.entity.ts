@@ -94,9 +94,6 @@ export class HospitalHairResult {
   norwoodScale?: string; // "NW3"
 
   @Column({ nullable: true })
-  donorAreaQuality?: string; // "Good", "Average"
-
-  @Column({ nullable: true })
   hairType?: string; // "Straight", "Wavy"
 
   /* ===============================
@@ -105,12 +102,6 @@ export class HospitalHairResult {
 
   @Column({ default: false })
   verified: boolean;
-
-  @Column({ nullable: true })
-  verifiedBy?: string; // Admin or medical reviewer
-
-  @Column({ type: 'timestamp', nullable: true })
-  verifiedAt?: Date;
 
   @Column({ default: false })
   consentReceived: boolean;
@@ -124,9 +115,6 @@ export class HospitalHairResult {
 
   @Column({ default: false })
   featured: boolean;
-
-  @Column({ default: false })
-  sharedOnInstagram: boolean;
 
   @Column({ nullable: true })
   instagramPostUrl?: string;
