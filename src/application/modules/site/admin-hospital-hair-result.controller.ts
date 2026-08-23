@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,7 +10,9 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
@@ -22,6 +25,7 @@ import { buildPagination } from './pagination.util';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { randomUUID } from 'node:crypto';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(AdminAuthGuard)
 @Controller('admin/hospital-hair-results')
@@ -104,9 +108,48 @@ export class AdminHospitalHairResultController {
     });
   }
 
+  @Get('bulk-create')
+  async bulkCreateForm(@Res() res: Response) {
+    const hospitals = await this.hospitalService.findAll({
+      take: 200,
+    });
+
+    return res.render('admin/create-hospital-hair-result-bulk', {
+      hospitals,
+      procedureTypes: Object.values(HairProcedureType),
+      techniques: Object.values(HairTransplantTechnique),
+      styles: ['create-blog.css'],
+      layout: false,
+    });
+  }
+
   @Post()
   async create(@Body() payload: CreateHospitalHairResultDto) {
     return this.hospitalHairResultService.create(payload);
+  }
+
+  @Post('/bulk-create')
+  @UseInterceptors(FileInterceptor('filePayload'))
+  async bulkCreate(@UploadedFile() file?: { buffer: Buffer }) {
+    if (!file || !(file.buffer instanceof Buffer)) {
+      throw new BadRequestException('filePayload is required.');
+    }
+
+    let jsonPayload: unknown;
+
+    try {
+      jsonPayload = JSON.parse(file.buffer.toString('utf-8'));
+    } catch {
+      throw new BadRequestException('Invalid JSON file content.');
+    }
+
+    if (!Array.isArray(jsonPayload)) {
+      throw new BadRequestException('JSON payload must be an array.');
+    }
+
+    return this.hospitalHairResultService.bulkCreate(
+      jsonPayload as CreateHospitalHairResultDto[],
+    );
   }
 
   @Post('upload-url')

@@ -90,6 +90,17 @@ export class HospitalHairResultService {
     return this.findOne(savedResult.id);
   }
 
+  async bulkCreate(
+    createHospitalHairResultInBulkDto: CreateHospitalHairResultDto[],
+  ): Promise<HospitalHairResult[]> {
+    const results: HospitalHairResult[] = [];
+    for (const dto of createHospitalHairResultInBulkDto) {
+      const result = await this.create(dto);
+      results.push(result);
+    }
+    return results;
+  }
+
   async findAll(
     options: Partial<{
       hospitalId: string | string[];
@@ -184,23 +195,8 @@ export class HospitalHairResultService {
       };
     }
 
-    const [results, total] = shouldRandomize
-      ? await Promise.all([
-        this.hospitalHairResultRepository
-          .createQueryBuilder('hr')
-          .setFindOptions({
-            where: optionsTyped.where,
-            skip: optionsTyped.skip,
-            take: optionsTyped.take,
-            relations: ['images'],
-          })
-          .orderBy('RANDOM()')
-          .getMany(),
-        this.hospitalHairResultRepository.count({
-          where: optionsTyped.where,
-        }),
-      ])
-      : await this.hospitalHairResultRepository.findAndCount({
+    const [results, total] =
+      await this.hospitalHairResultRepository.findAndCount({
         ...optionsTyped,
         relations: ['images'],
       });

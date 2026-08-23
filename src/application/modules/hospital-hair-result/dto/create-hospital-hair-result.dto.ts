@@ -152,3 +152,10 @@ export class CreateHospitalHairResultDto {
   @IsUrl({}, { each: true })
   imageUrls?: string[];
 }
+
+export class CreateHospitalHairResultInBulkDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateHospitalHairResultDto)
+  jsonPayload: CreateHospitalHairResultDto[];
+}

@@ -34,33 +34,13 @@ export class HomeController {
     });
 
     const results = randomHairResults.map((result) => {
-      const images = result.images || [];
-
-      let image = images.find(
-        (img) => img.isBefore && img.isAfter && img.angle == 'front',
-      );
-
-      if (!image) {
-        image = images.find((img) => img.isBefore && img.isAfter);
-      }
-
-      if (!image) {
-        image = images
-          .filter((img) => img.isBefore)
-          .sort((a, b) => b.month - a.month)[0];
-      }
-
-      if (!image) {
-        image = images[0] || null;
-      }
-
       return {
         id: result.id,
         hospital:
           randomHospitals.find((h) => h.id === result.hospitalId) || null,
         verified: result.verified,
         graftCount: result.graftCount,
-        image: image?.imageUrl || null,
+        image: result.previewImageUrl,
         technique: result.technique,
         operationDate: result.operationDate,
       };
