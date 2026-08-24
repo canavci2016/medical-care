@@ -195,20 +195,12 @@ export class HospitalHairResultService {
       };
     }
 
-    const [results, total] =
-      await this.hospitalHairResultRepository.findAndCount({
+    const [items, total] = await this.hospitalHairResultRepository.findAndCount(
+      {
         ...optionsTyped,
-        relations: ['images'],
-      });
-
-    const images = await this.hospitalHairResultImageRepository.find({
-      where: { resultId: In(results.map((r) => r.id)) },
-    });
-
-    const items = results.map((result) => ({
-      ...result,
-      images: images.filter((img) => img.resultId === result.id),
-    }));
+        relations: ['images', 'hospital'],
+      },
+    );
 
     const totalPages = Math.ceil(total / limit);
 
@@ -292,7 +284,7 @@ export class HospitalHairResultService {
   async findOne(id: string): Promise<HospitalHairResult> {
     const result = await this.hospitalHairResultRepository.findOne({
       where: { id },
-      relations: ['images'],
+      relations: ['images', 'hospital'],
     });
     if (!result) {
       throw new NotFoundException(

@@ -7,9 +7,11 @@ import {
   UpdateDateColumn,
   Index,
   AfterLoad,
+  ManyToOne,
 } from 'typeorm';
 import { HospitalHairResultImage } from './hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { Hospital } from '../../hospital/entities/hospital.entity';
 
 export enum HairProcedureType {
   HAIR = 'hair',
@@ -37,6 +39,9 @@ export class HospitalHairResult {
     cascade: true,
   })
   images: HospitalHairResultImage[];
+
+  @ManyToOne(() => Hospital, (hospital) => hospital.id)
+  hospital: Hospital;
   /* ===============================
      PROCEDURE INFO
   =============================== */

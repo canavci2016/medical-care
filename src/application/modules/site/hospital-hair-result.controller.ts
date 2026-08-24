@@ -52,14 +52,9 @@ export class HospitalHairResultController {
     const availableMonths =
       await this.hospitalHairResultService.getAvailableMonths();
 
-    const hospitals = await this.hospitalService.findAll({
-      id: latestHairResults.map((r) => r.hospitalId),
-    });
-
     const results = latestHairResults.map((result) => {
       return {
         ...result,
-        hospital: hospitals.find((hos) => hos.id === result.hospitalId),
         procedure: result.procedureType.toUpperCase(),
       };
     });
@@ -137,9 +132,7 @@ export class HospitalHairResultController {
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
     const result = await this.hospitalHairResultService.findOne(id);
-    const hospital = await this.hospitalService.findAll({
-      id: result.hospitalId,
-    });
+
     const similarResults = await this.hospitalHairResultService.findAll({
       hospitalId: result.hospitalId,
       procedureType: result.procedureType,
@@ -152,7 +145,6 @@ export class HospitalHairResultController {
     return res.render('result-detail', {
       similarResults: similarResults.data.map((r) => ({
         id: r.id,
-        hospital: hospital.find((hos) => hos.id === r.hospitalId),
         verified: r.verified,
         graftCount: r.graftCount,
         technique: r.technique,
@@ -169,7 +161,6 @@ export class HospitalHairResultController {
       })),
       result: {
         ...result,
-        hospital: hospital[0] || null,
         images: result.sortedImages.map((img) => img.imageUrl),
       },
     });
