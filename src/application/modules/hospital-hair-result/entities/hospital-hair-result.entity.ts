@@ -153,6 +153,9 @@ export class HospitalHairResult {
   updatedAt: Date;
 
   sortedImages: HospitalHairResultImage[];
+  beforeImageUrl: string | null;
+  afterImageUrl: string | null;
+  beforeAndAfterImageUrl: string | null;
   previewImageUrl: string | null;
 
   @AfterLoad()
@@ -164,6 +167,41 @@ export class HospitalHairResult {
       return a.month - b.month;
     });
     this.sortedImages = sortedImages || [];
-    this.previewImageUrl = sortedImages[0]?.imageUrl || null;
+
+    this.beforeImageUrl =
+      sortedImages.find(
+        (img) => img.isBefore && !img.isAfter && img.angle === 'front',
+      )?.imageUrl || null;
+
+    this.beforeImageUrl =
+      this.beforeImageUrl ||
+      sortedImages.find((img) => img.isBefore && !img.isAfter)?.imageUrl ||
+      null;
+
+    this.afterImageUrl =
+      sortedImages.find(
+        (img) => img.isAfter && !img.isBefore && img.angle === 'front',
+      )?.imageUrl || null;
+
+    this.afterImageUrl =
+      this.afterImageUrl ||
+      sortedImages.find((img) => img.isAfter && !img.isBefore)?.imageUrl ||
+      null;
+
+    this.beforeAndAfterImageUrl =
+      sortedImages.find(
+        (img) => img.isBefore && img.isAfter && img.angle === 'front',
+      )?.imageUrl || null;
+
+    this.beforeAndAfterImageUrl =
+      this.beforeAndAfterImageUrl ||
+      sortedImages.find((img) => img.isBefore && img.isAfter)?.imageUrl ||
+      null;
+
+    this.previewImageUrl =
+      this.beforeAndAfterImageUrl ||
+      this.afterImageUrl ||
+      this.beforeImageUrl ||
+      null;
   }
 }

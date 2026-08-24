@@ -66,7 +66,7 @@
           <!-- Case Overview -->
           <div class="detail-card">
             <h2>📋 Case Overview</h2>
-            <p>{{result.patientStory}}</p>
+            <p>{{result.doctorNotes}}</p>
 
             <div class="result-stats-grid" style="margin-top: 24px;">
               <div class="result-stat-item">
@@ -187,8 +187,7 @@
           {{#each similarResults}}
           <a href="/results/{{id}}" class="ba-card">
             <div class="ba-images">
-              <div class="ba-img"><img src="{{sortedImages.[0].imageUrl}}" alt="Before"><span class="ba-label before">Before</span></div>
-              <div class="ba-img"><img src="{{sortedImages.[1].imageUrl}}" alt="After"><span class="ba-label after">After</span></div>
+              <div class="ba-img"><img src="{{previewImageUrl}}" alt="Before"><span class="ba-label before">Before</span></div>
               <div class="divider"></div>
             </div>
             <div class="ba-info">
@@ -208,6 +207,7 @@
   </section>
 
   <!-- CTA -->
+
   <section class="cta-section">
     <div class="container">
       <h2>Ready to Start Your Transformation?</h2>

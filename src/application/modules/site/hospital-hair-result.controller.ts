@@ -144,7 +144,7 @@ export class HospitalHairResultController {
       hospitalId: result.hospitalId,
       procedureType: result.procedureType,
       technique: result.technique,
-      page: { page: 1, limit: 3 },
+      page: { page: 1, limit: 4 },
       orderBy: 'createdAt',
       orderDirection: 'desc',
     });
@@ -160,6 +160,7 @@ export class HospitalHairResultController {
         operationDate: r.operationDate,
         imageUrl: r,
         sortedImages: r.sortedImages,
+        previewImageUrl: r.previewImageUrl,
       })),
       currentPage: 'results',
       imagesAsJsArray: result.sortedImages.map((img, i) => ({

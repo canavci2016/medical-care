@@ -169,16 +169,13 @@ export class HospitalController {
       hospital: hospital,
       procedureTypes: procedureTypes,
       doctors: doctors,
-      latestHairResults: latestHairResults
-        .map((hr) => ({
-          id: hr.id,
-          beforeImage: hr.images[0]?.imageUrl || null,
-          afterImage: hr.images[1]?.imageUrl || hr.images[0]?.imageUrl || null,
-          graftCount: hr.graftCount,
-          technique: hr.procedureType,
-          operationDate: hr.operationDate,
-        }))
-        .filter((hr) => hr.beforeImage && hr.afterImage),
+      latestHairResults: latestHairResults.map((hr) => ({
+        id: hr.id,
+        graftCount: hr.graftCount,
+        technique: hr.procedureType,
+        operationDate: hr.operationDate,
+        previewImageUrl: hr.previewImageUrl,
+      })),
       totalProcedures: procedureTypes.reduce(
         (total, pt) => total + parseInt(pt.count, 10),
         0,
