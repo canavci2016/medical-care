@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import type { Response } from 'express';
-import { HospitalService } from '../hospital/hospital.service';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
@@ -17,7 +16,6 @@ import { HairResultQueryDto } from './dto/hair-result-query.dto';
 export class HospitalHairResultController {
   constructor(
     private readonly hospitalHairResultService: HospitalHairResultService,
-    private readonly hospitalService: HospitalService,
   ) { }
 
   @Get()
@@ -34,9 +32,6 @@ export class HospitalHairResultController {
         graftCount: query.graftCount
           ? { gte: parseInt(query.graftCount, 10) }
           : undefined,
-        availableMonths: query.duration
-          ? parseInt(query.duration, 10)
-          : undefined,
         verified:
           query.verified === 'on'
             ? true
@@ -49,8 +44,6 @@ export class HospitalHairResultController {
       });
 
     const ageRanges = await this.hospitalHairResultService.getAgeRanges();
-    const availableMonths =
-      await this.hospitalHairResultService.getAvailableMonths();
 
     const results = latestHairResults.map((result) => {
       return {
@@ -94,14 +87,6 @@ export class HospitalHairResultController {
         label: 'Verified only',
         selected: query.verified === 'on',
       },
-      availableMonths: availableMonths.map((month) => ({
-        label:
-          month.month === 0
-            ? 'Before'
-            : `${month.month} months after (${month.count})`,
-        value: month.month,
-        selected: query.duration === month.month.toString(),
-      })),
       hospitalId: query.hospitalId || '',
     };
 

@@ -252,35 +252,6 @@ export class HospitalHairResultService {
     return result;
   }
 
-  async getAvailableMonths(conditions?: { hospitalId?: string | string[] }) {
-    let query = this.hospitalHairResultRepository
-      .createQueryBuilder('hr')
-      .select(
-        "unnest(string_to_array(hr.availableMonths, ',')::int[])",
-        'month',
-      )
-      .addSelect('COUNT(*)', 'count');
-
-    if (conditions?.hospitalId) {
-      const hospitalIds = Array.isArray(conditions.hospitalId)
-        ? conditions.hospitalId
-        : [conditions.hospitalId];
-      query = query.where('hr.hospitalId IN (:...hospitalIds)', {
-        hospitalIds,
-      });
-    }
-
-    const result: { month: string; count: string }[] = await query
-      .groupBy('month')
-      .orderBy('month', 'ASC')
-      .getRawMany();
-
-    return result.map((r) => ({
-      month: parseInt(r.month, 10),
-      count: parseInt(r.count, 10),
-    }));
-  }
-
   async findOne(id: string): Promise<HospitalHairResult> {
     const result = await this.hospitalHairResultRepository.findOne({
       where: { id },

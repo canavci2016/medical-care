@@ -57,9 +57,4 @@ export class HairResultQueryDto {
   @IsOptional()
   @IsString()
   name?: string;
-
-  @IsOptional()
-  @ValidateIf((o: HairResultQueryDto) => o.duration !== '')
-  @IsNumberString()
-  duration?: string;
 }
