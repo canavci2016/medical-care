@@ -48,7 +48,9 @@ export class AppQueueConsumer extends WorkerHost {
         text,
       });
 
-      this.logger.log(`Contact form email sent for ${contact.email ?? 'unknown email'}`);
+      this.logger.log(
+        `Contact form email sent for ${contact.email ?? 'unknown email'}`,
+      );
     }
 
     return payload;
