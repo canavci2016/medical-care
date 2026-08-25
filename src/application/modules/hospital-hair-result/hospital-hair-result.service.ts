@@ -111,7 +111,6 @@ export class HospitalHairResultService {
       page: Required<Pagination>;
       orderBy: string;
       orderDirection: 'asc' | 'desc';
-      random?: boolean;
       ageRange: string;
     }> = {},
   ) {
@@ -169,12 +168,7 @@ export class HospitalHairResultService {
     optionsTyped.skip = (page - 1) * limit;
     optionsTyped.take = limit;
 
-    const shouldRandomize =
-      options.random === true ||
-      (typeof options.orderBy === 'string' &&
-        options.orderBy.toLowerCase() === 'random');
-
-    if (options.orderBy && !shouldRandomize) {
+    if (options.orderBy) {
       optionsTyped.order = {
         [options.orderBy]: options.orderDirection || 'ASC',
       };

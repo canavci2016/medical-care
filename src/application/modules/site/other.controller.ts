@@ -5,7 +5,7 @@ import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/su
 
 @Controller()
 export class OtherController {
-  constructor(private readonly appQueueService: AppQueueService) {}
+  constructor(private readonly appQueueService: AppQueueService) { }
 
   @Get('/contact')
   @Get('/about')
@@ -33,7 +33,7 @@ export class OtherController {
 
   @Post('contact')
   @Post('about')
-  async contact(
+  contact(
     @Req() req,
     @Body()
     body: {
@@ -47,7 +47,7 @@ export class OtherController {
     @Res() res: Response,
   ) {
     //TODO: Prevent spam by adding a captcha or rate limiting as well as jobid to prevent duplicate submissions. Also, consider adding a queue for sending emails to avoid blocking the request.
-    await this.appQueueService.add(
+    this.appQueueService.add(
       SupportedEventTypes.CONTACT_FORM_SUBMISSION,
       {
         ...body,

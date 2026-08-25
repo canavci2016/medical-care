@@ -16,6 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
 import { GoogleModule } from './core/google/google.module';
 import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
+import { AppEmailModule } from './shared/modules/app-email/app-email.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
     AwsModule,
     CronjobModule,
     AppQueueModule,
+    AppEmailModule,
     GoogleModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({

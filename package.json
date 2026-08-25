@@ -45,6 +45,7 @@
     "express-session": "^1.19.0",
     "hbs": "^4.2.0",
     "instagram-url-direct": "^2.0.7",
+    "nodemailer": "^9.0.5",
     "pg": "^8.17.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

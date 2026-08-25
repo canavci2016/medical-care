@@ -25,7 +25,6 @@ export class HomeController {
       data: randomHairResults,
       pagination: { total: hairResultCount },
     } = await this.hospitalHairResultService.findAll({
-      random: true,
       page: { limit: 3, page: 1 },
     });
 
