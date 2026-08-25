@@ -18,7 +18,6 @@ import { UpdateHospitalDto } from '../hospital/dto/update-hospital.dto';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { buildPagination } from './pagination.util';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
-import { randomUUID } from 'node:crypto';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { GooglePlaceService } from 'src/application/core/google/google-place.service';
 
@@ -27,7 +26,6 @@ import { GooglePlaceService } from 'src/application/core/google/google-place.ser
 export class AdminHospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
-    private readonly awsS3Service: AwsS3Service,
     private readonly googlePlaceService: GooglePlaceService,
   ) {}
 
@@ -107,10 +105,7 @@ export class AdminHospitalController {
 
   @Post('upload-url')
   async getUploadUrl(@Body('contentType') contentType: string) {
-    return this.awsS3Service.getSignedUploadUrl(
-      `uploads/hospitals/${randomUUID()}`,
-      contentType,
-    );
+    return this.hospitalService.getSignedUrlForImageUpload(contentType);
   }
 
   @Put(':id')

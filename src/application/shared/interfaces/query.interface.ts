@@ -7,6 +7,8 @@ export interface Query<T = number> {
   gte?: T;
   lt?: T;
   lte?: T;
+  like?: T;
+  notLike?: T;
   notNull?: boolean;
 }
 

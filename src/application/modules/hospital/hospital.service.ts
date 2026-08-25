@@ -12,6 +12,8 @@ import { GooglePlaceService } from 'src/application/core/google/google-place.ser
 import { CountryService } from 'src/application/shared/modules/country/country.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
+import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
+import { randomUUID } from 'node:crypto';
 
 export enum RatingFilter {
   'FIVE' = '5',
@@ -28,6 +30,7 @@ export class HospitalService {
     private readonly googlePlaceService: GooglePlaceService,
     private readonly countryService: CountryService,
     private readonly cityService: CityService,
+    private readonly awsS3Service: AwsS3Service,
   ) { }
 
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
@@ -232,5 +235,16 @@ export class HospitalService {
   async remove(id: string): Promise<void> {
     const hospital = await this.findOne(id);
     await this.hospitalRepository.remove(hospital);
+  }
+
+  async getSignedUrlForImageUpload(contentType: string) {
+    return this.awsS3Service.getSignedUploadUrl(
+      this.getSignedImageUrl(),
+      contentType,
+    );
+  }
+
+  getSignedImageUrl() {
+    return `uploads/hospitals/${randomUUID()}`;
   }
 }

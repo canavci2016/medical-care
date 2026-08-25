@@ -113,7 +113,6 @@ export class HospitalHairResultService {
       orderDirection: 'asc' | 'desc';
       random?: boolean;
       ageRange: string;
-      availableMonths: number | number[];
     }> = {},
   ) {
     const optionsTyped: FindManyOptions<HospitalHairResult> = {
@@ -161,20 +160,6 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         hospitalId: In(hospitalIds),
-      };
-    }
-
-    if (options.availableMonths !== undefined) {
-      const months = Array.isArray(options.availableMonths)
-        ? options.availableMonths
-        : [options.availableMonths];
-
-      optionsTyped.where = {
-        ...optionsTyped.where,
-        availableMonths: Raw(
-          (alias) => `string_to_array(${alias}, ',')::int[] && :months`,
-          { months },
-        ),
       };
     }
 
