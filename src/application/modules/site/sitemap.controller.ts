@@ -30,7 +30,7 @@ export class SitemapController {
       return res.send(cached);
     }
 
-    const baseUrl = process.env.APP_URL || 'https://medicalcare.com';
+    const baseUrl = process.env.APP_URL || 'https://hairresult.com';
     const today = new Date().toISOString().split('T')[0];
 
     const staticUrls: Array<{
@@ -38,12 +38,12 @@ export class SitemapController {
       changefreq: string;
       priority: string;
     }> = [
-        { loc: '/', changefreq: 'daily', priority: '1.0' },
-        { loc: '/hospitals', changefreq: 'daily', priority: '0.9' },
-        { loc: '/results', changefreq: 'daily', priority: '0.9' },
-        { loc: '/blogs', changefreq: 'weekly', priority: '0.8' },
-        { loc: '/about', changefreq: 'monthly', priority: '0.5' },
-      ];
+      { loc: '/', changefreq: 'daily', priority: '1.0' },
+      { loc: '/hospitals', changefreq: 'daily', priority: '0.9' },
+      { loc: '/results', changefreq: 'daily', priority: '0.9' },
+      { loc: '/blogs', changefreq: 'weekly', priority: '0.8' },
+      { loc: '/about', changefreq: 'monthly', priority: '0.5' },
+    ];
 
     const [blogs, hospitals, hairResults] = await Promise.all([
       this.blogService.findAll({

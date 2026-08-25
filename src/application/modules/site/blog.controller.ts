@@ -112,10 +112,6 @@ export class BlogController {
   @Get(':slug')
   async findOne(@Param('slug') slug: string, @Res() res: Response) {
     const blog = await this.blogService.findOneBy({ slug });
-    const categories = await this.categoryService.findAll({
-      orderBy: 'name',
-      order: 'ASC',
-    });
 
     const recentBlogs = await this.blogService.findAll({
       skip: 0,
@@ -125,19 +121,9 @@ export class BlogController {
       status: BlogStatus.PUBLISHED,
     });
 
-    const popularBlogs = await this.blogService.findAll({
-      skip: 0,
-      take: 3,
-      orderBy: 'viewCount',
-      order: 'DESC',
-      status: BlogStatus.PUBLISHED,
-    });
-
     return res.render('blog-detail', {
       blog,
-      categories,
       recentBlogs,
-      popularBlogs,
       styles: ['blog-detail.css'],
     });
   }
