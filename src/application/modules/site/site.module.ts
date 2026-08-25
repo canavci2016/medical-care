@@ -18,6 +18,7 @@ import { AdminAuthController } from './admin-auth.controller';
 import { SitemapController } from './sitemap.controller';
 import { CountryModule } from 'src/application/shared/modules/country/country.module';
 import { CityModule } from 'src/application/shared/modules/city/city.module';
+import { AppQueueModule } from 'src/application/shared/modules/app-queue/app-queue.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CityModule } from 'src/application/shared/modules/city/city.module';
     BlogModule,
     CountryModule,
     CityModule,
+    AppQueueModule,
   ],
   controllers: [
     HomeController,

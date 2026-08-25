@@ -1,8 +1,12 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import type { Response } from 'express';
+import { AppQueueService } from 'src/application/shared/modules/app-queue/app-queue.service';
+import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/supported-event-types.enum';
 
 @Controller()
 export class OtherController {
+  constructor(private readonly appQueueService: AppQueueService) {}
+
   @Get('/contact')
   @Get('/about')
   about(@Req() req, @Res() res: Response) {
@@ -29,7 +33,7 @@ export class OtherController {
 
   @Post('contact')
   @Post('about')
-  contact(
+  async contact(
     @Req() req,
     @Body()
     body: {
@@ -42,6 +46,19 @@ export class OtherController {
     },
     @Res() res: Response,
   ) {
+    //TODO: Prevent spam by adding a captcha or rate limiting as well as jobid to prevent duplicate submissions. Also, consider adding a queue for sending emails to avoid blocking the request.
+    await this.appQueueService.add(
+      SupportedEventTypes.CONTACT_FORM_SUBMISSION,
+      {
+        ...body,
+        ip: req?.ip,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        removeOnFail: true,
+      },
+    );
+
     return {
       success: true,
       message:
