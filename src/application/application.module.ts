@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
-import KeyvRedis from '@keyv/redis';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
@@ -17,6 +16,9 @@ import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
 import { GoogleModule } from './core/google/google.module';
 import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
 import { AppEmailModule } from './shared/modules/app-email/app-email.module';
+import { RedisConnectionCheckService } from './shared/modules/app-queue/redis-connection-check.service';
+import KeyvRedis, { createCluster } from '@keyv/redis';
+import Keyv from 'keyv';
 
 @Module({
   imports: [
@@ -25,13 +27,27 @@ import { AppEmailModule } from './shared/modules/app-email/app-email.module';
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        stores: [
-          new KeyvRedis(
-            configService.get('REDIS_URL', 'redis://localhost:6379'),
-          ),
-        ],
-      }),
+      useFactory: (configService: ConfigService) => {
+        const redisUrl = configService.getOrThrow<string>('REDIS_URL');
+
+        const cluster = createCluster({
+          rootNodes: [
+            {
+              url: redisUrl,
+            },
+          ],
+        });
+
+        const redisStore = new KeyvRedis(cluster);
+
+        return {
+          stores: [
+            new Keyv({
+              store: redisStore,
+            }),
+          ],
+        };
+      },
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
@@ -77,6 +93,6 @@ import { AppEmailModule } from './shared/modules/app-email/app-email.module';
   ],
 
   controllers: [],
-  providers: [],
+  providers: [RedisConnectionCheckService],
 })
 export class ApplicationModule {}
