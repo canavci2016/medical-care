@@ -16,12 +16,14 @@ import { AdminHospitalController } from './admin-hospital.controller';
 import { AdminDoctorController } from './admin-doctor.controller';
 import { AdminAuthController } from './admin-auth.controller';
 import { SitemapController } from './sitemap.controller';
+import { AppRateLimitModule } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.module';
 import { CountryModule } from 'src/application/shared/modules/country/country.module';
 import { CityModule } from 'src/application/shared/modules/city/city.module';
 import { AppQueueModule } from 'src/application/shared/modules/app-queue/app-queue.module';
 
 @Module({
   imports: [
+    AppRateLimitModule,
     HospitalModule,
     DoctorModule,
     HospitalHairResultModule,
