@@ -1,30 +1,24 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   CanActivate,
   ExecutionContext,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import type { Cache } from 'cache-manager';
 import type { Request } from 'express';
+import { RedisService } from 'src/application/core/redis/redis.service';
 import { APP_RATE_LIMIT_METADATA } from './app-rate-limit.constants';
 import type { AppRateLimitOptions } from './app-rate-limit.interface';
 
 @Injectable()
 export class AppRateLimitGuard implements CanActivate {
-  private readonly cacheManager: Cache;
-
   constructor(
-    @Inject(CACHE_MANAGER) cacheManager: object,
+    private readonly redisService: RedisService,
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
-  ) {
-    this.cacheManager = cacheManager as Cache;
-  }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const options = this.reflector.getAllAndOverride<AppRateLimitOptions>(
@@ -36,14 +30,15 @@ export class AppRateLimitGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest() as Request;
+    const request = context.switchToHttp().getRequest<Request>();
     const clientIp = this.getClientIp(request);
     const keyPrefix =
-      options.keyPrefix ?? `${context.getClass().name}:${context.getHandler().name}`;
+      options.keyPrefix ??
+      `${context.getClass().name}:${context.getHandler().name}`;
     const cacheKey = `rate-limit:${keyPrefix}:${clientIp}`;
     const maxAttempts = this.resolveMaxAttempts(options);
     const ttlSeconds = this.resolveTtlSeconds(options);
-    const attempts = (await this.cacheManager.get<number>(cacheKey)) ?? 0;
+    const attempts = (await this.redisService.get<number>(cacheKey)) ?? 0;
 
     if (attempts >= maxAttempts) {
       throw new HttpException(
@@ -52,7 +47,7 @@ export class AppRateLimitGuard implements CanActivate {
       );
     }
 
-    await this.cacheManager.set(cacheKey, attempts + 1, ttlSeconds * 1000);
+    await this.redisService.set(cacheKey, attempts + 1, ttlSeconds);
 
     return true;
   }

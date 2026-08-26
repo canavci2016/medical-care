@@ -25,7 +25,6 @@
     "@aws-sdk/client-s3": "^3.996.0",
     "@aws-sdk/s3-request-presigner": "^3.996.0",
     "@faker-js/faker": "^10.2.0",
-    "@keyv/redis": "^5.1.6",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/cache-manager": "^3.1.0",
@@ -47,6 +46,7 @@
     "instagram-url-direct": "^2.0.7",
     "nodemailer": "^9.0.5",
     "pg": "^8.17.2",
+    "redis": "^5.12.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.28"

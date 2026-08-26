@@ -1,7 +1,6 @@
-import { Controller, Get, Inject, Res } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import type { Cache } from 'cache-manager';
+import { Controller, Get, Res } from '@nestjs/common';
 import type { Response } from 'express';
+import { RedisService } from 'src/application/core/redis/redis.service';
 import { BlogService } from '../blog/blog.service';
 import { BlogStatus } from '../blog/entities/blog.entity';
 import { HospitalService } from '../hospital/hospital.service';
@@ -10,21 +9,18 @@ import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair
 @Controller()
 export class SitemapController {
   private readonly CACHE_KEY = 'sitemap_xml';
-  private readonly CACHE_TTL_MS = 5 * 60 * 60 * 1000; // 5 hours
-  private readonly cacheManager!: Cache;
+  private readonly CACHE_TTL_SECONDS = 5 * 60 * 60; // 5 hours
 
   constructor(
+    private readonly redisService: RedisService,
     private readonly blogService: BlogService,
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
-    @Inject(CACHE_MANAGER) cacheManager: unknown,
-  ) {
-    this.cacheManager = cacheManager as Cache;
-  }
+  ) {}
 
   @Get('sitemap.xml')
   async getSitemap(@Res() res: Response) {
-    const cached = await this.cacheManager.get<string>(this.CACHE_KEY);
+    const cached = await this.redisService.get<string>(this.CACHE_KEY);
     if (cached) {
       res.header('Content-Type', 'application/xml');
       return res.send(cached);
@@ -97,7 +93,7 @@ export class SitemapController {
 ${xmlEntries}
 </urlset>`;
 
-    await this.cacheManager.set(this.CACHE_KEY, xml, this.CACHE_TTL_MS);
+    await this.redisService.set(this.CACHE_KEY, xml, this.CACHE_TTL_SECONDS);
 
     res.header('Content-Type', 'application/xml');
     return res.send(xml);

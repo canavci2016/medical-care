@@ -17,39 +17,13 @@ import { GoogleModule } from './core/google/google.module';
 import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
 import { AppEmailModule } from './shared/modules/app-email/app-email.module';
 import { RedisConnectionCheckService } from './shared/modules/app-queue/redis-connection-check.service';
-import KeyvRedis, { createCluster } from '@keyv/redis';
-import Keyv from 'keyv';
+import { RedisModule } from './core/redis/redis.module';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
-    CacheModule.registerAsync({
-      isGlobal: true,
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        const redisUrl = configService.getOrThrow<string>('REDIS_URL');
-
-        const cluster = createCluster({
-          rootNodes: [
-            {
-              url: redisUrl,
-            },
-          ],
-        });
-
-        const redisStore = new KeyvRedis(cluster);
-
-        return {
-          stores: [
-            new Keyv({
-              store: redisStore,
-            }),
-          ],
-        };
-      },
-      inject: [ConfigService],
-    }),
+    RedisModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -95,4 +69,4 @@ import Keyv from 'keyv';
   controllers: [],
   providers: [RedisConnectionCheckService],
 })
-export class ApplicationModule {}
+export class ApplicationModule { }
