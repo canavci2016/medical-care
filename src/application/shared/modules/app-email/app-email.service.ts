@@ -10,14 +10,14 @@ export class AppEmailService {
   constructor(private readonly configService: ConfigService) {
     const host = this.configService.get<string>('SMTP_HOST');
     const port = this.configService.get<string>('SMTP_PORT', '587');
-    const secure = this.configService.get<boolean>('SMTP_SECURE', false);
+    const secure = this.configService.get<string>('SMTP_SECURE', 'false');
     const user = this.configService.get<string>('SMTP_USER');
     const pass = this.configService.get<string>('SMTP_PASSWORD');
 
     this.transporter = nodemailer.createTransport({
       host,
       port: parseInt(port),
-      secure: false,
+      secure: secure === 'true',
       auth: user && pass ? { user, pass } : undefined,
     });
   }
