@@ -1,74 +1,39 @@
-<!-- HERO -->
-<section class='hero'>
-  <img
-    src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/06dea3e8-36a3-44d9-b7b8-3394e65e1d35.png'
-    alt='Hair transplant clinic'
-    class='hero-bg-image'
-  />
-  <div class='container'>
-    <div class='hero-content'>
-      <h1>Find the Best
-        <span>Hair Transplant</span>
-        Hospitals & Doctors</h1>
-      <p>Discover top-rated clinics, experienced surgeons, and real patient
-        results. Your journey to confidence starts here with verified hospitals
-        and proven outcomes.</p>
-      <div class='hero-actions'>
-        <a href='/hospitals' class='btn btn-primary'>Browse Hospitals</a>
-        <a
-          href='/results'
-          class='btn btn-outline'
-          style='border-color: #fff; color: #fff;'
-        >View Results</a>
-      </div>
-      <div class='hero-stats'>
-        <div class='hero-stat'>
-          <span class='number' data-count='{{hospitalCount}}'>0</span>
-          <span class='label'>Partner Hospitals</span>
-        </div>
-        <div class='hero-stat'>
-          <span class='number' data-count='{{hairResultCount}}'>0</span>
-          <span class='label'>Procedures Done</span>
-        </div>
-      </div>
-    </div>
-    <div class='hero-image'>
-      <img
-        src='https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/bcdad408-8479-4318-8ce6-df46b8d4435e.png'
-        alt='Doctor consultation'
-      />
-      <div class='floating-card top-right'>
-        <div class='icon green'>✓</div>
-        <div class='info'>
-          <div class='value'>98.5%</div>
-          <div class='desc'>Success Rate</div>
-        </div>
-      </div>
-      <div class='floating-card bottom-left'>
-        <div class='icon blue'>★</div>
-        <div class='info'>
-          <div class='value'>4.9/5.0</div>
-          <div class='desc'>Patient Rating</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- STATS BAR -->
-<section class='stats-bar'>
+<!-- PATIENT RESULTS -->
+<section class='section'>
   <div class='container'>
-    <div class='stat-item fade-in'>
-      <span class='stat-number' data-count='{{hospitalCount}}'>0</span>
-      <span class='stat-label'>Partner Hospitals</span>
+    <div class='section-header fade-in'>
+      <span class='label'>Real Transformations</span>
+      <h2>Patient Results</h2>
+      <p>See real photos from verified patients across our partner hospitals.</p>
     </div>
-    <div class='stat-item fade-in'>
-      <span class='stat-number' data-count='{{hairResultCount}}'>0</span>
-      <span class='stat-label'>Successful Procedures</span>
+    <div class='grid-3'>
+      {{#each results}}
+      <a href='/results/{{this.id}}' class='card fade-in'>
+        <div class='card-image'>
+          <img
+            src='{{this.image}}'
+            alt='FUE Hair Transplant Result'
+          />
+          <div class='overlay'>
+            <span class='badge badge-blue'>{{this.technique}}</span>
+            <span class='badge badge-green'>{{this.graftCount}} Grafts</span>
+          </div>
+        </div>
+        <div class='card-body'>
+          <h3>{{this.technique}} — {{this.graftCount}} Grafts</h3>
+          <div class='ba-meta'>
+            <span>👨‍⚕️ Dr. {{this.doctor}}</span>
+            <span>🏥 {{this.hospital.name}}</span>
+            <span>📅  {{relative_date this.operationDate}}</span>
+          </div>
+          <span class='view-detail-link'>View Full Case →</span>
+        </div>
+      </a>
+      {{/each}}
     </div>
-    <div class='stat-item fade-in'>
-      <span class='stat-number' data-count='35'>0</span>
-      <span class='stat-label'>Countries Served</span>
+    <div style='text-align: center; margin-top: 40px;'>
+      <a href='/results' class='btn btn-outline'>View All Results →</a>
     </div>
   </div>
 </section>
@@ -132,40 +97,20 @@
   </div>
 </section>
 
-<section class='section'>
+<!-- STATS BAR -->
+<section class='stats-bar'>
   <div class='container'>
-    <div class='section-header fade-in'>
-      <span class='label'>Real Transformations</span>
-      <h2>Patient Results</h2>
-      <p>See real photos from verified patients across our partner hospitals.</p>
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='{{hospitalCount}}'>0</span>
+      <span class='stat-label'>Partner Hospitals</span>
     </div>
-    <div class='grid-3'>
-      {{#each results}}
-      <a href='/results/{{this.id}}' class='card fade-in'>
-        <div class='card-image'>
-          <img
-            src='{{this.image}}'
-            alt='FUE Hair Transplant Result'
-          />
-          <div class='overlay'>
-            <span class='badge badge-blue'>{{this.technique}}</span>
-            <span class='badge badge-green'>{{this.graftCount}} Grafts</span>
-          </div>
-        </div>
-        <div class='card-body'>
-          <h3>{{this.technique}} — {{this.graftCount}} Grafts</h3>
-          <div class='ba-meta'>
-            <span>👨‍⚕️ Dr. {{this.doctor}}</span>
-            <span>🏥 {{this.hospital.name}}</span>
-            <span>📅  {{relative_date this.operationDate}}</span>
-          </div>
-          <span class='view-detail-link'>View Full Case →</span>
-        </div>
-      </a>
-      {{/each}}
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='{{hairResultCount}}'>0</span>
+      <span class='stat-label'>Successful Procedures</span>
     </div>
-    <div style='text-align: center; margin-top: 40px;'>
-      <a href='/results' class='btn btn-outline'>View All Results →</a>
+    <div class='stat-item fade-in'>
+      <span class='stat-number' data-count='35'>0</span>
+      <span class='stat-label'>Countries Served</span>
     </div>
   </div>
 </section>
@@ -198,6 +143,7 @@
     </div>
   </div>
 </section>
+
 
 <!-- CTA -->
 <section class='cta-section'>
