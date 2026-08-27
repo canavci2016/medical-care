@@ -66,8 +66,10 @@ export class HospitalHairResultController {
         }),
       ),
       graftCounts: Object.entries({
+        '2000+': '2000',
         '3000+': '3000',
         '4000+': '4000',
+        '5000+': '5000',
       }).map(([key, value]) => ({
         label: key,
         value,

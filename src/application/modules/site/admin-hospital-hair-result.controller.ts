@@ -46,7 +46,7 @@ export class AdminHospitalHairResultController {
           page: Number.isNaN(pageNumber) ? 1 : pageNumber,
           limit: 20,
         },
-        orderBy: 'operationDate',
+        orderBy: 'createdAt',
         orderDirection: 'desc',
       });
 

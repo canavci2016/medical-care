@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, In, Repository, MoreThanOrEqual, Raw } from 'typeorm';
+import { FindManyOptions, In, Repository, MoreThanOrEqual, Raw, Between } from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
 import {
@@ -139,9 +139,10 @@ export class HospitalHairResultService {
     }
 
     if (options.graftCount?.gte) {
+      const highestGraftCount = options.graftCount.gte + 999;
       optionsTyped.where = {
         ...optionsTyped.where,
-        graftCount: MoreThanOrEqual(options.graftCount.gte),
+        graftCount: Between(options.graftCount.gte, highestGraftCount),
       };
     }
 

@@ -17,7 +17,6 @@ import { CreateHospitalDto } from '../hospital/dto/create-hospital.dto';
 import { UpdateHospitalDto } from '../hospital/dto/update-hospital.dto';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { buildPagination } from './pagination.util';
-import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { GooglePlaceService } from 'src/application/core/google/google-place.service';
 
@@ -39,7 +38,7 @@ export class AdminHospitalController {
           page: Number.isNaN(pageNumber) ? 1 : pageNumber,
           limit: 20,
         },
-        orderBy: 'rating',
+        orderBy: 'createdAt',
         orderDirection: 'desc',
       });
 
