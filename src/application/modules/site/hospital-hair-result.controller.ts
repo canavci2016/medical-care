@@ -8,18 +8,101 @@ import {
 } from '@nestjs/common';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import type { Response } from 'express';
-import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
+import {
+  GraftCountEnum,
+  HairProcedureType,
+} from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
+import { HospitalService } from '../hospital/hospital.service';
 
-@Controller('results')
+@Controller()
 export class HospitalHairResultController {
   constructor(
     private readonly hospitalHairResultService: HospitalHairResultService,
+    private readonly hospitalService: HospitalService,
   ) { }
 
-  @Get()
+  @Get('/results')
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
+    return this.renderResults(query, res);
+  }
+
+  @Get('/clinics/:hospitalSlug/results')
+  async findAllForHospital(
+    @Res() res: Response,
+    @Param('hospitalSlug') hospitalSlug: string,
+    @Query() query: HairResultQueryDto,
+  ) {
+    const hospital = await this.hospitalService.findOneBy({
+      slug: hospitalSlug,
+    });
+    query.hospitalId = hospital.id;
+    return this.renderResults(query, res);
+  }
+
+  @Get('/results/:hospitalSlug-:graftCount-grafts-:technique-:months-months')
+  async findAllForMultipleCriteria(
+    @Res() res: Response,
+    @Query() query: HairResultQueryDto,
+    @Param('hospitalSlug') hospitalSlug: string,
+    @Param('graftCount') graftCount: string,
+    @Param('technique') technique: string,
+    @Param('months') months: string,
+  ) {
+    const baseGraftCount = this.roundDownToThousand(parseInt(graftCount, 10));
+    query.graftCount = query.graftCount || baseGraftCount.toString();
+    const hospital = await this.hospitalService.findOneBy({
+      slug: hospitalSlug,
+    });
+    query.hospitalId = hospital.id;
+
+    let techniqueValue: HairTransplantTechnique | undefined;
+
+    if (
+      Object.values(HairTransplantTechnique).includes(
+        technique.toUpperCase() as HairTransplantTechnique,
+      )
+    ) {
+      techniqueValue = technique.toUpperCase() as HairTransplantTechnique;
+    }
+
+    query.technique = query.technique || techniqueValue;
+
+    return this.renderResults(query, res);
+  }
+
+  @Get('/:technique-hair-transplant-results')
+  async findAllForTechnique(
+    @Res() res: Response,
+    @Query() query: HairResultQueryDto,
+    @Param('technique') technique: string,
+  ) {
+    let techniqueValue: HairTransplantTechnique | undefined;
+
+    if (
+      Object.values(HairTransplantTechnique).includes(
+        technique.toUpperCase() as HairTransplantTechnique,
+      )
+    ) {
+      techniqueValue = technique.toUpperCase() as HairTransplantTechnique;
+    }
+
+    query.technique = query.technique || techniqueValue;
+    return this.renderResults(query, res);
+  }
+
+  @Get('/results/:graftCount-grafts')
+  async findAllForGrafts(
+    @Res() res: Response,
+    @Param('graftCount') graftCount: string,
+    @Query() query: HairResultQueryDto,
+  ) {
+    query.graftCount = query.graftCount || graftCount;
+    return this.renderResults(query, res);
+  }
+
+  async renderResults(query: HairResultQueryDto, @Res() res: Response) {
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
         hospitalId: query.hospitalId,
@@ -66,10 +149,11 @@ export class HospitalHairResultController {
         }),
       ),
       graftCounts: Object.entries({
-        '2000+': '2000',
-        '3000+': '3000',
-        '4000+': '4000',
-        '5000+': '5000',
+        '1000+': GraftCountEnum.ONE_PLUS,
+        '2000+': GraftCountEnum.TWO_PLUS,
+        '3000+': GraftCountEnum.THREE_PLUS,
+        '4000+': GraftCountEnum.FOUR_PLUS,
+        '5000+': GraftCountEnum.FIVE_PLUS,
       }).map(([key, value]) => ({
         label: key,
         value,
@@ -116,7 +200,7 @@ export class HospitalHairResultController {
     });
   }
 
-  @Get(':id')
+  @Get('/results/:id')
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
     const result = await this.hospitalHairResultService.findOne(id);
 
@@ -151,5 +235,9 @@ export class HospitalHairResultController {
         images: result.sortedImages.map((img) => img.imageUrl),
       },
     });
+  }
+
+  roundDownToThousand(value: number): number {
+    return Math.floor(value / 1000) * 1000;
   }
 }

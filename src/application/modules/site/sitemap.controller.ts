@@ -5,6 +5,15 @@ import { BlogService } from '../blog/blog.service';
 import { BlogStatus } from '../blog/entities/blog.entity';
 import { HospitalService } from '../hospital/hospital.service';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
+import { GraftCountEnum } from '../hospital-hair-result/entities/hospital-hair-result.entity';
+import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+
+interface XmlUrl {
+  loc: string;
+  changefreq: string;
+  priority: string;
+};
+
 
 @Controller()
 export class SitemapController {
@@ -16,11 +25,12 @@ export class SitemapController {
     private readonly blogService: BlogService,
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
-  ) {}
+  ) { }
 
   @Get('sitemap.xml')
   async getSitemap(@Res() res: Response) {
     const cached = await this.redisService.get<string>(this.CACHE_KEY);
+
     if (cached) {
       res.header('Content-Type', 'application/xml');
       return res.send(cached);
@@ -29,13 +39,9 @@ export class SitemapController {
     const baseUrl = process.env.APP_URL || 'https://hairresult.com';
     const today = new Date().toISOString().split('T')[0];
 
-    const staticUrls: Array<{
-      loc: string;
-      changefreq: string;
-      priority: string;
-    }> = [
+    const staticUrls: Array<XmlUrl> = [
       { loc: '/', changefreq: 'daily', priority: '1.0' },
-      { loc: '/hospitals', changefreq: 'daily', priority: '0.9' },
+      { loc: '/clinics', changefreq: 'daily', priority: '0.9' },
       { loc: '/results', changefreq: 'daily', priority: '0.9' },
       { loc: '/blogs', changefreq: 'weekly', priority: '0.8' },
       { loc: '/about', changefreq: 'monthly', priority: '0.5' },
@@ -52,23 +58,59 @@ export class SitemapController {
       }),
     ]);
 
+    const listOfGraftCounts = Object.values(GraftCountEnum);
+    const listOfTechniques = Object.values(HairTransplantTechnique);
     const blogUrls = blogs.map((blog) => ({
       loc: `/blogs/${blog.slug}`,
       changefreq: 'weekly',
       priority: '0.7',
     }));
-
-    const hospitalUrls = hospitals.map((hospital) => ({
-      loc: `/hospitals/${hospital.id}`,
-      changefreq: 'weekly',
-      priority: '0.8',
-    }));
-
     const resultUrls = hairResults.data.map((result) => ({
       loc: `/results/${result.id}`,
       changefreq: 'monthly',
       priority: '0.6',
     }));
+    const hospitalUrls: Array<XmlUrl> = [];
+
+    for (const technique of listOfTechniques) {
+      resultUrls.push({
+        loc: `/${technique.toLowerCase()}-hair-transplant-results`,
+        changefreq: 'weekly',
+        priority: '0.8',
+      });
+    }
+
+    for (const graft of listOfGraftCounts) {
+      resultUrls.push({
+        loc: `/results/${graft}-grafts`,
+        changefreq: 'weekly',
+        priority: '0.8',
+      });
+    }
+
+    for (const hospital of hospitals) {
+      hospitalUrls.push({
+        loc: `/clinics/${hospital.slug}`,
+        changefreq: 'weekly',
+        priority: '0.8',
+      });
+
+      resultUrls.push({
+        loc: `/clinics/${hospital.slug}/results`,
+        changefreq: 'weekly',
+        priority: '0.8',
+      });
+
+      for (const graft of listOfGraftCounts) {
+        for (const technique of listOfTechniques) {
+          resultUrls.push({
+            loc: `/results/${hospital.slug}-${graft}-grafts-${technique}-12-months`,
+            changefreq: 'weekly',
+            priority: '0.8',
+          });
+        }
+      }
+    }
 
     const allUrls = [
       ...staticUrls,

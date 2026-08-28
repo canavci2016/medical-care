@@ -19,6 +19,14 @@ export enum HairProcedureType {
   EYEBROW = 'eyebrow',
 }
 
+export enum GraftCountEnum {
+  'ONE_PLUS' = '1000',
+  'TWO_PLUS' = '2000',
+  'THREE_PLUS' = '3000',
+  'FOUR_PLUS' = '4000',
+  'FIVE_PLUS' = '5000',
+}
+
 @Entity('hospital_hair_results')
 @Index(['verified', 'monthsAfter'])
 export class HospitalHairResult {

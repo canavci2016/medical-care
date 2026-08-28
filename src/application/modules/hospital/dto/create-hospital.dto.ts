@@ -69,6 +69,11 @@ export class CreateHospitalDto {
   name: string;
 
   @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  slug?: string;
+
+  @IsOptional()
   @IsUrl()
   logoUrl?: string;
 

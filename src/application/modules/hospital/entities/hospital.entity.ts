@@ -37,6 +37,10 @@ export class Hospital {
   @Column({ length: 255 })
   name: string;
 
+   @Index({ unique: true })
+   @Column({ nullable: true, length: 255 })
+   slug?: string;
+
   @Column({ nullable: true })
   logoUrl?: string;
 

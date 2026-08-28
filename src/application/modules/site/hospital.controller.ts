@@ -15,7 +15,7 @@ import { CountryService } from 'src/application/shared/modules/country/country.s
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import { StringHelper } from 'src/application/shared/helpers/String';
 
-@Controller('hospitals')
+@Controller(['hospitals', 'clinics'])
 export class HospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
@@ -23,7 +23,7 @@ export class HospitalController {
     private readonly doctorService: DoctorService,
     private readonly countryService: CountryService,
     private readonly cityService: CityService,
-  ) {}
+  ) { }
 
   @Get('/api')
   async apiFindPaginated(
@@ -140,27 +140,27 @@ export class HospitalController {
     });
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
-    const hospital = await this.hospitalService.findOne(id);
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string, @Res() res: Response) {
+    const hospital = await this.hospitalService.findOneBy({ slug });
     if (!hospital) {
       return res.status(404).send('Hospital not found');
     }
 
     const doctors = await this.doctorService.paginated({
-      hospitalId: id,
+      hospitalId: hospital.id,
       page: 1,
       limit: 5,
     });
 
     const procedureTypes =
       await this.hospitalHairResultService.getProcedureTypes({
-        hospitalId: id,
+        hospitalId: hospital.id,
       });
 
     const { data: latestHairResults } =
       await this.hospitalHairResultService.findAll({
-        hospitalId: id,
+        hospitalId: hospital.id,
         page: { limit: 3, page: 1 },
       });
 

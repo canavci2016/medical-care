@@ -63,6 +63,11 @@
                       <input type='text' class='form-control' id='name' value='{{hospital.name}}' />
                     </div>
 
+                    <div class='mb-3'>
+                      <label for='slug' class='form-label'>Slug</label>
+                      <input type='text' class='form-control' id='slug' value='{{hospital.slug}}' />
+                    </div>
+
                     <div class='row'>
                       <div class='col-md-6 mb-3'>
                         <label for='city' class='form-label'>City</label>
@@ -353,6 +358,7 @@
 
         const buildPayload = () => ({
           name: String(document.getElementById('name').value || '').trim(),
+          slug: String(document.getElementById('slug').value || '').trim() || undefined,
           city: String(document.getElementById('city').value || '').trim() || undefined,
           country: String(document.getElementById('country').value || '').trim() || undefined,
           address: String(document.getElementById('address').value || '').trim() || undefined,

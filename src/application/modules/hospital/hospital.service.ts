@@ -36,6 +36,10 @@ export class HospitalService {
   async create(createHospitalDto: CreateHospitalDto): Promise<Hospital> {
     const hospital = this.hospitalRepository.create(createHospitalDto);
 
+    hospital.slug = await this.generateUniqueSlug(
+      createHospitalDto.slug ?? hospital.name,
+    );
+
     if (hospital.country) {
       hospital.countryId = (
         await this.countryService.findCountryOrCreate(hospital.country)
@@ -183,6 +187,18 @@ export class HospitalService {
     return hospital;
   }
 
+  async findOneBy(
+    prop: Partial<Pick<Hospital, 'id' | 'slug'>>,
+  ): Promise<Hospital> {
+    const hospital = await this.hospitalRepository.findOneBy(prop);
+    if (!hospital) {
+      throw new NotFoundException(
+        `Hospital with property "${JSON.stringify(prop)}" not found`,
+      );
+    }
+    return hospital;
+  }
+
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {
     if (updateHospitalDto.googlePlaceId) {
       const details = await this.googlePlaceService.getPlaceDetails(
@@ -211,6 +227,14 @@ export class HospitalService {
     }
 
     const hospital = await this.findOne(id);
+
+    if (updateHospitalDto.slug || updateHospitalDto.name) {
+      hospital.slug = await this.generateUniqueSlug(
+        updateHospitalDto.slug ?? updateHospitalDto.name ?? hospital.name,
+        hospital.id,
+      );
+    }
+
     Object.assign(hospital, updateHospitalDto);
 
     if (updateHospitalDto.country) {
@@ -246,5 +270,45 @@ export class HospitalService {
 
   getSignedImageUrl() {
     return `uploads/hospitals/${randomUUID()}`;
+  }
+
+  private async generateUniqueSlug(
+    input: string,
+    excludeHospitalId?: string,
+  ): Promise<string> {
+    const baseSlug = this.toSlug(input);
+    let slug = baseSlug;
+    let counter = 1;
+
+    while (await this.slugExists(slug, excludeHospitalId)) {
+      counter += 1;
+      slug = `${baseSlug}-${counter}`;
+    }
+
+    return slug;
+  }
+
+  private async slugExists(slug: string, excludeHospitalId?: string) {
+    const existing = await this.hospitalRepository.findOne({
+      where: {
+        slug,
+        ...(excludeHospitalId ? { id: Not(excludeHospitalId) } : {}),
+      },
+      select: ['id'],
+    });
+
+    return !!existing;
+  }
+
+  private toSlug(value: string): string {
+    const normalized = value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    return normalized || randomUUID();
   }
 }
