@@ -12,8 +12,7 @@ interface XmlUrl {
   loc: string;
   changefreq: string;
   priority: string;
-};
-
+}
 
 @Controller()
 export class SitemapController {
@@ -30,11 +29,6 @@ export class SitemapController {
   @Get('sitemap.xml')
   async getSitemap(@Res() res: Response) {
     const cached = await this.redisService.get<string>(this.CACHE_KEY);
-
-    if (cached) {
-      res.header('Content-Type', 'application/xml');
-      return res.send(cached);
-    }
 
     const baseUrl = process.env.APP_URL || 'https://hairresult.com';
     const today = new Date().toISOString().split('T')[0];

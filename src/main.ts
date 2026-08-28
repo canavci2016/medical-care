@@ -73,6 +73,13 @@ async function bootstrap() {
     },
   );
 
+  hbs.registerHelper(
+    'toUpperCase',
+    function (str: string, index: number, length: number) {
+      return str?.toUpperCase() || str;
+    },
+  );
+
   hbs.registerHelper('relative_date', function (date: string) {
     return date
       ? formatDistanceToNow(new Date(date), {

@@ -1,7 +1,7 @@
 <!-- PAGE HEADER -->
 <section class='page-header'>
   <div class='container'>
-    <h1>Patient Results Gallery</h1>
+    <h1>{{seo.h1Title}}</h1>
     <p>Real before and after photos from verified patients. See the
       transformations achieved by our partner hospitals.</p>
     <div class='breadcrumb'>
@@ -53,7 +53,7 @@
   
      <a href="/results/{{this.id}}" class="card filterable-card fade-in" data-technique="{{this.technique}}" data-grafts="{{this.graftCount}}" data-hospital="{{this.hospital.name}}">
           <div class="card-image">
-            <img src="{{this.previewImageUrl}}" alt="{{this.technique}} Hair Transplant Result">
+            <img src="{{this.previewImageUrl}}" alt="{{this.graftCount}} graft {{toUpperCase this.technique}} hair transplant result before and after">
             <div class="overlay">
               <span class="badge badge-blue">{{this.technique}}</span>
               <span class="badge badge-green">{{this.graftCount}} Grafts</span>

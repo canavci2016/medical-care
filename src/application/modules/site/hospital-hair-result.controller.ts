@@ -16,6 +16,20 @@ import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransp
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
 import { HospitalService } from '../hospital/hospital.service';
 
+interface SeoParamsInterface {
+  title: string;
+  h1Title: string;
+  keywords: string;
+  description: string;
+  canonical: string;
+  ogType: string;
+  ogTitle: string;
+  ogDescription: string;
+  ogUrl: string;
+  twitterTitle: string;
+  twitterDescription: string;
+}
+
 @Controller()
 export class HospitalHairResultController {
   constructor(
@@ -38,7 +52,11 @@ export class HospitalHairResultController {
       slug: hospitalSlug,
     });
     query.hospitalId = hospital.id;
-    return this.renderResults(query, res);
+    return this.renderResults(query, res, {
+      ogTitle: `${hospital.name} hair transplant results`,
+      title: `${hospital.name} hair transplant results`,
+      h1Title: `${hospital.name} hair transplant results`,
+    });
   }
 
   @Get('/results/:hospitalSlug-:graftCount-grafts-:technique-:months-months')
@@ -69,7 +87,11 @@ export class HospitalHairResultController {
 
     query.technique = query.technique || techniqueValue;
 
-    return this.renderResults(query, res);
+    return this.renderResults(query, res, {
+      ogTitle: `${graftCount} Graft ${techniqueValue} Hair Transplant Result – ${months} Months`,
+      title: `${graftCount} Graft ${techniqueValue} Hair Transplant Result – ${months} Months`,
+      h1Title: `${graftCount} Graft ${techniqueValue} Hair Transplant Result`,
+    });
   }
 
   @Get('/:technique-hair-transplant-results')
@@ -89,7 +111,39 @@ export class HospitalHairResultController {
     }
 
     query.technique = query.technique || techniqueValue;
-    return this.renderResults(query, res);
+    return this.renderResults(query, res, {
+      ogTitle: `${techniqueValue} Hair Transplant Result`,
+      title: `${techniqueValue} Hair Transplant Result`,
+      h1Title: `${techniqueValue} Hair Transplant Result`,
+    });
+  }
+
+  @Get('/:technique-:graftCount-grafts-before-and-after')
+  async findAllForTechniqueAndGraftCount(
+    @Res() res: Response,
+    @Query() query: HairResultQueryDto,
+    @Param('technique') technique: string,
+    @Param('graftCount') graftCount: string,
+  ) {
+    let techniqueValue: HairTransplantTechnique | undefined;
+
+    if (
+      Object.values(HairTransplantTechnique).includes(
+        technique.toUpperCase() as HairTransplantTechnique,
+      )
+    ) {
+      techniqueValue = technique.toUpperCase() as HairTransplantTechnique;
+    }
+
+    query.technique = query.technique || techniqueValue;
+    query.graftCount =
+      query.graftCount ||
+      this.roundDownToThousand(parseInt(graftCount, 10)).toString();
+    return this.renderResults(query, res, {
+      ogTitle: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
+      title: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
+      h1Title: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
+    });
   }
 
   @Get('/results/:graftCount-grafts')
@@ -99,10 +153,18 @@ export class HospitalHairResultController {
     @Query() query: HairResultQueryDto,
   ) {
     query.graftCount = query.graftCount || graftCount;
-    return this.renderResults(query, res);
+    return this.renderResults(query, res, {
+      ogTitle: `${graftCount} Graft Transplant Result`,
+      title: `${graftCount} Graft Transplant Result`,
+      h1Title: `${graftCount} Graft Transplant Result`,
+    });
   }
 
-  async renderResults(query: HairResultQueryDto, @Res() res: Response) {
+  async renderResults(
+    query: HairResultQueryDto,
+    @Res() res: Response,
+    seo: Partial<SeoParamsInterface> = {},
+  ) {
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
         hospitalId: query.hospitalId,
@@ -183,6 +245,7 @@ export class HospitalHairResultController {
       filters,
       seo: {
         title: 'Hair Transplant Results | Medical Care',
+        h1Title: 'Hair Transplant Results',
         keywords:
           'hair transplant results, before after hair transplant, verified hair results, FUE results, DHI results',
         description:
@@ -196,6 +259,7 @@ export class HospitalHairResultController {
         twitterTitle: 'Hair Transplant Results | Medical Care',
         twitterDescription:
           'See verified before-and-after hair transplant cases and compare outcomes.',
+        ...seo,
       },
     });
   }
