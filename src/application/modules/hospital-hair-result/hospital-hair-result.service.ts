@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, In, Repository, MoreThanOrEqual, Raw, Between } from 'typeorm';
+import { FindManyOptions, In, Repository, Between } from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
 import {
