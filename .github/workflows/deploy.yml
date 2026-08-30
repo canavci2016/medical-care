@@ -64,6 +64,52 @@ jobs:
             echo "Elastic Beanstalk application '$EB_APPLICATION_NAME' already exists."
           fi
 
+      - name: Recover Elastic Beanstalk environment if its stack is stuck
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          EB_ENVIRONMENT_NAME: ${{ secrets.EB_ENVIRONMENT_NAME }}
+        run: |
+          env_id=$(aws elasticbeanstalk describe-environments \
+            --environment-names "$EB_ENVIRONMENT_NAME" \
+            --query "Environments[0].EnvironmentId" \
+            --output text)
+
+          if [ -z "$env_id" ] || [ "$env_id" = "None" ]; then
+            echo "Environment '$EB_ENVIRONMENT_NAME' not found, skipping stack recovery."
+            exit 0
+          fi
+
+          stack_name="awseb-e-${env_id}-stack"
+          stack_status=$(aws cloudformation describe-stacks \
+            --stack-name "$stack_name" \
+            --query "Stacks[0].StackStatus" \
+            --output text 2>/dev/null || echo "NOT_FOUND")
+
+          if [ "$stack_status" = "DELETE_FAILED" ]; then
+            echo "CloudFormation stack '$stack_name' is stuck in DELETE_FAILED, forcing deletion of the resources that failed to delete..."
+            retain=$(aws cloudformation list-stack-resources \
+              --stack-name "$stack_name" \
+              --query "StackResourceSummaries[?ResourceStatus=='DELETE_FAILED'].LogicalResourceId" \
+              --output text)
+
+            if [ -n "$retain" ] && [ "$retain" != "None" ]; then
+              aws cloudformation delete-stack --stack-name "$stack_name" --retain-resources $retain
+            else
+              aws cloudformation delete-stack --stack-name "$stack_name"
+            fi
+
+            aws cloudformation wait stack-delete-complete --stack-name "$stack_name"
+            echo "Stack '$stack_name' deleted. Rebuilding environment '$EB_ENVIRONMENT_NAME'..."
+
+            aws elasticbeanstalk rebuild-environment --environment-name "$EB_ENVIRONMENT_NAME"
+            aws elasticbeanstalk wait environment-updated --environment-names "$EB_ENVIRONMENT_NAME"
+            echo "Environment '$EB_ENVIRONMENT_NAME' has been rebuilt and is ready."
+          else
+            echo "Stack '$stack_name' status is '$stack_status', no recovery needed."
+          fi
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
