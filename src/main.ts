@@ -108,4 +108,12 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+bootstrap().catch((error) => {
+  // If bootstrapping fails (e.g. the database or redis is unreachable),
+  // exit the process instead of hanging forever with no port bound.
+  // This lets the host process manager (e.g. Elastic Beanstalk) restart
+  // the app and retry, rather than leaving it stuck and failing health checks
+  // indefinitely until the deployment times out.
+  console.error('Failed to bootstrap application', error);
+  process.exit(1);
+});
