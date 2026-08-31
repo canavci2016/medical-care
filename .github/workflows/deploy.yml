@@ -81,7 +81,7 @@ jobs:
             exit 0
           fi
 
-          stack_name="awseb-${env_id}-stack"
+          stack_name="awseb-e-${env_id}-stack"
           stack_status=$(aws cloudformation describe-stacks \
             --stack-name "$stack_name" \
             --query "Stacks[0].StackStatus" \
