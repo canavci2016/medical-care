@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CacheModule } from '@nestjs/cache-manager';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HospitalModule } from './modules/hospital/hospital.module';
 import { DoctorModule } from './modules/doctor/doctor.module';
@@ -16,7 +15,6 @@ import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
 import { GoogleModule } from './core/google/google.module';
 import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
 import { AppEmailModule } from './shared/modules/app-email/app-email.module';
-import { RedisConnectionCheckService } from './shared/modules/app-queue/redis-connection-check.service';
 import { RedisModule } from './core/redis/redis.module';
 
 @Module({
@@ -67,6 +65,6 @@ import { RedisModule } from './core/redis/redis.module';
   ],
 
   controllers: [],
-  providers: [RedisConnectionCheckService],
+  providers: [],
 })
 export class ApplicationModule { }

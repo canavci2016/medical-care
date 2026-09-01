@@ -50,15 +50,13 @@ import { ConfigService } from '@nestjs/config';
         client.on('reconnecting', () => {
           logger.warn('Redis reconnecting');
         });
-        try {
-          await client.connect();
-        } catch (error) {
+
+        client.connect().catch((error) => {
           logger.error(
             'Initial Redis connection failed. Application will continue without Redis.',
           );
-
           logger.error(error);
-        }
+        });
 
         return client;
       },
