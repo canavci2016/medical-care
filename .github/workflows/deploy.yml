@@ -25,10 +25,7 @@ jobs:
         run: npm run build
 
       - name: Zip project
-        run: zip -r deploy.zip \
-          dist \
-          package.json \
-          package-lock.json
+        run: zip -r deploy.zip . -x "node_modules/*" ".git/*"
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
