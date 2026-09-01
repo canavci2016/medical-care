@@ -65,7 +65,7 @@ export class CronjobService {
     }
   }
 
-  @Cron('*/10 * * * *')
+  @Cron('*/35 * * * *')
   async uploadHairResultImagesToS3() {
     this.logger.debug('Running uploadHairResultImagesToS3 cron job');
     const baseS3Url = this.awsS3Service.getBaseS3Url();
