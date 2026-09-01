@@ -13,6 +13,22 @@ import { AppQueueService } from './app-queue.service';
       useFactory: (configService: ConfigService) => ({
         connection: {
           url: configService.get<string>('REDIS_URL', 'redis://localhost:6379'),
+          connectTimeout: 5_000,
+          maxRetriesPerRequest: null,
+          retryStrategy: (times: number) => {
+            return Math.min(times * 500, 10_000);
+          },
+        },
+        defaultJobOptions: {
+          attempts: 5,
+
+          backoff: {
+            type: 'exponential',
+            delay: 1_000,
+          },
+
+          removeOnComplete: true,
+          removeOnFail: 1_000,
         },
       }),
     }),
@@ -23,4 +39,4 @@ import { AppQueueService } from './app-queue.service';
   providers: [AppQueueService, AppQueueConsumer],
   exports: [BullModule, AppQueueService],
 })
-export class AppQueueModule {}
+export class AppQueueModule { }
