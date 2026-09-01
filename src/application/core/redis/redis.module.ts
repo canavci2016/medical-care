@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
   providers: [
     {
       provide: 'REDIS_CLIENT',
-      useFactory: async (configService: ConfigService) => {
+      useFactory: (configService: ConfigService) => {
         const logger = new Logger('RedisModule', { timestamp: true });
 
         const url = configService.get<string>('REDIS_URL');
