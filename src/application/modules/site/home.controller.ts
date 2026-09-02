@@ -64,7 +64,7 @@ export class HomeController {
       seo: {
         title: 'Real Hair Transplant Results | Medical Care',
         keywords:
-          'hair transplant results, before after hair transplant, FUE results, DHI results, verified clinic outcomes',
+          'hair transplant in turkey, hair transplant results, before after hair transplant, FUE results, DHI results, verified clinic outcomes',
         description:
           'Find real hair transplant before-and-after results from trusted clinics. Search by hospital, technique, and treatment timeline.',
         canonical: '/',
