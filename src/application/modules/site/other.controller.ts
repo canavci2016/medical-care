@@ -11,10 +11,12 @@ import {
 import type { Request, Response } from 'express';
 import { APP_RATE_LIMIT_METADATA } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.constants';
 import { AppRateLimitGuard } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.guard';
+import { AppQueueService } from 'src/application/shared/modules/app-queue/app-queue.service';
 import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/supported-event-types.enum';
 
 @Controller()
 export class OtherController {
+  constructor(private readonly appQueueService: AppQueueService) {}
 
   @Get('/contact')
   @Get('/about')
@@ -90,6 +92,17 @@ export class OtherController {
       message?: string;
     },
   ) {
+    void this.appQueueService.add(
+      SupportedEventTypes.CONTACT_FORM_SUBMISSION,
+      {
+        ...body,
+        ip: req.ip,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        removeOnFail: true,
+      },
+    );
 
     return {
       success: true,
