@@ -265,7 +265,12 @@ export class HospitalHairResultService {
 
     const result = await this.findOne(id);
     Object.assign(result, rest);
-    await this.hospitalHairResultRepository.save(result);
+    await this.hospitalHairResultRepository
+      .createQueryBuilder()
+      .update(HospitalHairResult)
+      .set(rest)
+      .where('id = :id', { id })
+      .execute();
 
     if (imageUrls !== undefined || images !== undefined) {
       await this.hospitalHairResultImageRepository.delete({ resultId: id });
