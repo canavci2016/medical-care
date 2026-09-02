@@ -20,7 +20,6 @@ import { SitemapService } from './sitemap.service';
 import { AppRateLimitModule } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.module';
 import { CountryModule } from 'src/application/shared/modules/country/country.module';
 import { CityModule } from 'src/application/shared/modules/city/city.module';
-import { AppQueueModule } from 'src/application/shared/modules/app-queue/app-queue.module';
 
 @Module({
   imports: [
@@ -31,7 +30,6 @@ import { AppQueueModule } from 'src/application/shared/modules/app-queue/app-que
     BlogModule,
     CountryModule,
     CityModule,
-    AppQueueModule,
   ],
   controllers: [
     HomeController,

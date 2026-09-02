@@ -13,7 +13,6 @@ import { AwsModule } from './shared/modules/aws/aws.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronjobModule } from './shared/modules/cronjob/cronjob.module';
 import { GoogleModule } from './core/google/google.module';
-import { AppQueueModule } from './shared/modules/app-queue/app-queue.module';
 import { AppEmailModule } from './shared/modules/app-email/app-email.module';
 import { RedisModule } from './core/redis/redis.module';
 
@@ -53,7 +52,6 @@ import { RedisModule } from './core/redis/redis.module';
     SeederModule,
     AwsModule,
     CronjobModule,
-    AppQueueModule,
     AppEmailModule,
     GoogleModule.forRootAsync({
       imports: [ConfigModule],
