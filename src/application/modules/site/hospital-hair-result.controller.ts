@@ -250,7 +250,7 @@ export class HospitalHairResultController {
           'hair transplant results, before after hair transplant, verified hair results, FUE results, DHI results',
         description:
           'Browse verified hair transplant before-and-after cases. Filter by procedure type, technique, graft count, age range, and duration.',
-        canonical: '/results',
+        canonical: this.getCanonicalUrl(query),
         ogType: 'website',
         ogTitle: 'Hair Transplant Results | Medical Care',
         ogDescription:
@@ -303,5 +303,10 @@ export class HospitalHairResultController {
 
   roundDownToThousand(value: number): number {
     return Math.floor(value / 1000) * 1000;
+  }
+
+  getCanonicalUrl(query: HairResultQueryDto): string {
+    const baseUrl = process.env.APP_URL || '';
+    return `${baseUrl}/results`;
   }
 }
