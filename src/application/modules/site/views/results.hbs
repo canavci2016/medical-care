@@ -41,7 +41,7 @@
         <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
         {{/each}}
       </select>
-      <select class="hospital-list select2" name="hospitalId" data-placeholder="Hospitals">
+      <select class="hospital-list select2" name="hospitalId" id="hospitalId" data-placeholder="Hospitals">
       </select>
 
       <button type='submit' class='btn btn-primary btn-sm'>Search</button>
@@ -120,13 +120,17 @@
         },
         processResults: function(data) {
             // Transforms the top-level key of the response object from 'items' to 'results'
-            return {
-                results: data.data.map(function(hospital) {
+            
+            let results= data.data.map(function(hospital) {
                     return {
                         id: hospital.id,
                         text: hospital.name
                     };
-                }),
+                });
+
+        results=[...[{id: 'all-hospitals', text: 'All Hospitals'}],...results];
+            return {
+                results: results,
                 pagination: {
                    more: data.pagination.hasNext
                  }
@@ -157,6 +161,13 @@ $.ajax({
             data: res
         }
     });
+    $('#hospitalId').trigger('change');
+});
+
+$('#hospitalId').on("change", function(e) {
+  if(e.target.value === 'all-hospitals'){
+$('#hospitalId').val(null).trigger('change');
+  }
 });
 
 }
