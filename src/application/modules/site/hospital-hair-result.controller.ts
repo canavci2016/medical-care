@@ -39,7 +39,19 @@ export class HospitalHairResultController {
 
   @Get('/results')
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
-    return this.renderResults(query, res);
+    let h1Title = 'Hair Transplant Results';
+
+    if (query.graftCount && query.technique) {
+      h1Title = `${query.graftCount} Graft ${query.technique.toUpperCase()} Hair Transplant Result - 12 Months | HairResult`;
+    } else if (query.graftCount) {
+      h1Title = `${query.graftCount} Graft Hair Transplant Result - 12 Months | HairResult`;
+    } else if (query.technique) {
+      h1Title = `${query.technique.toUpperCase()} Hair Transplant Result - 12 Months | HairResult`;
+    }
+
+    return this.renderResults(query, res, {
+      h1Title: h1Title,
+    });
   }
 
   @Get('/clinics/:hospitalSlug/results')
