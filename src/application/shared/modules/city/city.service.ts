@@ -3,13 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { City } from './entities/city.entity';
 import { Query } from '../../interfaces/query.interface';
+import { StringHelper } from '../../helpers/String';
 
 @Injectable()
 export class CityService {
   constructor(
     @InjectRepository(City)
     private readonly cityRepository: Repository<City>,
-  ) {}
+  ) { }
 
   async create(payload: Partial<City>): Promise<City> {
     const city = this.cityRepository.create(payload);
@@ -66,13 +67,22 @@ export class CityService {
   }
 
   async findCityOrCreate(name: string): Promise<City> {
-    const lowerCaseName = name.toLowerCase();
+    const normalizedName = name.trim();
+    const lowerCaseName = normalizedName.toLowerCase();
+    const slug = StringHelper.toSlug(lowerCaseName);
+
     let city = await this.cityRepository.findOne({
-      where: { name: lowerCaseName },
+      where: [{ name: lowerCaseName }, { slug }],
     });
 
     if (!city) {
-      city = await this.create({ name: lowerCaseName });
+      city = await this.create({
+        name: lowerCaseName,
+        slug,
+      });
+    } else if (city && !city.slug) {
+      city.slug = StringHelper.toSlug(city.name);
+      await this.cityRepository.save(city);
     }
 
     return city;

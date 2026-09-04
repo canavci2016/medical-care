@@ -14,6 +14,7 @@ import { CityService } from 'src/application/shared/modules/city/city.service';
 import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { randomUUID } from 'node:crypto';
+import { StringHelper } from 'src/application/shared/helpers/String';
 
 export enum RatingFilter {
   'FIVE' = '5',
@@ -276,7 +277,7 @@ export class HospitalService {
     input: string,
     excludeHospitalId?: string,
   ): Promise<string> {
-    const baseSlug = this.toSlug(input);
+    const baseSlug = StringHelper.toSlug(input);
     let slug = baseSlug;
     let counter = 1;
 
@@ -298,17 +299,5 @@ export class HospitalService {
     });
 
     return !!existing;
-  }
-
-  private toSlug(value: string): string {
-    const normalized = value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-
-    return normalized || randomUUID();
   }
 }

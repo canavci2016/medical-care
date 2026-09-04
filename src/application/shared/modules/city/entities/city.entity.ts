@@ -14,6 +14,9 @@ export class City {
   @Column({ length: 120, unique: true })
   name: string;
 
+  @Column({ unique: true, nullable: true })
+  slug?: string;
+
   @Column({ default: true })
   isActive: boolean;
 
