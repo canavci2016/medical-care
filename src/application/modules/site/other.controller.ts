@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Req,
   Res,
@@ -9,14 +10,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
+import { CityService } from 'src/application/shared/modules/city/city.service';
 import { APP_RATE_LIMIT_METADATA } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.constants';
 import { AppRateLimitGuard } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.guard';
 import { AppQueueService } from 'src/application/shared/modules/app-queue/app-queue.service';
 import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/supported-event-types.enum';
+import { HospitalService } from '../hospital/hospital.service';
 
 @Controller()
 export class OtherController {
-  constructor(private readonly appQueueService: AppQueueService) { }
+  constructor(
+    private readonly appQueueService: AppQueueService,
+    private readonly cityService: CityService,
+    private readonly hospitalService: HospitalService,
+  ) { }
 
   @Get('/contact')
   @Get('/about')
@@ -113,9 +120,19 @@ export class OtherController {
 
   @Get('/hair-transplant/:citySlug')
   @Get('/about')
-  cityDetail(@Req() req, @Res() res: Response) {
+  async cityDetail(
+    @Req() req,
+    @Res() res: Response,
+    @Param('citySlug') citySlug: string,
+  ) {
+    const city = await this.cityService.findOneBy({ slug: citySlug });
+    const hospitals = await this.hospitalService.paginated({
+      cityId: city.id,
+      page: { page: 1, limit: 3 },
+    });
     return res.render('city', {
-      styles: ['about.css'],
+      city,
+      hospitals: hospitals,
       seo: {
         title: 'About Us | Medical Care',
         keywords:

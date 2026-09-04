@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -70,6 +71,13 @@ async function bootstrap() {
     'slice',
     function (str: string, index: number, length: number) {
       return str?.slice(index, index + length) || str;
+    },
+  );
+
+  hbs.registerHelper(
+    'split',
+    function (str: string, separator: string) {
+      return str?.split(separator) || str;
     },
   );
 

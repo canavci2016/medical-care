@@ -6,7 +6,7 @@
       <h1>Hair Transplant in Istanbul</h1>
       <p>The world's busiest hair restoration destination — documented, compared and verified. Every number below is backed by a real case in our gallery.</p>
       <div class="breadcrumb">
-        <a href="index.html">Home</a>
+        <a href="/">Home</a>
         <span class="sep">›</span>
         <span>Hair Transplant in Istanbul</span>
       </div>
@@ -21,7 +21,7 @@
         <span class="stat-label">Documented Results</span>
       </div>
       <div class="stat-item fade-in">
-        <span class="stat-number" data-count="42">0</span>
+        <span class="stat-number" data-count="{{hospitals.pagination.total}}">0</span>
         <span class="stat-label">Clinics</span>
       </div>
       <div class="stat-item fade-in">
@@ -38,7 +38,7 @@
           <h2>Start with the photos, not the promises</h2>
           <p>Browse every documented Istanbul case with graft counts, techniques and post-op timelines.</p>
         </div>
-        <a href="results.html?hospital=istanbul" class="btn btn-primary">Explore Istanbul Results</a>
+        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-primary">Explore {{city.name}} Results</a>
       </div>
     </div>
   </section>
@@ -48,15 +48,15 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">Real Transformations</span>
-        <h2>Real Hair Transplant Results in Istanbul</h2>
-        <p>Before and after photos from verified patients treated in Istanbul clinics, each with the technique, graft count and time since surgery.</p>
+        <h2>Real Hair Transplant Results in {{city.name}}</h2>
+        <p>Before and after photos from verified patients treated in {{city.name}} clinics, each with the technique, graft count and time since surgery.</p>
       </div>
 
       <div class="grid-3">
         <a href="result-detail.html" class="ba-card fade-in">
           <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before FUE hair transplant in Istanbul"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After FUE hair transplant in Istanbul"><span class="ba-label after">After</span></div>
+            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before FUE hair transplant in {{city.name}}"><span class="ba-label before">Before</span></div>
+            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After FUE hair transplant in {{city.name}}"><span class="ba-label after">After</span></div>
           </div>
           <div class="ba-info">
             <h3>Sapphire FUE — 4,100 Grafts</h3>
@@ -87,8 +87,8 @@
 
         <a href="result-detail.html" class="ba-card fade-in">
           <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before crown restoration in Istanbul"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After crown restoration in Istanbul"><span class="ba-label after">After</span></div>
+            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before crown restoration in {{city.name}}"><span class="ba-label before">Before</span></div>
+            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After crown restoration in {{city.name}}"><span class="ba-label after">After</span></div>
           </div>
           <div class="ba-info">
             <h3>FUE Crown Restoration — 3,300 Grafts</h3>
@@ -103,7 +103,7 @@
       </div>
 
       <div style="text-align: center; margin-top: 40px;">
-        <a href="results.html?hospital=istanbul" class="btn btn-outline">View all Istanbul results →</a>
+        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-outline">View all {{city.name}} results →</a>
       </div>
     </div>
   </section>
@@ -178,29 +178,30 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">42 Clinics Tracked</span>
-        <h2>Hair Transplant Clinics in Istanbul</h2>
+        <h2>Hair Transplant Clinics in {{city.name}}</h2>
         <p>Ranked by the number of documented cases in our gallery — not by advertising spend.</p>
       </div>
 
       <div class="grid-3">
-        <a href="hospital-detail.html" class="card fade-in">
+        {{#each hospitals.data as |hospital|}}
+        <a href="/clinics/{{hospital.slug}}" class="card fade-in">
           <div class="card-image">
-            <img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/1adac7cd-fa9f-45ab-9ccd-785eed597067.png" alt="Istanbul Hair Center">
+            <img src="{{hospital.coverImageUrl}}" alt="{{hospital.name}}">
             <div class="overlay">
               <span class="badge badge-green">Verified</span>
               <span class="badge badge-gold">Most Documented</span>
             </div>
           </div>
           <div class="card-body">
-            <h3>Istanbul Hair Center</h3>
+            <h3>{{hospital.name}}</h3>
             <div class="location">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Şişli, Istanbul
             </div>
             <div class="tags">
-              <span class="badge badge-blue">FUE</span>
-              <span class="badge badge-blue">DHI</span>
-              <span class="badge badge-blue">Sapphire FUE</span>
+              {{#each  (split hospital.techniques ",")}}
+                <span class="badge badge-blue">{{this}}</span>
+              {{/each}}
             </div>
             <div class="meta">
               <div class="rating">
@@ -211,62 +212,7 @@
             </div>
           </div>
         </a>
-
-        <a href="hospital-detail.html" class="card fade-in">
-          <div class="card-image">
-            <img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/1adac7cd-fa9f-45ab-9ccd-785eed597067.png" alt="Bosphorus Hair Institute">
-            <div class="overlay">
-              <span class="badge badge-green">Verified</span>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>Bosphorus Hair Institute</h3>
-            <div class="location">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Beşiktaş, Istanbul
-            </div>
-            <div class="tags">
-              <span class="badge badge-blue">DHI</span>
-              <span class="badge badge-blue">Unshaven DHI</span>
-              <span class="badge badge-blue">PRP</span>
-            </div>
-            <div class="meta">
-              <div class="rating">
-                <div class="stars">★★★★★</div>
-                <span class="score">4.8</span>
-              </div>
-              <span class="procedures">92 documented results</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="hospital-detail.html" class="card fade-in">
-          <div class="card-image">
-            <img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/1adac7cd-fa9f-45ab-9ccd-785eed597067.png" alt="Anatolia Hair Clinic">
-            <div class="overlay">
-              <span class="badge badge-green">Verified</span>
-            </div>
-          </div>
-          <div class="card-body">
-            <h3>Anatolia Hair Clinic</h3>
-            <div class="location">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Kadıköy, Istanbul
-            </div>
-            <div class="tags">
-              <span class="badge badge-blue">FUE</span>
-              <span class="badge badge-blue">Sapphire FUE</span>
-              <span class="badge badge-blue">Beard to Scalp</span>
-            </div>
-            <div class="meta">
-              <div class="rating">
-                <div class="stars">★★★★<span class="empty">★</span></div>
-                <span class="score">4.7</span>
-              </div>
-              <span class="procedures">81 documented results</span>
-            </div>
-          </div>
-        </a>
+        {{/each}}
       </div>
 
       <div style="text-align: center; margin-top: 40px;">
