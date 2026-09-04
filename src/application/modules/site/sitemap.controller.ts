@@ -40,6 +40,12 @@ export class SitemapController {
     return this.sitemapService.getHospitalSitemapXml();
   }
 
+  @Get('sitemaps/hospital-of-city.xml')
+  @Header('Content-Type', 'application/xml')
+  hospitalOfCitySitemap() {
+    return this.sitemapService.getHospitalOfCitySitemapXml();
+  }
+
   @Get('sitemaps/blog.xml')
   @Header('Content-Type', 'application/xml')
   blogSitemap() {

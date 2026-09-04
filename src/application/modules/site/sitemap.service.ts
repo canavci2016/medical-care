@@ -6,6 +6,7 @@ import { BlogStatus } from '../blog/entities/blog.entity';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { GraftCountEnum } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HospitalService } from '../hospital/hospital.service';
+import { CityService } from 'src/application/shared/modules/city/city.service';
 
 interface XmlUrl {
   loc: string;
@@ -23,6 +24,7 @@ export class SitemapService {
     private readonly blogService: BlogService,
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
+    private readonly cityService: CityService,
   ) { }
 
   async getSitemapIndexXml(): Promise<string> {
@@ -35,6 +37,7 @@ export class SitemapService {
       '/sitemaps/hospital.xml',
       '/sitemaps/blog.xml',
       '/sitemaps/results-for-hospitals.xml',
+      '/sitemaps/hospital-of-city.xml',
       ...Array.from(
         Array(hairResults.pagination.totalPages),
         (_, x) => `/sitemaps/results-${x + 1}.xml`,
@@ -145,6 +148,20 @@ ${xmlEntries}
       .filter((hospital) => !!hospital.slug)
       .map((hospital) => ({
         loc: `/clinics/${hospital.slug}`,
+        changefreq: 'daily',
+        priority: '0.9',
+      }));
+
+    const today = new Date().toISOString().split('T')[0];
+    return this.toUrlsetXml(urls, today);
+  }
+
+  async getHospitalOfCitySitemapXml(): Promise<string> {
+    const cities = await this.cityService.findAll({ take: 10000 });
+    const urls: Array<XmlUrl> = cities
+      .filter((city) => !!city.slug)
+      .map((city) => ({
+        loc: `/hair-transplant/${city.slug}/clinics`,
         changefreq: 'daily',
         priority: '0.9',
       }));

@@ -57,8 +57,36 @@ export class HospitalController {
     return res.json({ data: hospital });
   }
 
+  @Get(['/hair-transplant/:citySlug/clinics', '/hair-result/:cityId/hospitals'])
+  async clinicsOfCity(
+    @Res() res: Response,
+    @Query() query: HospitalQueryDto,
+    @Param('citySlug') citySlug: string,
+  ) {
+    query.city = citySlug;
+    const cityInst = await this.cityService.findOneBy({ slug: citySlug });
+    return this.renderResults(res, query, {
+      h1Title: `Hair Transplant Clinics in ${cityInst?.name}`,
+      title: `Hair Transplant Clinics in ${cityInst?.name}`,
+      keywords: `hair transplant clinics in ${cityInst?.name}, best hair clinics in ${cityInst?.name}, clinic ratings, hair restoration hospitals, hospital directory`,
+      canonical: `/hair-transplant/${citySlug}/clinics`,
+      description: `Browse verified hospitals and clinics for hair transplant procedures in ${cityInst?.name}. Filter by city, rating, and sorting options.`,
+      ogTitle: `Hair Transplant Clinics in ${cityInst?.name}`,
+      ogDescription: `Discover and compare hair transplant clinics in ${cityInst?.name} by rating and location.`,
+      twitterTitle: `Hair Transplant Clinics in ${cityInst?.name}`,
+    });
+  }
+
   @Get(['/hospitals', '/clinics'])
   async findAll(@Res() res: Response, @Query() query: HospitalQueryDto) {
+    return this.renderResults(res, query);
+  }
+
+  async renderResults(
+    @Res() res: Response,
+    @Query() query: HospitalQueryDto,
+    seoProps: Record<string, any> = {},
+  ) {
     let cityId: string | undefined = undefined;
 
     if (query.city) {
@@ -127,20 +155,22 @@ export class HospitalController {
       pagination,
       filters,
       seo: {
+        h1Title: 'Hair Transplant Clinics',
         title: 'Hospitals | Medical Care',
         keywords:
-          'hair transplant hospitals, best hair clinics, clinic ratings, hair restoration hospitals, hospital directory',
+          'hair transplant clinics, best hair clinics, clinic ratings, hair restoration hospitals, hospital directory',
         description:
           'Browse verified hospitals and clinics for hair transplant procedures. Filter by city, rating, and sorting options.',
         canonical: '/hospitals',
         ogType: 'website',
         ogTitle: 'Hospitals | Medical Care',
         ogDescription:
-          'Discover and compare hair transplant hospitals by rating and location.',
+          'Discover and compare hair transplant clinics by rating and location.',
         ogUrl: '/hospitals',
         twitterTitle: 'Hospitals | Medical Care',
         twitterDescription:
-          'Compare top hair transplant hospitals and clinics in one place.',
+          'Compare top hair transplant clinics and clinics in one place.',
+        ...seoProps,
       },
     });
   }
