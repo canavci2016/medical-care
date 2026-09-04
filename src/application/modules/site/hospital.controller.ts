@@ -15,7 +15,7 @@ import { CountryService } from 'src/application/shared/modules/country/country.s
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import { StringHelper } from 'src/application/shared/helpers/String';
 
-@Controller(['hospitals', 'clinics'])
+@Controller()
 export class HospitalController {
   constructor(
     private readonly hospitalService: HospitalService,
@@ -25,7 +25,7 @@ export class HospitalController {
     private readonly cityService: CityService,
   ) { }
 
-  @Get('/api')
+  @Get(['/hospitals/api', '/clinics/api'])
   async apiFindPaginated(
     @Res() res: Response,
     @Query() query: HospitalQueryDto,
@@ -36,8 +36,6 @@ export class HospitalController {
 
     const response = await this.hospitalService.paginated({
       name: query.name,
-      cityId: query.cityId,
-      rating: query.rating,
       page: {
         limit: query.limit ? parseInt(query.limit, 10) : 12,
         page: query.page ? parseInt(query.page, 10) : 1,
@@ -49,7 +47,7 @@ export class HospitalController {
     return res.json(response);
   }
 
-  @Get('/api/:id')
+  @Get(['/hospitals/api/:id', '/clinics/api/:id'])
   async apiFindOne(
     @Param('id', ParseUUIDPipe) id: string,
     @Res() res: Response,
@@ -59,8 +57,15 @@ export class HospitalController {
     return res.json({ data: hospital });
   }
 
-  @Get()
+  @Get(['/hospitals', '/clinics'])
   async findAll(@Res() res: Response, @Query() query: HospitalQueryDto) {
+    let cityId: string | undefined = undefined;
+
+    if (query.city) {
+      const cityInst = await this.cityService.findOneBy({ slug: query.city });
+      cityId = cityInst?.id;
+    }
+
     const [orderCollumn, orderDirection] = query.sorting
       ? query.sorting.split('_')
       : ['rating', 'desc'];
@@ -68,7 +73,7 @@ export class HospitalController {
     const { data: hospitals, pagination } =
       await this.hospitalService.paginated({
         name: query.name,
-        cityId: query.city,
+        cityId: cityId,
         countryId: { eq: query.country },
         rating: query.rating,
         page: {
@@ -89,8 +94,8 @@ export class HospitalController {
       name: query.name || '',
       cities: cities.map((city) => ({
         label: StringHelper.capitalizeFirstLetter(city.name),
-        value: city.id,
-        selected: query.city === city.id,
+        value: city.slug,
+        selected: cityId === city.id,
       })),
       countries: countries.map((country) => ({
         label: StringHelper.capitalizeFirstLetter(country.name),
@@ -140,7 +145,7 @@ export class HospitalController {
     });
   }
 
-  @Get(':slug')
+  @Get(['/hospitals/:slug', '/clinics/:slug'])
   async findOne(@Param('slug') slug: string, @Res() res: Response) {
     const hospital = await this.hospitalService.findOneBy({ slug });
     if (!hospital) {

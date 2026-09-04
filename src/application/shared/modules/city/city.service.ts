@@ -55,6 +55,18 @@ export class CityService {
     return city;
   }
 
+  async findOneBy(
+    params: Partial<Pick<City, 'id' | 'name' | 'slug'>>,
+  ): Promise<City> {
+    const city = await this.cityRepository.findOneBy(params);
+
+    if (!city) {
+      throw new NotFoundException(`City not found`);
+    }
+
+    return city;
+  }
+
   async update(id: string, payload: Partial<City>): Promise<City> {
     const city = await this.findOne(id);
     Object.assign(city, payload);

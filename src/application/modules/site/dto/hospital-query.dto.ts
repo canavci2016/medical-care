@@ -22,7 +22,6 @@ export class HospitalQueryDto {
 
   @IsOptional()
   @ValidateIf((o: HospitalQueryDto) => o.city !== '')
-  @IsUUID()
   city?: string;
 
   @IsOptional()
