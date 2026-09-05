@@ -2,13 +2,13 @@
   <!-- PAGE HEADER -->
   <section class="page-header">
     <div class="container">
-      <span class="city-eyebrow">🇹🇷 Istanbul, Turkey</span>
-      <h1>Hair Transplant in Istanbul</h1>
+      <span class="city-eyebrow">🇹🇷 {{city.name}}, Turkey</span>
+      <h1>Hair Transplant in {{city.name}}</h1>
       <p>The world's busiest hair restoration destination — documented, compared and verified. Every number below is backed by a real case in our gallery.</p>
       <div class="breadcrumb">
         <a href="/">Home</a>
         <span class="sep">›</span>
-        <span>Hair Transplant in Istanbul</span>
+        <span>Hair Transplant in {{city.name}}</span>
       </div>
     </div>
   </section>
@@ -36,7 +36,7 @@
       <div class="city-cta-inner fade-in">
         <div>
           <h2>Start with the photos, not the promises</h2>
-          <p>Browse every documented Istanbul case with graft counts, techniques and post-op timelines.</p>
+          <p>Browse every documented {{city.name}} case with graft counts, techniques and post-op timelines.</p>
         </div>
         <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-primary">Explore {{city.name}} Results</a>
       </div>
@@ -44,7 +44,7 @@
   </section>
 
   <!-- REAL RESULTS -->
-  <section class="section" id="istanbul-results">
+  <section class="section" id="{{city.slug}}-results">
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">Real Transformations</span>
@@ -53,53 +53,22 @@
       </div>
 
       <div class="grid-3">
-        <a href="result-detail.html" class="ba-card fade-in">
+        {{#each results.data as |result|}}
+        <a href="/results/{{result.id}}" class="ba-card fade-in">
           <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before FUE hair transplant in {{city.name}}"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After FUE hair transplant in {{city.name}}"><span class="ba-label after">After</span></div>
+            <div class="ba-img"><img src="{{result.previewImageUrl}}" alt="After FUE hair transplant in {{city.name}}"><span class="ba-label after">Before - After</span></div>
           </div>
           <div class="ba-info">
-            <h3>Sapphire FUE — 4,100 Grafts</h3>
+            <h3>{{result.technique}} — {{result.graftCount}} Grafts</h3>
             <div class="ba-meta">
               <span>👨‍⚕️ - </span>
-              <span>🏥 Istanbul Hair Center</span>
-              <span>📅 14 months post-op</span>
+              <span>🏥 {{result.hospital.name}}</span>
+              <span>📅 {{relative_date result.operationDate}}</span>
             </div>
             <span class="view-detail-link">View Full Case →</span>
           </div>
         </a>
-
-        <a href="result-detail.html" class="ba-card fade-in">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before DHI hair transplant in Istanbul"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After DHI hair transplant in Istanbul"><span class="ba-label after">After</span></div>
-          </div>
-          <div class="ba-info">
-            <h3>DHI Hairline Rebuild — 2,650 Grafts</h3>
-            <div class="ba-meta">
-              <span>👨‍⚕️-</span>
-              <span>🏥 Bosphorus Hair Institute</span>
-              <span>📅 12 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
-
-        <a href="result-detail.html" class="ba-card fade-in">
-          <div class="ba-images">
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="Before crown restoration in {{city.name}}"><span class="ba-label before">Before</span></div>
-            <div class="ba-img"><img src="https://mgx-backend-cdn.metadl.com/generate/images/1058559/2026-03-25/8689c9e4-fff5-4abb-816f-1233e5842b58.png" alt="After crown restoration in {{city.name}}"><span class="ba-label after">After</span></div>
-          </div>
-          <div class="ba-info">
-            <h3>FUE Crown Restoration — 3,300 Grafts</h3>
-            <div class="ba-meta">
-              <span>👨‍⚕️ Dr. Can Aydin</span>
-              <span>🏥 Anatolia Hair Clinic</span>
-              <span>📅 18 months post-op</span>
-            </div>
-            <span class="view-detail-link">View Full Case →</span>
-          </div>
-        </a>
+        {{/each}}
       </div>
 
       <div style="text-align: center; margin-top: 40px;">
@@ -109,18 +78,18 @@
   </section>
 
   <!-- COST -->
-  <section class="section" id="istanbul-cost" style="background: #fff;">
+  <section class="section" id="{{city.slug}}-cost" style="background: #fff;">
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">Budget Planning</span>
-        <h2>Hair Transplant Cost in Istanbul</h2>
-        <p>Istanbul packages are usually quoted as a flat all-in price rather than per graft. These ranges reflect the quotes reported by patients in our documented cases.</p>
+        <h2>Hair Transplant Cost in {{city.name}}</h2>
+        <p>{{city.name}} packages are usually quoted as a flat all-in price rather than per graft. These ranges reflect the quotes reported by patients in our documented cases.</p>
       </div>
 
       <div class="cost-grid">
         <div class="detail-card fade-in">
           <h3>Typical price ranges</h3>
-          <p class="cost-note">All-inclusive packages quoted in Istanbul, 2026.</p>
+          <p class="cost-note">All-inclusive packages quoted in {{city.name}}, 2026.</p>
           <table class="pricing-table">
             <thead>
               <tr><th>Package tier</th><th>Price range</th><th>Usually includes</th></tr>
@@ -135,7 +104,7 @@
 
         <div class="detail-card fade-in">
           <h3>Cost by graft count</h3>
-          <p class="cost-note">Guide prices at a mid-range Istanbul clinic.</p>
+          <p class="cost-note">Guide prices at a mid-range {{city.name}} clinic.</p>
           <table class="pricing-table">
             <thead>
               <tr><th>Grafts</th><th>Typical cost</th><th>Best suited for</th></tr>
@@ -174,10 +143,10 @@
   </section>
 
   <!-- CLINICS -->
-  <section class="section" id="istanbul-clinics">
+  <section class="section" id="{{city.slug}}-clinics">
     <div class="container">
       <div class="section-header fade-in">
-        <span class="label">42 Clinics Tracked</span>
+        <span class="label">{{hospitals.pagination.total}} Clinics Tracked</span>
         <h2>Hair Transplant Clinics in {{city.name}}</h2>
         <p>Ranked by the number of documented cases in our gallery — not by advertising spend.</p>
       </div>
@@ -196,7 +165,7 @@
             <h3>{{hospital.name}}</h3>
             <div class="location">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Şişli, Istanbul
+              Şişli, {{city.name}}
             </div>
             <div class="tags">
               {{#each  (split hospital.techniques ",")}}
@@ -222,7 +191,7 @@
   </section>
 
   <!-- TECHNIQUES -->
-  <section class="section" id="istanbul-techniques">
+  <section class="section" id="{{city.slug}}-techniques">
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">By Technique</span>

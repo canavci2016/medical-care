@@ -7,6 +7,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
+import { CityService } from 'src/application/shared/modules/city/city.service';
 import type { Response } from 'express';
 import {
   GraftCountEnum,
@@ -35,6 +36,7 @@ export class HospitalHairResultController {
   constructor(
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
+    private readonly cityService: CityService,
   ) { }
 
   @Get('/results')
@@ -51,6 +53,23 @@ export class HospitalHairResultController {
 
     return this.renderResults(query, res, {
       h1Title: h1Title,
+    });
+  }
+
+  @Get('/hair-transplant/:citySlug/results')
+  async findAllForCities(
+    @Res() res: Response,
+    @Param('citySlug') citySlug: string,
+    @Query() query: HairResultQueryDto,
+  ) {
+    const city = await this.cityService.findOneBy({
+      slug: citySlug,
+    });
+    query.cityId = city.id;
+    return this.renderResults(query, res, {
+      ogTitle: `hair transplant results in  ${city.name} `,
+      title: `hair transplant results in ${city.name} `,
+      h1Title: `hair transplant results in ${city.name} `,
     });
   }
 

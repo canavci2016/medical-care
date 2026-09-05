@@ -16,6 +16,7 @@ import { AppRateLimitGuard } from 'src/application/shared/modules/app-rate-limit
 import { AppQueueService } from 'src/application/shared/modules/app-queue/app-queue.service';
 import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/supported-event-types.enum';
 import { HospitalService } from '../hospital/hospital.service';
+import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 
 @Controller()
 export class OtherController {
@@ -23,6 +24,7 @@ export class OtherController {
     private readonly appQueueService: AppQueueService,
     private readonly cityService: CityService,
     private readonly hospitalService: HospitalService,
+    private readonly hairResultService: HospitalHairResultService,
   ) { }
 
   @Get('/contact')
@@ -130,7 +132,12 @@ export class OtherController {
       cityId: city.id,
       page: { page: 1, limit: 3 },
     });
+    const results = await this.hairResultService.findAll({
+      page: { page: 1, limit: 3 },
+    });
+
     return res.render('city', {
+      results,
       city,
       hospitals: hospitals,
       seo: {

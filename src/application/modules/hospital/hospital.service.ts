@@ -94,6 +94,7 @@ export class HospitalService {
       page: Pagination;
       orderBy: string;
       orderDirection: OrderDirection;
+      relations: ('country' | 'city' | 'hospitalHairResults')[];
     }> = {},
   ) {
     const queryBuilder = this.hospitalRepository.createQueryBuilder('hospital');
@@ -131,6 +132,8 @@ export class HospitalService {
         countryId: options.countryId.eq,
       });
     }
+
+    if (options.relations?.includes('city')) { /* empty */ }
 
     const page = options.page?.page || 1;
     const limit = options.page?.limit || 10;
