@@ -157,14 +157,20 @@ ${xmlEntries}
   }
 
   async getHospitalOfCitySitemapXml(): Promise<string> {
+    const urls: Array<XmlUrl> = [];
     const cities = await this.cityService.findAll({ take: 10000 });
-    const urls: Array<XmlUrl> = cities
-      .filter((city) => !!city.slug)
-      .map((city) => ({
+    for (const city of cities) {
+      urls.push({
         loc: `/hair-transplant/${city.slug}/clinics`,
         changefreq: 'daily',
         priority: '0.9',
-      }));
+      });
+      urls.push({
+        loc: `/hair-transplant/${city.slug}/results`,
+        changefreq: 'daily',
+        priority: '0.9',
+      });
+    }
 
     const today = new Date().toISOString().split('T')[0];
     return this.toUrlsetXml(urls, today);
