@@ -104,6 +104,11 @@ export class HospitalService {
       'procedureCount',
     );
 
+    queryBuilder.addSelect(
+      '(select name from cities as ct where "ct"."id" = hospital.cityId)',
+      'cityName',
+    );
+
     if (options.cityId) {
       queryBuilder.andWhere('hospital.cityId = :cityId', {
         cityId: options.cityId,
