@@ -33,7 +33,7 @@ const generateBlog = (
     excerpt: faker.lorem.paragraph(),
     content: faker.lorem.paragraphs(5, '\n\n'),
     featuredImage: faker.image.urlLoremFlickr({ category: 'business' }),
-    metaTitle: `${title} | Medical Care`,
+    metaTitle: `${title} | HairResult`,
     metaDescription: faker.lorem.sentence({ min: 10, max: 20 }),
     metaKeywords: faker.helpers.arrayElements(keywordPool, keywordCount),
     status: BlogStatus.PUBLISHED,

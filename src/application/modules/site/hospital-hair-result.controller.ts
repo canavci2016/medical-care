@@ -275,7 +275,7 @@ export class HospitalHairResultController {
       pagination: pagination,
       filters,
       seo: {
-        title: 'Hair Transplant Results | Medical Care',
+        title: 'Hair Transplant Results | HairResult',
         h1Title: 'Hair Transplant Results',
         keywords:
           'hair transplant results, before after hair transplant, verified hair results, FUE results, DHI results',
@@ -283,11 +283,11 @@ export class HospitalHairResultController {
           'Browse verified hair transplant before-and-after cases. Filter by procedure type, technique, graft count, age range, and duration.',
         canonical: this.getCanonicalUrl(query),
         ogType: 'website',
-        ogTitle: 'Hair Transplant Results | Medical Care',
+        ogTitle: 'Hair Transplant Results | HairResult',
         ogDescription:
           'Explore real hair transplant outcomes with filters for technique, graft count, and timeline.',
         ogUrl: '/results',
-        twitterTitle: 'Hair Transplant Results | Medical Care',
+        twitterTitle: 'Hair Transplant Results | HairResult',
         twitterDescription:
           'See verified before-and-after hair transplant cases and compare outcomes.',
         ...seo,

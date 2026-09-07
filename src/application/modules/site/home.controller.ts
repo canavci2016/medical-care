@@ -62,18 +62,18 @@ export class HomeController {
       hairResultCount,
       reviews: reviews.filter((r) => r!.comment).slice(0, 3),
       seo: {
-        title: 'Real Hair Transplant Results | Medical Care',
+        title: 'Real Hair Transplant Results | HairResult',
         keywords:
           'hair transplant in turkey, hair transplant results, before after hair transplant, FUE results, DHI results, verified clinic outcomes',
         description:
           'Find real hair transplant before-and-after results from trusted clinics. Search by hospital, technique, and treatment timeline.',
         canonical: '/',
         ogType: 'website',
-        ogTitle: 'Real Hair Transplant Results | Medical Care',
+        ogTitle: 'Real Hair Transplant Results | HairResult',
         ogDescription:
           'Explore authentic hair transplant outcomes and compare results by clinic and technique.',
         ogUrl: '/',
-        twitterTitle: 'Real Hair Transplant Results | Medical Care',
+        twitterTitle: 'Real Hair Transplant Results | HairResult',
         twitterDescription:
           'Discover real before-and-after hair transplant cases from trusted clinics.',
       },

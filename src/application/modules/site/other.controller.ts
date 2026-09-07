@@ -34,20 +34,20 @@ export class OtherController {
     return res.render('about', {
       styles: ['about.css'],
       seo: {
-        title: 'About Us | Medical Care',
+        title: 'About Us | HairResult',
         keywords:
-          'about medical care, hair transplant platform, healthcare marketplace, clinic transparency',
+          'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
         description:
-          'Learn about Medical Care, our mission, and how we help users discover trusted clinics and real treatment outcomes.',
+          'Learn about HairResult, our mission, and how we help users discover trusted clinics and real treatment outcomes.',
         canonical: '/about',
         ogType: 'website',
-        ogTitle: 'About Us | Medical Care',
+        ogTitle: 'About Us | HairResult',
         ogDescription:
-          'Meet the Medical Care platform and our mission to improve patient decision-making.',
+          'Meet the HairResult platform and our mission to improve patient decision-making.',
         ogUrl: '/about',
-        twitterTitle: 'About Us | Medical Care',
+        twitterTitle: 'About Us | HairResult',
         twitterDescription:
-          'Learn more about the Medical Care platform and our mission.',
+          'Learn more about the HairResult platform and our mission.',
       },
     });
   }
@@ -149,17 +149,17 @@ export class OtherController {
       seo: {
         title: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results | HairResult.`,
         keywords:
-          'about medical care, hair transplant platform, healthcare marketplace, clinic transparency',
-        description: `Learn about Medical Care in ${StringHelper.capitalizeFirstLetter(city.name)}, our mission, and how we help users discover trusted clinics and real treatment outcomes.`,
+          'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
+        description: `Learn about HairResult in ${StringHelper.capitalizeFirstLetter(city.name)}, our mission, and how we help users discover trusted clinics and real treatment outcomes.`,
         canonical: '/hair-transplant/' + city.slug,
         ogType: 'website',
-        ogTitle: 'About Us | Medical Care',
+        ogTitle: 'About Us | HairResult',
         ogDescription:
-          'Meet the Medical Care platform and our mission to improve patient decision-making.',
+          'Meet the HairResult platform and our mission to improve patient decision-making.',
         ogUrl: '/hair-transplant/' + city.slug,
-        twitterTitle: 'About Us | Medical Care',
+        twitterTitle: 'About Us | HairResult',
         twitterDescription:
-          'Learn more about the hair transplant platform and our mission.',
+          'Learn more about the HairResult platform and our mission.',
       },
     });
   }
