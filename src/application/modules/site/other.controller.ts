@@ -141,7 +141,7 @@ export class OtherController {
       city,
       hospitals: hospitals,
       seo: {
-        title: 'About Us | Medical Care',
+        title: `Hair Transplant in ${city.name}: Clinics, Costs & Real Results | HairResult.`,
         keywords:
           'about medical care, hair transplant platform, healthcare marketplace, clinic transparency',
         description:
