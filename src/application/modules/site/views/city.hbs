@@ -2,13 +2,13 @@
   <!-- PAGE HEADER -->
   <section class="page-header">
     <div class="container">
-      <span class="city-eyebrow">🇹🇷 {{city.name}}, Turkey</span>
-      <h1>Hair Transplant in {{city.name}}</h1>
+      <span class="city-eyebrow">🇹🇷 {{ucwords city.name}}, Turkey</span>
+      <h1>Hair Transplant in {{ucwords city.name}}</h1>
       <p>The world's busiest hair restoration destination — documented, compared and verified. Every number below is backed by a real case in our gallery.</p>
       <div class="breadcrumb">
         <a href="/">Home</a>
         <span class="sep">›</span>
-        <span>Hair Transplant in {{city.name}}</span>
+        <span>Hair Transplant in {{ucwords city.name}}</span>
       </div>
     </div>
   </section>
@@ -36,9 +36,9 @@
       <div class="city-cta-inner fade-in">
         <div>
           <h2>Start with the photos, not the promises</h2>
-          <p>Browse every documented {{city.name}} case with graft counts, techniques and post-op timelines.</p>
+          <p>Browse every documented {{ucwords city.name}} case with graft counts, techniques and post-op timelines.</p>
         </div>
-        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-primary">Explore {{city.name}} Results</a>
+        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-primary">Explore {{ucwords city.name}} Results</a>
       </div>
     </div>
   </section>
@@ -48,15 +48,15 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">Real Transformations</span>
-        <h2>Real Hair Transplant Results in {{city.name}}</h2>
-        <p>Before and after photos from verified patients treated in {{city.name}} clinics, each with the technique, graft count and time since surgery.</p>
+        <h2>Real Hair Transplant Results in {{ucwords city.name}}</h2>
+        <p>Before and after photos from verified patients treated in {{ucwords city.name}} clinics, each with the technique, graft count and time since surgery.</p>
       </div>
 
       <div class="grid-3">
         {{#each results.data as |result|}}
         <a href="/results/{{result.id}}" class="ba-card fade-in">
           <div class="ba-images">
-            <div class="ba-img"><img src="{{result.previewImageUrl}}" alt="After FUE hair transplant in {{city.name}}"><span class="ba-label after">Before - After</span></div>
+            <div class="ba-img"><img src="{{result.previewImageUrl}}" alt="After FUE hair transplant in {{ucwords city.name}}"><span class="ba-label after">Before - After</span></div>
           </div>
           <div class="ba-info">
             <h3>{{result.technique}} — {{result.graftCount}} Grafts</h3>
@@ -72,7 +72,7 @@
       </div>
 
       <div style="text-align: center; margin-top: 40px;">
-        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-outline">View all {{city.name}} results →</a>
+        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-outline">View all {{ucwords city.name}} results →</a>
       </div>
     </div>
   </section>
@@ -82,14 +82,14 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">Budget Planning</span>
-        <h2>Hair Transplant Cost in {{city.name}}</h2>
-        <p>{{city.name}} packages are usually quoted as a flat all-in price rather than per graft. These ranges reflect the quotes reported by patients in our documented cases.</p>
+        <h2>Hair Transplant Cost in {{ucwords city.name}}</h2>
+        <p>{{ucwords city.name}} packages are usually quoted as a flat all-in price rather than per graft. These ranges reflect the quotes reported by patients in our documented cases.</p>
       </div>
 
       <div class="cost-grid">
         <div class="detail-card fade-in">
           <h3>Typical price ranges</h3>
-          <p class="cost-note">All-inclusive packages quoted in {{city.name}}, 2026.</p>
+          <p class="cost-note">All-inclusive packages quoted in {{ucwords city.name}}, 2026.</p>
           <table class="pricing-table">
             <thead>
               <tr><th>Package tier</th><th>Price range</th><th>Usually includes</th></tr>
@@ -104,7 +104,7 @@
 
         <div class="detail-card fade-in">
           <h3>Cost by graft count</h3>
-          <p class="cost-note">Guide prices at a mid-range {{city.name}} clinic.</p>
+          <p class="cost-note">Guide prices at a mid-range {{ucwords city.name}} clinic.</p>
           <table class="pricing-table">
             <thead>
               <tr><th>Grafts</th><th>Typical cost</th><th>Best suited for</th></tr>
@@ -147,7 +147,7 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">{{hospitals.pagination.total}} Clinics Tracked</span>
-        <h2>Hair Transplant Clinics in {{city.name}}</h2>
+        <h2>Hair Transplant Clinics in {{ucwords city.name}}</h2>
         <p>Ranked by the number of documented cases in our gallery — not by advertising spend.</p>
       </div>
 
@@ -165,7 +165,7 @@
             <h3>{{hospital.name}}</h3>
             <div class="location">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Şişli, {{city.name}}
+              Şişli, {{ucwords city.name}}
             </div>
             <div class="tags">
               {{#each  (split hospital.techniques ",")}}
@@ -185,7 +185,7 @@
       </div>
 
       <div style="text-align: center; margin-top: 40px;">
-        <a href="/hair-transplant/{{city.slug}}/clinics" class="btn btn-outline">View {{city.name}} clinics →</a>
+        <a href="/hair-transplant/{{city.slug}}/clinics" class="btn btn-outline">View {{ucwords city.name}} clinics →</a>
       </div>
     </div>
   </section>
@@ -195,15 +195,15 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">By Technique</span>
-        <h2>DHI and FUE in {{city.name}}</h2>
-        <p>Both techniques are offered by almost every {{city.name}} clinic. The difference shows up in density, session limits and price.</p>
+        <h2>DHI and FUE in {{ucwords city.name}}</h2>
+        <p>Both techniques are offered by almost every {{ucwords city.name}} clinic. The difference shows up in density, session limits and price.</p>
       </div>
 
       <div class="technique-grid">
         <div class="technique-card fade-in">
           <span class="badge badge-blue">DHI</span>
-          <h3>DHI Hair Transplant in {{city.name}}</h3>
-          <p>Follicles are extracted and implanted in one step with a Choi implanter pen, giving tight control over angle and depth. {{city.name}} clinics use it most often for hairlines, temple points and unshaven sessions where the graft count stays under about 3,000.</p>
+          <h3>DHI Hair Transplant in {{ucwords city.name}}</h3>
+          <p>Follicles are extracted and implanted in one step with a Choi implanter pen, giving tight control over angle and depth. {{ucwords city.name}} clinics use it most often for hairlines, temple points and unshaven sessions where the graft count stays under about 3,000.</p>
           <ul class="technique-list">
             <li><strong>Typical range:</strong> 1,500 – 3,000 grafts</li>
             <li><strong>Cost for 3,000:</strong> $3,200 – $4,800</li>
@@ -215,8 +215,8 @@
 
         <div class="technique-card fade-in">
           <span class="badge badge-blue">FUE</span>
-          <h3>FUE Hair Transplant in {{city.name}}</h3>
-          <p>Grafts are harvested individually, channels are opened — often with a sapphire blade — and then implanted. It remains the workhorse technique in {{city.name}} because it handles large sessions covering the hairline, mid-scalp and crown in a single day.</p>
+          <h3>FUE Hair Transplant in {{ucwords city.name}}</h3>
+          <p>Grafts are harvested individually, channels are opened — often with a sapphire blade — and then implanted. It remains the workhorse technique in {{ucwords city.name}} because it handles large sessions covering the hairline, mid-scalp and crown in a single day.</p>
           <ul class="technique-list">
             <li><strong>Typical range:</strong> 2,000 – 4,500+ grafts</li>
             <li><strong>Cost for 3,000:</strong> $2,400 – $3,600</li>
@@ -235,7 +235,7 @@
       <div class="section-header fade-in">
         <span class="label">Before You Book</span>
         <h2>What to Know Before Choosing a Clinic</h2>
-        <p>{{city.name}} has excellent surgeons and aggressive resellers in the same neighbourhood. These are the questions that separate them.</p>
+        <p>{{ucwords city.name}} has excellent surgeons and aggressive resellers in the same neighbourhood. These are the questions that separate them.</p>
       </div>
 
       <div class="grid-3">
@@ -278,8 +278,8 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">Step by Step</span>
-        <h2>Hair Transplant Process in {{city.name}}</h2>
-        <p>A typical {{city.name}} trip runs three to four days from landing to flying home, followed by a year of monitored growth.</p>
+        <h2>Hair Transplant Process in {{ucwords city.name}}</h2>
+        <p>A typical {{ucwords city.name}} trip runs three to four days from landing to flying home, followed by a year of monitored growth.</p>
       </div>
 
       <div class="detail-card fade-in" style="max-width: 860px; margin: 0 auto;">
@@ -329,18 +329,18 @@
     <div class="container">
       <div class="section-header fade-in">
         <span class="label">FAQ</span>
-        <h2>{{city.name}} Hair Transplant Questions</h2>
-        <p>The questions patients ask most often before booking a trip to {{city.name}}.</p>
+        <h2>{{ucwords city.name}} Hair Transplant Questions</h2>
+        <p>The questions patients ask most often before booking a trip to {{ucwords city.name}}.</p>
       </div>
 
       <div class="detail-card fade-in" style="max-width: 860px; margin: 0 auto;">
         <div class="faq-item active">
           <div class="faq-question">
-            <span>Why is a hair transplant in {{city.name}} so much cheaper?</span>
+            <span>Why is a hair transplant in {{ucwords city.name}} so much cheaper?</span>
             <span class="faq-toggle">+</span>
           </div>
           <div class="faq-answer">
-            <p>Lower staff and facility costs, a favourable exchange rate and very high procedure volume let {{city.name}} clinics charge a fraction of US or UK prices. The saving comes from the local cost base, not from cutting the number of grafts — but it also means the market is crowded, so verifying the surgeon matters more than in a smaller market.</p>
+            <p>Lower staff and facility costs, a favourable exchange rate and very high procedure volume let {{ucwords city.name}} clinics charge a fraction of US or UK prices. The saving comes from the local cost base, not from cutting the number of grafts — but it also means the market is crowded, so verifying the surgeon matters more than in a smaller market.</p>
           </div>
         </div>
         <div class="faq-item">
@@ -395,11 +395,11 @@
   <!-- CTA -->
   <section class="cta-section">
     <div class="container">
-      <h2>Compare {{city.name}} Clinics on Evidence, Not Ads</h2>
-      <p>Tell us your hair loss pattern and budget, and we will point you to the {{city.name}} clinics and surgeons with documented cases that match.</p>
+      <h2>Compare {{ucwords city.name}} Clinics on Evidence, Not Ads</h2>
+      <p>Tell us your hair loss pattern and budget, and we will point you to the {{ucwords city.name}} clinics and surgeons with documented cases that match.</p>
       <div class="cta-actions">
         <a href="/contact" class="btn btn-primary">Get Free Consultation</a>
-        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-outline" style="border-color: #fff; color: #fff;">Explore {{city.name}} Results</a>
+        <a href="/hair-transplant/{{city.slug}}/results" class="btn btn-outline" style="border-color: #fff; color: #fff;">Explore {{ucwords city.name}} Results</a>
       </div>
     </div>
   </section>

@@ -17,6 +17,7 @@ import { AppQueueService } from 'src/application/shared/modules/app-queue/app-qu
 import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/supported-event-types.enum';
 import { HospitalService } from '../hospital/hospital.service';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
+import { StringHelper } from 'src/application/shared/helpers/String';
 
 @Controller()
 export class OtherController {
@@ -146,20 +147,19 @@ export class OtherController {
       city,
       hospitals: hospitals,
       seo: {
-        title: `Hair Transplant in ${city.name}: Clinics, Costs & Real Results | HairResult.`,
+        title: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results | HairResult.`,
         keywords:
           'about medical care, hair transplant platform, healthcare marketplace, clinic transparency',
-        description:
-          'Learn about Medical Care, our mission, and how we help users discover trusted clinics and real treatment outcomes.',
-        canonical: '/about',
+        description: `Learn about Medical Care in ${StringHelper.capitalizeFirstLetter(city.name)}, our mission, and how we help users discover trusted clinics and real treatment outcomes.`,
+        canonical: '/hair-transplant/' + city.slug,
         ogType: 'website',
         ogTitle: 'About Us | Medical Care',
         ogDescription:
           'Meet the Medical Care platform and our mission to improve patient decision-making.',
-        ogUrl: '/about',
+        ogUrl: '/hair-transplant/' + city.slug,
         twitterTitle: 'About Us | Medical Care',
         twitterDescription:
-          'Learn more about the Medical Care platform and our mission.',
+          'Learn more about the hair transplant platform and our mission.',
       },
     });
   }

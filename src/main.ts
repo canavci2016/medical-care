@@ -7,6 +7,7 @@ import hbs from 'hbs';
 import session from 'express-session';
 import { ValidationPipe } from '@nestjs/common';
 import { formatDistanceToNow } from 'date-fns';
+import { StringHelper } from './application/shared/helpers/String';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -94,6 +95,10 @@ async function bootstrap() {
         addSuffix: true,
       })
       : '';
+  });
+
+  hbs.registerHelper('ucwords', function (str: string) {
+    return StringHelper.capitalizeFirstLetter(str);
   });
 
   app.use(
