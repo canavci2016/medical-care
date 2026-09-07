@@ -136,8 +136,13 @@ export class OtherController {
       page: { page: 1, limit: 3 },
     });
 
+    const doctors = {
+      pagination: { total: 0 },
+    };
+
     return res.render('city', {
       results,
+      doctors,
       city,
       hospitals: hospitals,
       seo: {
