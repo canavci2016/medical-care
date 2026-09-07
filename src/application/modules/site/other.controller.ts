@@ -150,16 +150,14 @@ export class OtherController {
         title: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results | HairResult.`,
         keywords:
           'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
-        description: `Learn about HairResult in ${StringHelper.capitalizeFirstLetter(city.name)}, our mission, and how we help users discover trusted clinics and real treatment outcomes.`,
+        description: `Compare hair transplant clinics in ${StringHelper.capitalizeFirstLetter(city.name)},real before-and-after results, DHI and FUE procedures, graft counts, costs and patient outcomes.`,
         canonical: '/hair-transplant/' + city.slug,
         ogType: 'website',
-        ogTitle: 'About Us | HairResult',
-        ogDescription:
-          'Meet the HairResult platform and our mission to improve patient decision-making.',
+        ogTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results`,
+        ogDescription: `Explore documented hair transplant results, clinics, costs, DHI and FUE procedures in ${StringHelper.capitalizeFirstLetter(city.name)}.`,
         ogUrl: '/hair-transplant/' + city.slug,
-        twitterTitle: 'About Us | HairResult',
-        twitterDescription:
-          'Learn more about the HairResult platform and our mission.',
+        twitterTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results`,
+        twitterDescription: `Compare documented hair transplant results, clinics and costs in ${StringHelper.capitalizeFirstLetter(city.name)}.`,
       },
     });
   }

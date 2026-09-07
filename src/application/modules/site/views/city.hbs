@@ -56,7 +56,7 @@
         {{#each results.data as |result|}}
         <a href="/results/{{result.id}}" class="ba-card fade-in">
           <div class="ba-images">
-            <div class="ba-img"><img src="{{result.previewImageUrl}}" alt="After FUE hair transplant in {{ucwords city.name}}"><span class="ba-label after">Before - After</span></div>
+            <div class="ba-img"><img src="{{result.previewImageUrl}}" alt="{{result.graftCount}} graft {{result.technique}} hair transplant result at {{result.hospital.name}} in {{ucwords ../city.name}}"><span class="ba-label after">Before - After</span></div>
           </div>
           <div class="ba-info">
             <h3>{{result.technique}} — {{result.graftCount}} Grafts</h3>
@@ -83,7 +83,7 @@
       <div class="section-header fade-in">
         <span class="label">Budget Planning</span>
         <h2>Hair Transplant Cost in {{ucwords city.name}}</h2>
-        <p>{{ucwords city.name}} packages are usually quoted as a flat all-in price rather than per graft. These ranges reflect the quotes reported by patients in our documented cases.</p>
+        <p>{{ucwords city.name}} packages are usually quoted as a flat all-in price rather than per graft. Pricing data based on X documented Istanbul cases with reported costs. Last updated September 2026.</p>
       </div>
 
       <div class="cost-grid">
