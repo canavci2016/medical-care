@@ -156,18 +156,18 @@ export class HospitalController {
       filters,
       seo: {
         h1Title: 'Hair Transplant Clinics',
-        title: 'Hospitals | HairResult',
+        title: 'Clinics | HairResult',
         keywords:
           'hair transplant clinics, best hair clinics, clinic ratings, hair restoration hospitals, hospital directory',
         description:
           'Browse verified hospitals and clinics for hair transplant procedures. Filter by city, rating, and sorting options.',
-        canonical: '/hospitals',
+        canonical: '/clinics',
         ogType: 'website',
-        ogTitle: 'Hospitals | HairResult',
+        ogTitle: 'Clinics | HairResult',
         ogDescription:
           'Discover and compare hair transplant clinics by rating and location.',
-        ogUrl: '/hospitals',
-        twitterTitle: 'Hospitals | HairResult',
+        ogUrl: '/clinics',
+        twitterTitle: 'Clinics | HairResult',
         twitterDescription:
           'Compare top hair transplant clinics and clinics in one place.',
         ...seoProps,
