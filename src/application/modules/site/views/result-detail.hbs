@@ -18,10 +18,12 @@
       <!-- Profile Header -->
       <div class="profile-header">
         <div class="profile-image">
-          <img src="{{result.previewImageUrl}}" alt="Patient Result">
+          <img src="{{result.previewImageUrl}}" alt="Before and After {{result.graftCount}} graft  {{result.technique}} {{result.procedureType}} transplant at {{result.hospital.name}}">
         </div>
         <div class="profile-info">
-          <h1>{{result.technique}} {{result.procedureType}} Transplant — {{result.graftCount}} Grafts</h1>
+          <h1>
+            {{result.graftCount}} Graft {{result.procedureType}} {{result.technique}} Transplant Result
+            </h1>
           <p class="subtitle">Performed at {{result.hospital.name}}</p>
           <div class="profile-badges">
             <span class="badge badge-green">✓ Verified Result</span>
@@ -45,7 +47,7 @@
             <div class="result-gallery">
               <!-- Main Image Viewer -->
               <div class="result-gallery-main">
-                <img id="galleryMainImg" src="{{result.previewImageUrl}}" alt="Before - Front View">
+                <img id="galleryMainImg" src="{{result.previewImageUrl}}" alt="Before and After {{result.graftCount}} graft  {{result.technique}} {{result.procedureType}} transplant at {{result.hospital.name}}">
                 <span class="result-gallery-caption" id="galleryCaption">Before — Front View</span>
                 <button class="gallery-nav gallery-prev" id="galleryPrev">‹</button>
                 <button class="gallery-nav gallery-next" id="galleryNext">›</button>
@@ -54,7 +56,7 @@
               <div class="result-gallery-thumbs" id="galleryThumbs">
                 {{#each result.images}}
                   <div class="result-thumb {{#if @first}}active{{/if}}" data-index="{{@index}}">
-                    <img src="{{this}}" alt="Gallery Image {{@index}}">
+                    <img src="{{this}}" alt="Before and After {{result.graftCount}} graft  {{result.technique}} {{result.procedureType}} transplant at {{result.hospital.name}}">
                     <span class="thumb-label {{#if @first}}before{{else}}after{{/if}}">{{#if @first}}Before{{else}}After{{/if}}</span>
                   </div>
                 {{/each}}
@@ -194,7 +196,7 @@
               <h4>{{technique}} Technique — {{graftCount}} Grafts</h4>
               <div class="ba-meta">
                 <span>👨‍⚕️ Unknown Doctor</span>
-                <span>📅 10 months post-op</span>
+                <span>📅 {{relative_date this.operationDate}}</span>
               </div>
               <span class="view-detail-link">View Full Case →</span>
             </div>
