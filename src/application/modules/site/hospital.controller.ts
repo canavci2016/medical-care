@@ -215,6 +215,11 @@ export class HospitalController {
         (total, pt) => total + parseInt(pt.count, 10),
         0,
       ),
+      seo: {
+        h1Title: `${hospital.name} Transplant Results & Reviews | HairResult.`,
+        title: `${hospital.name} Hair Transplant Results & Reviews | HairResult.`,
+        description: `${hospital.name} Hair Transplant Results & Reviews | HairResult.`,
+      },
     });
   }
 }
