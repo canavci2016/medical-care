@@ -193,6 +193,20 @@ export class HospitalController {
         hospitalId: hospital.id,
       });
 
+    if (hospital.instagramUrl) {
+      hospital.instagramUrl = StringHelper.attachUtmSource(
+        hospital.instagramUrl,
+        'hairresult',
+      );
+    }
+
+    if (hospital.website) {
+      hospital.website = StringHelper.attachUtmSource(
+        hospital.website,
+        'hairresult',
+      );
+    }
+
     const { data: latestHairResults } =
       await this.hospitalHairResultService.findAll({
         hospitalId: hospital.id,
