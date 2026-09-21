@@ -185,6 +185,10 @@
                 class='info-value'
               ><a
                   href='{{hospital.instagramUrl}}'
+                    onclick="gtag('event', 'clinic_instagram_url', {
+    destination_url: this.href,
+    button_name: 'Visit Clinic Instagram Page'
+  });"
                   target='_blank'
                 >{{hospital.instagramUrl}}</a></span></div>
           </div>
