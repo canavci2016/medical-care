@@ -309,6 +309,10 @@ export class HospitalHairResultController {
     });
 
     return res.render('result-detail', {
+      seo: {
+        h1Title: `${result.graftCount} Graft ${result.procedureType} ${result.technique} Transplant Result`,
+        title: ` ${result.graftCount} Graft ${result.procedureType} ${result.technique} Transplant Result | HairResult`,
+      },
       similarResults: similarResults.data.map((r) => ({
         id: r.id,
         verified: r.verified,
