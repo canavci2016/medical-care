@@ -28,8 +28,7 @@ export class OtherController {
     private readonly hairResultService: HospitalHairResultService,
   ) { }
 
-  @Get('/contact')
-  @Get('/about')
+  @Get(['/contact', '/about'])
   about(@Req() req, @Res() res: Response) {
     return res.render('about', {
       styles: ['about.css'],
@@ -122,7 +121,6 @@ export class OtherController {
   }
 
   @Get('/hair-transplant/:citySlug')
-  @Get('/about')
   async cityDetail(
     @Req() req,
     @Res() res: Response,
