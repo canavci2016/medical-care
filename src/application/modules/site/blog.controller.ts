@@ -11,7 +11,7 @@ export class BlogController {
   constructor(
     private readonly blogService: BlogService,
     private readonly categoryService: BlogCategoryService,
-  ) {}
+  ) { }
 
   @Get()
   async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
@@ -94,6 +94,10 @@ export class BlogController {
     });
 
     return res.render('blog-detail', {
+      seo: {
+        title: blog.metaTitle,
+        ogTitle: blog.metaTitle,
+      },
       blog,
       recentBlogs,
       styles: ['blog-detail.css'],
