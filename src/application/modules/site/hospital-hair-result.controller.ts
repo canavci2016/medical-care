@@ -242,11 +242,11 @@ export class HospitalHairResultController {
         }),
       ),
       graftCounts: Object.entries({
-        '1000+': GraftCountEnum.ONE_PLUS,
-        '2000+': GraftCountEnum.TWO_PLUS,
-        '3000+': GraftCountEnum.THREE_PLUS,
-        '4000+': GraftCountEnum.FOUR_PLUS,
-        '5000+': GraftCountEnum.FIVE_PLUS,
+        '[1,000] - [2,000]': GraftCountEnum.ONE_PLUS,
+        '[2,000] - [3,000]': GraftCountEnum.TWO_PLUS,
+        '[3,000] - [4,000]': GraftCountEnum.THREE_PLUS,
+        '[4,000] - [5,000]': GraftCountEnum.FOUR_PLUS,
+        '[5,000+]': GraftCountEnum.FIVE_PLUS,
       }).map(([key, value]) => ({
         label: key,
         value,
