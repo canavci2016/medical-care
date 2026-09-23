@@ -185,7 +185,7 @@
                 class='info-value'
               ><a
                   href='{{hospital.instagramUrl}}'
-                  onclick="gtag('event', 'clinic_instagram_url', {
+                  onclick="gtag('event', 'clinic_instagram_url_click', {
     clinic_id: '{{hospital.id}}',
     clinic_name: '{{hospital.name}}',
     destination_url: this.href,
@@ -201,7 +201,7 @@
               ><a
                   href='{{hospital.website}}'
                   target='_blank'
-                   onclick="gtag('event', 'clinic_website_url', {
+                   onclick="gtag('event', 'clinic_website_url_click', {
     clinic_id: '{{hospital.id}}',
     clinic_name: '{{hospital.name}}',
     destination_url: this.href,
