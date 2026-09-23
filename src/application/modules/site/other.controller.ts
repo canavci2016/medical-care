@@ -132,6 +132,7 @@ export class OtherController {
       page: { page: 1, limit: 3 },
     });
     const results = await this.hairResultService.findAll({
+      cityId: { eq: city.id },
       page: { page: 1, limit: 3 },
     });
 

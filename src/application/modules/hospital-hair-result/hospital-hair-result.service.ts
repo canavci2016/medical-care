@@ -104,6 +104,7 @@ export class HospitalHairResultService {
   async findAll(
     options: Partial<{
       hospitalId: string | string[];
+      cityId: Query<string>;
       procedureType: string | Query;
       technique: string | Query;
       graftCount: Pick<Query, 'gte'>;
@@ -160,6 +161,13 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         hospitalId: In(hospitalIds),
+      };
+    }
+
+    if (options.cityId?.eq) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        hospital: { cityId: options.cityId.eq },
       };
     }
 
