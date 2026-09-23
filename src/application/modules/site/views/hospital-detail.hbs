@@ -186,6 +186,9 @@
               ><a
                   href='{{hospital.instagramUrl}}'
                   onclick="gtag('event', 'clinic_instagram_url', {
+    clinic_id: '{{hospital.id}}',
+    clinic_name: '{{hospital.name}}',
+    result_id: '{{result.id}}',
     destination_url: this.href,
     button_name: 'Visit Clinic Instagram Page'
   });"
@@ -200,8 +203,11 @@
                   href='{{hospital.website}}'
                   target='_blank'
                    onclick="gtag('event', 'clinic_website_url', {
+    clinic_id: '{{hospital.id}}',
+    clinic_name: '{{hospital.name}}',
+    result_id: '{{result.id}}',           
     destination_url: this.href,
-    button_name: 'Visit Clinic Website'
+    button_name: 'Visit Clinic Website',
   });"
                 >{{hospital.website}}</a></span></div>
           </div>
