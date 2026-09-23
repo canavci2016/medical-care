@@ -231,8 +231,8 @@ export class HospitalController {
       ),
       seo: {
         h1Title: `${hospital.name} Transplant Results & Reviews | HairResult.`,
-        title: `${hospital.name} Hair Transplant Results & Reviews | HairResult.`,
-        description: `${hospital.name} Hair Transplant Results & Reviews | HairResult.`,
+        title: `${hospital.name.replace(/hair transplant/gi, '')} Hair Transplant Results & Reviews | HairResult.`,
+        description: `${hospital.name.replace(/hair transplant/gi, '')} Hair Transplant Results & Reviews | HairResult.`,
       },
     });
   }
