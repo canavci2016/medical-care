@@ -136,19 +136,21 @@
           <h2>Patient Results</h2>
           <div class='grid-2' style='margin-top: 16px;'>
             {{#each latestHairResults}}
+              <a href="/results/{{this.id}}">
               <div class='ba-card'>
                 <div class='ba-images'>
                   <div class='ba-img'><img
                       src='{{this.previewImageUrl}}'
-                      alt='Before'
+                      alt='{{this.graftCount}} grafts {{this.technique}} {{this.procedureType}} transplant result before and after'
                     /><span class='ba-label before'>Before</span></div>
                 </div>
                 <div class='ba-info'>
-                  <h4>{{this.technique}} — {{this.graftCount}} Grafts</h4>
+                  <h4>{{this.technique}} {{this.procedureType}} transplant  — {{this.graftCount}} Grafts</h4>
                   <div class='ba-meta'><span>👨‍⚕️ Unknown doctor</span><span
                     >{{relative_date this.operationDate}}</span></div>
                 </div>
               </div>
+              </a>
             {{/each}}
           </div>
           <div style='text-align: center; margin-top: 20px;'>

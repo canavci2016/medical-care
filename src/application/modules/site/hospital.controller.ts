@@ -221,7 +221,8 @@ export class HospitalController {
       latestHairResults: latestHairResults.map((hr) => ({
         id: hr.id,
         graftCount: hr.graftCount,
-        technique: hr.procedureType,
+        technique: hr.technique,
+        procedureType: hr.procedureType,
         operationDate: hr.operationDate,
         previewImageUrl: hr.previewImageUrl,
       })),
