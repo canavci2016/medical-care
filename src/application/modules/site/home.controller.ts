@@ -12,54 +12,29 @@ export class HomeController {
 
   @Get()
   async getHomeData(@Res() res: Response) {
-    const {
-      pagination: { total: hospitalCount },
-      data: hospitals,
-    } = await this.hospitalService.paginated({
+    const hospitals = await this.hospitalService.paginated({
       orderBy: 'createdAt',
       orderDirection: 'desc',
       page: { limit: 3, page: 1 },
     });
 
-    const {
-      data: randomHairResults,
-      pagination: { total: hairResultCount },
-    } = await this.hospitalHairResultService.findAll({
+    const results = await this.hospitalHairResultService.findAll({
       page: { limit: 3, page: 1 },
     });
 
-    const randomHospitals = await this.hospitalService.findAll({
-      id: randomHairResults.map((r) => r.hospitalId),
-    });
-
-    const results = randomHairResults.map((result) => {
-      return {
-        id: result.id,
-        hospital:
-          randomHospitals.find((h) => h.id === result.hospitalId) || null,
-        verified: result.verified,
-        graftCount: result.graftCount,
-        image: result.previewImageUrl,
-        technique: result.technique,
-        operationDate: result.operationDate,
-      };
-    });
-
     const reviews: any[] = [];
-    for (const hospital of hospitals) {
+    for (const hospital of hospitals.data) {
       reviews.push(...(hospital.reviews || []));
     }
 
-    for (const hospital of randomHospitals) {
-      reviews.push(...(hospital.reviews || []));
+    for (const res of results.data) {
+      reviews.push(...(res.hospital?.reviews || []));
     }
 
     return res.render('index', {
       currentPage: 'home',
-      hospitalCount,
       hospitals,
-      results,
-      hairResultCount,
+      results: results,
       reviews: reviews.filter((r) => r!.comment).slice(0, 3),
       seo: {
         title: 'Real Hair Transplant Results | HairResult',

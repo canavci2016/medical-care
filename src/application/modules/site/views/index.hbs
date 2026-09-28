@@ -8,11 +8,11 @@
       <p>See real photos from verified patients across our partner hospitals.</p>
     </div>
     <div class='grid-3'>
-      {{#each results}}
+      {{#each results.data}}
       <a href='/results/{{this.id}}' class='card fade-in'>
         <div class='card-image'>
           <img
-            src='{{this.image}}'
+            src='{{this.previewImageUrl}}'
             alt='FUE Hair Transplant Result'
           />
           <div class='overlay'>
@@ -48,7 +48,7 @@
         and cutting-edge technology.</p>
     </div>
     <div class='grid-3'>
-      {{#each hospitals}}
+      {{#each hospitals.data}}
         <!-- Hospital 1 -->
         <a href='/clinics/{{this.slug}}' class='card fade-in'>
           <div class='card-image'>
@@ -101,11 +101,11 @@
 <section class='stats-bar'>
   <div class='container'>
     <div class='stat-item fade-in'>
-      <span class='stat-number' data-count='{{hospitalCount}}'>{{hospitalCount}}</span>
+      <span class='stat-number' data-count='{{hospitals.pagination.total}}'>{{hospitals.pagination.total}}</span>
       <span class='stat-label'>Partner Hospitals</span>
     </div>
     <div class='stat-item fade-in'>
-      <span class='stat-number' data-count='{{hairResultCount}}'>{{hairResultCount}}</span>
+      <span class='stat-number' data-count='{{results.pagination.total}}'>{{results.pagination.total}}</span>
       <span class='stat-label'>Successful Procedures</span>
     </div>
     <div class='stat-item fade-in'>
