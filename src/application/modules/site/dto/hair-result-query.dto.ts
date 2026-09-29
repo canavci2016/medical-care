@@ -19,7 +19,7 @@ export class HairResultQueryDto {
 
   @IsOptional()
   @ValidateIf((o: HairResultQueryDto) => o.technique !== '')
-  @IsIn(Object.keys(HairTransplantTechnique))
+  @IsIn(Object.values(HairTransplantTechnique))
   technique?: string;
 
   @IsOptional()

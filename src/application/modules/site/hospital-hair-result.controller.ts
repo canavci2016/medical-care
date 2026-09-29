@@ -235,7 +235,7 @@ export class HospitalHairResultController {
         selected: query.procedure === value,
       })),
       techniques: Object.entries(HairTransplantTechnique).map(
-        ([value, key]) => ({
+        ([key, value]) => ({
           label: key,
           value,
           selected: query.technique === value,
