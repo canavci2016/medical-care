@@ -48,7 +48,10 @@ export class HospitalHairResultController {
     } else if (query.graftCount) {
       h1Title = `${query.graftCount} Graft Hair Transplant Result - 12 Months | HairResult`;
     } else if (query.technique) {
-      h1Title = `${query.technique.toUpperCase().split('_').join(' ')} Hair Transplant Result - 12 Months | HairResult`;
+      const res = Object.entries(HairTransplantTechnique).find(
+        ([key, value]) => value === query.technique,
+      );
+      h1Title = `${res?.[0]} Hair Transplant Result - 12 Months | HairResult`;
     }
 
     return this.renderResults(query, res, {
