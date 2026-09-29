@@ -262,10 +262,6 @@ export class HospitalHairResultController {
           sortKey: parseInt(ar.ageRange.split('-')[0], 10),
         }))
         .sort((a, b) => a.sortKey - b.sortKey),
-      verified: {
-        label: 'Verified only',
-        selected: query.verified === 'on',
-      },
       hospitalId: query.hospitalId || '',
     };
 

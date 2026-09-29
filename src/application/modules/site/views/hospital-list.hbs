@@ -15,6 +15,21 @@
 <!-- FILTER + LISTING -->
 <section class='section'>
   <div class='container'>
+
+<div class="filter-container">
+
+
+  <button
+    type="button"
+    class="filter-toggle"
+    id="filterToggle"
+    aria-expanded="true"
+    aria-controls="filterBar"
+  >
+    <span>Filters ({{selectedFilterCount}})</span>
+    <span class="filter-toggle-icon">⌃</span>
+  </button>
+
     <form class='filter-bar' method='GET' action='hospitals'>
       <div class='search-input'>
         <svg
@@ -50,8 +65,9 @@
         <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
         {{/each}}
       </select>
-      <button type='submit' class='btn btn-primary btn-sm'>Search</button>
+      <button type='submit' class='btn btn-primary btn-sm'>Apply</button>
     </form>
+  </div>
 
     <div class='grid-3' id='hospitalsGrid'>
       <!-- Hospital 1 -->
@@ -123,3 +139,28 @@
     </div>
   </div>
 </section>
+<script>
+  $(document).ready(function() {
+    const filterContainer = $('.filter-container');
+    const filterToggle = $('#filterToggle');
+
+if (window.innerWidth <= 768) {
+    filterContainer.addClass('collapsed');
+    filterToggle.attr('aria-expanded', 'false');
+}
+
+
+filterToggle.on('click', function () {
+
+    const isCollapsed = filterContainer.hasClass('collapsed');
+
+    filterContainer.toggleClass('collapsed');
+
+    filterToggle.attr(
+        'aria-expanded',
+        isCollapsed ? 'true' : 'false'
+    );
+
+});
+});
+</script>

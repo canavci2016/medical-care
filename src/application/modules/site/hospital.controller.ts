@@ -149,10 +149,20 @@ export class HospitalController {
       })),
     };
 
+    const selectedFilterCount = ((queryObj) => {
+      let count = 0;
+      if (queryObj.name) count++;
+      if (queryObj.city) count++;
+      if (queryObj.country) count++;
+      if (queryObj.rating) count++;
+      return count;
+    })(query);
+
     return res.render('hospital-list', {
       currentPage: 'hospitals',
       hospitals,
       pagination,
+      selectedFilterCount: selectedFilterCount,
       filters,
       seo: {
         h1Title: 'Hair Transplant Clinics',
