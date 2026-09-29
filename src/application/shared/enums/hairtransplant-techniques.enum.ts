@@ -3,4 +3,5 @@ export enum HairTransplantTechnique {
   DHI = 'DHI',
   SAFIR = 'SAFIR',
   HYBRID = 'HYBRID',
+  SAPPHIRE_FUE = 'SAPPHIRE FUE',
 }
