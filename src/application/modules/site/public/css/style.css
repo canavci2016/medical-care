@@ -2757,6 +2757,16 @@ a.ba-card:hover .view-detail-link {
 }
 
 
+.results-count{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  padding-bottom:14px;
+  font-size:14px;
+  color:var(--text-secondary);
+}
+
 
 /* Filter Container */
 
