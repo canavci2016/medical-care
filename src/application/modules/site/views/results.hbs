@@ -2,8 +2,7 @@
 <section class='page-header'>
   <div class='container'>
     <h1>{{seo.h1Title}}</h1>
-    <p>Real before and after photos from verified patients. See the
-      transformations achieved by our partner hospitals.</p>
+    <p>Real before and after photos from verified patients.</p>
     <div class='breadcrumb'>
       <a href='/'>Home</a>
       <span class='sep'>›</span>
@@ -16,30 +15,68 @@
 <section class='section'>
   <div class='container'>
 
-   <form class='filter-bar' method='GET' action='/results'>
-      <select name='technique'>
-        <option value=''>Techniques</option>
-      {{#each filters.techniques}}
-        <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
-      {{/each}}
-      </select>
-      <select name='graftCount'>
-        <option value=''>Graft Counts</option>
-     {{#each filters.graftCounts}}
-        <option {{#if selected}}selected{{/if}} value='{{value}}'>{{label}}</option>
-      {{/each}}
-      </select>
-      <select name='ageRange'>
-        <option value=''>All Age ranges</option>
-         {{#each filters.ageRanges}}
-        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
-        {{/each}}
-      </select>
-      <select class="hospital-list select2" name="hospitalId" id="hospitalId" data-placeholder="Hospitals">
-      </select>
+<div class="filter-container">
 
-      <button type='submit' class='btn btn-primary btn-sm'>Search</button>
-    </form>
+  <button
+    type="button"
+    class="filter-toggle"
+    id="filterToggle"
+    aria-expanded="true"
+    aria-controls="filterBar"
+  >
+    <span>Filters</span>
+    <span class="filter-toggle-icon">⌃</span>
+  </button>
+
+  <form
+    class="filter-bar"
+    id="filterBar"
+    method="GET"
+    action="/results"
+  >
+    <select name="technique">
+      <option value="">Techniques</option>
+      {{#each filters.techniques}}
+        <option {{#if selected}}selected{{/if}} value="{{value}}">
+          {{label}}
+        </option>
+      {{/each}}
+    </select>
+
+    <select name="graftCount">
+      <option value="">Graft Counts</option>
+      {{#each filters.graftCounts}}
+        <option {{#if selected}}selected{{/if}} value="{{value}}">
+          {{label}}
+        </option>
+      {{/each}}
+    </select>
+
+    <select name="ageRange">
+      <option value="">All Age ranges</option>
+      {{#each filters.ageRanges}}
+        <option
+          value="{{this.value}}"
+          {{#if this.selected}}selected{{/if}}
+        >
+          {{this.label}}
+        </option>
+      {{/each}}
+    </select>
+
+    <select
+      class="hospital-list select2"
+      name="hospitalId"
+      id="hospitalId"
+      data-placeholder="Hospitals"
+    ></select>
+
+    <button type="submit" class="btn btn-primary btn-sm">
+      Search
+    </button>
+  </form>
+
+</div>
 
     <div class='grid-3' id='resultsGrid'>
 
@@ -166,6 +203,28 @@ $('#hospitalId').val(null).trigger('change');
 
 }
 
+
+const filterContainer = $('.filter-container');
+const filterToggle = $('#filterToggle');
+
+if (window.innerWidth <= 768) {
+    filterContainer.addClass('collapsed');
+    filterToggle.attr('aria-expanded', 'false');
+}
+
+
+filterToggle.on('click', function () {
+
+    const isCollapsed = filterContainer.hasClass('collapsed');
+
+    filterContainer.toggleClass('collapsed');
+
+    filterToggle.attr(
+        'aria-expanded',
+        isCollapsed ? 'true' : 'false'
+    );
+
+});
 
 });
 

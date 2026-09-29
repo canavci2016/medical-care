@@ -2755,3 +2755,56 @@ a.ba-card:hover .view-detail-link {
   width: 15%;
   height: 43px;
 }
+
+
+
+/* Filter Container */
+
+.filter-container {
+  margin-bottom: 24px;
+}
+
+.filter-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 18px;
+  margin-bottom: 10px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  background: #fff;
+  color: #111827;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.filter-toggle:hover {
+  background: #f9fafb;
+}
+
+.filter-toggle-icon {
+  font-size: 18px;
+  transition: transform 0.25s ease;
+}
+
+.filter-container.collapsed .filter-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.filter-container.collapsed .filter-bar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+.filter-container .filter-toggle{
+  display: none;
+}
+}
+/* Filter Container */
