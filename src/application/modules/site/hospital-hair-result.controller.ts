@@ -37,7 +37,7 @@ export class HospitalHairResultController {
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
     private readonly cityService: CityService,
-  ) { }
+  ) {}
 
   @Get('/results')
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
