@@ -228,6 +228,7 @@ export class HospitalHairResultController {
       return {
         ...result,
         procedure: result.procedureType.toUpperCase(),
+        technique: result.technique.split('_').join(' '),
       };
     });
 
