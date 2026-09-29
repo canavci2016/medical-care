@@ -269,11 +269,34 @@ export class HospitalHairResultController {
       hospitalId: query.hospitalId || '',
     };
 
+    const selectedFilterCount = ((queryObj) => {
+      let selectedFilterCount = 0;
+
+      if (queryObj.technique) {
+        selectedFilterCount = selectedFilterCount + 1;
+      }
+
+      if (queryObj?.graftCount) {
+        selectedFilterCount = selectedFilterCount + 1;
+      }
+
+      if (queryObj?.ageRange) {
+        selectedFilterCount = selectedFilterCount + 1;
+      }
+
+      if (queryObj.hospitalId) {
+        selectedFilterCount = selectedFilterCount + 1;
+      }
+
+      return selectedFilterCount;
+    })(query);
+
     return res.render('results', {
       currentPage: 'results',
       results,
       pagination: pagination,
       filters,
+      selectedFilterCount: selectedFilterCount,
       seo: {
         title: 'Hair Transplant Results | HairResult',
         h1Title: 'Hair Transplant Results',
