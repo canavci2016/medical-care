@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, In, Repository, Between } from 'typeorm';
+import {
+  FindManyOptions,
+  In,
+  Repository,
+  Between,
+  MoreThanOrEqual,
+} from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
 import {
@@ -110,9 +116,10 @@ export class HospitalHairResultService {
       graftCount: Pick<Query, 'gte'>;
       verified?: boolean;
       page: Required<Pagination>;
+      ageRange: string;
+      monthAfter: Query<number> | null;
       orderBy: string;
       orderDirection: 'asc' | 'desc';
-      ageRange: string;
     }> = {},
   ) {
     const optionsTyped: FindManyOptions<HospitalHairResult> = {
@@ -168,6 +175,21 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         hospital: { cityId: options.cityId.eq },
+      };
+    }
+
+    if (
+      typeof options.monthAfter?.lte === 'number' &&
+      typeof options.monthAfter?.gte === 'number'
+    ) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        monthsAfter: Between(options.monthAfter.gte, options.monthAfter.lte),
+      };
+    } else if (typeof options.monthAfter?.gte === 'number') {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        monthsAfter: MoreThanOrEqual(options.monthAfter.gte),
       };
     }
 

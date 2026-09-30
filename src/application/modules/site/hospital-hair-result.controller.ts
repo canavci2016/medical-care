@@ -3,8 +3,8 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
-  Query,
   Res,
+  Query,
 } from '@nestjs/common';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
@@ -16,6 +16,7 @@ import {
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
 import { HospitalService } from '../hospital/hospital.service';
+import { Query as QueryBuilder } from 'src/application/shared/interfaces/query.interface';
 
 interface SeoParamsInterface {
   title: string;
@@ -218,6 +219,20 @@ export class HospitalHairResultController {
               ? false
               : undefined,
         ageRange: query.ageRange,
+        monthAfter: (() => {
+          const parsedMonthAfter = query?.monthAfter?.split('-');
+          const monthAfterQueryBuilder: QueryBuilder<number> | null = {};
+          if (Array.isArray(parsedMonthAfter)) {
+            if (parsedMonthAfter?.[0]) {
+              monthAfterQueryBuilder.gte = parseInt(parsedMonthAfter[0], 10);
+            }
+
+            if (parsedMonthAfter?.[1]) {
+              monthAfterQueryBuilder.lte = parseInt(parsedMonthAfter[1], 10);
+            }
+          }
+          return monthAfterQueryBuilder;
+        })(),
         orderBy: query.orderBy || 'createdAt',
         orderDirection: query.orderDirection || 'desc',
       });
@@ -302,6 +317,10 @@ export class HospitalHairResultController {
         }
 
         if (queryObj.hospitalId) {
+          selectedFilterCount = selectedFilterCount + 1;
+        }
+
+        if (queryObj.monthAfter) {
           selectedFilterCount = selectedFilterCount + 1;
         }
 
