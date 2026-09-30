@@ -48,6 +48,10 @@ export class HairResultQueryDto {
 
   @IsOptional()
   @IsString()
+  monthAfter?: string;
+
+  @IsOptional()
+  @IsString()
   orderBy?: string;
 
   @IsOptional()

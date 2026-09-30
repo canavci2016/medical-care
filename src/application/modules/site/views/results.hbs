@@ -64,6 +64,18 @@
       {{/each}}
     </select>
 
+    <select name="monthAfter">
+      <option value="">Result timeline</option>
+      {{#each filters.monthAfter}}
+        <option
+          value="{{this.value}}"
+          {{#if this.selected}}selected{{/if}}
+        >
+          {{this.label}}
+        </option>
+      {{/each}}
+    </select>
+
     <select
       class="hospital-list select2"
       name="hospitalId"

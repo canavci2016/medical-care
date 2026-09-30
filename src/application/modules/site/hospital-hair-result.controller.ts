@@ -37,7 +37,7 @@ export class HospitalHairResultController {
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
     private readonly cityService: CityService,
-  ) {}
+  ) { }
 
   @Get('/results')
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
@@ -256,6 +256,18 @@ export class HospitalHairResultController {
         value,
         selected: query.graftCount === value,
       })),
+      monthAfter: Object.entries({
+        '0–3 months': '0-3',
+        '4–6 months': '4-6',
+        '7–9 months': '7-9',
+        '10–12 months': '10-12',
+        '12–18 months': '12-18',
+        '18+ months': '19',
+      }).map(([key, value]) => ({
+        label: key,
+        value,
+        selected: query.monthAfter === value,
+      })),
       ageRanges: ageRanges
         .filter((ar) => ar.ageRange !== null)
         .map((ar) => ({
@@ -269,34 +281,32 @@ export class HospitalHairResultController {
       hospitalId: query.hospitalId || '',
     };
 
-    const selectedFilterCount = ((queryObj) => {
-      let selectedFilterCount = 0;
-
-      if (queryObj.technique) {
-        selectedFilterCount = selectedFilterCount + 1;
-      }
-
-      if (queryObj?.graftCount) {
-        selectedFilterCount = selectedFilterCount + 1;
-      }
-
-      if (queryObj?.ageRange) {
-        selectedFilterCount = selectedFilterCount + 1;
-      }
-
-      if (queryObj.hospitalId) {
-        selectedFilterCount = selectedFilterCount + 1;
-      }
-
-      return selectedFilterCount;
-    })(query);
-
     return res.render('results', {
       currentPage: 'results',
       results,
       pagination: pagination,
       filters,
-      selectedFilterCount: selectedFilterCount,
+      selectedFilterCount: ((queryObj) => {
+        let selectedFilterCount = 0;
+
+        if (queryObj.technique) {
+          selectedFilterCount = selectedFilterCount + 1;
+        }
+
+        if (queryObj?.graftCount) {
+          selectedFilterCount = selectedFilterCount + 1;
+        }
+
+        if (queryObj?.ageRange) {
+          selectedFilterCount = selectedFilterCount + 1;
+        }
+
+        if (queryObj.hospitalId) {
+          selectedFilterCount = selectedFilterCount + 1;
+        }
+
+        return selectedFilterCount;
+      })(query),
       seo: {
         title: 'Hair Transplant Results | HairResult',
         h1Title: 'Hair Transplant Results',
