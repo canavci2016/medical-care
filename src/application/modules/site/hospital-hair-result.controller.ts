@@ -276,7 +276,7 @@ export class HospitalHairResultController {
         '4–6 months': '4-6',
         '7–9 months': '7-9',
         '10–12 months': '10-12',
-        '12–18 months': '12-18',
+        '13–18 months': '13-18',
         '18+ months': '19',
       }).map(([key, value]) => ({
         label: key,
