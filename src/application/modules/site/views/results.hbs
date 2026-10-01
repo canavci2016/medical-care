@@ -168,9 +168,9 @@ results
             // Query parameters will be ?search=[term]&page=[page]
             return query;
         },
-        processResults: function(data) {
+        processResults: function(data, params) {
             // Transforms the top-level key of the response object from 'items' to 'results'
-            
+
             let results= data.data.map(function(hospital) {
                     return {
                         id: hospital.id,
@@ -178,7 +178,11 @@ results
                     };
                 });
 
-        results=[...[{id: 'all-hospitals', text: 'All Hospitals'}],...results];
+            // Only show "All Hospitals" option on the first page and when there's no search term
+            if ((!params.page || params.page === 1) && !params.term) {
+                results = [{id: 'all-hospitals', text: 'All Hospitals'}, ...results];
+            }
+
             return {
                 results: results,
                 pagination: {
