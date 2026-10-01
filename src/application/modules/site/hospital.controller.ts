@@ -235,6 +235,7 @@ export class HospitalController {
         procedureType: hr.procedureType,
         operationDate: hr.operationDate,
         previewImageUrl: hr.previewImageUrl,
+        monthsAfter: hr.monthsAfter,
       })),
       totalProcedures: procedureTypes.reduce(
         (total, pt) => total + parseInt(pt.count, 10),

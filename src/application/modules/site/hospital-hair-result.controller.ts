@@ -375,6 +375,7 @@ export class HospitalHairResultController {
         imageUrl: r,
         sortedImages: r.sortedImages,
         previewImageUrl: r.previewImageUrl,
+        monthsAfter: r.monthsAfter,
       })),
       currentPage: 'results',
       imagesAsJsArray: result.sortedImages.map((img, i) => ({
