@@ -19,6 +19,8 @@ export class HomeController {
     });
 
     const results = await this.hospitalHairResultService.findAll({
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
       page: { limit: 3, page: 1 },
     });
 
