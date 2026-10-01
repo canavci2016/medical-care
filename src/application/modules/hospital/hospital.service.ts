@@ -214,7 +214,6 @@ export class HospitalService {
         updateHospitalDto.googlePlaceId,
       );
       updateHospitalDto.address = details.formattedAddress;
-      updateHospitalDto.phone = details.internationalPhoneNumber;
       updateHospitalDto.weekDayOpenings =
         details.regularOpeningHours?.weekdayDescriptions || [];
       updateHospitalDto.directionsUri =
