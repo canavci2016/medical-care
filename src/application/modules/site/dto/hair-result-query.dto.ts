@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HairProcedureType } from '../../hospital-hair-result/entities/hospital-hair-result.entity';
+import { Transform } from 'class-transformer';
 
 export class HairResultQueryDto {
   [key: string]: string | undefined;
@@ -40,6 +41,9 @@ export class HairResultQueryDto {
 
   @IsOptional()
   @IsString()
+  @Transform(({ value }: { value: string }) =>
+    value === 'all-hospitals' ? undefined : value,
+  )
   hospitalId?: string;
 
   @IsOptional()
