@@ -27,7 +27,6 @@ export class AppQueueConsumer extends WorkerHost {
         lastName?: string;
         email?: string;
         subject?: string;
-        technique?: string;
         message?: string;
       };
 
@@ -36,8 +35,6 @@ export class AppQueueConsumer extends WorkerHost {
       const text = [
         `Name: ${contact.firstName ?? ''} ${contact.lastName ?? ''}`.trim(),
         `Email: ${contact.email ?? 'N/A'}`,
-        `Technique: ${contact.technique ?? 'N/A'}`,
-        '',
         'Message:',
         contact.message ?? 'No message provided',
       ].join('\n');

@@ -58,7 +58,7 @@ export class OtherController {
     message: 'Too many contact requests. Please try again later.',
     maxAttempts: 5,
   })
-  @Post('contact')
+  @Post(['contact', 'about'])
   contact(
     @Req() req: Request,
     @Body()
@@ -67,23 +67,6 @@ export class OtherController {
       lastName: string;
       email?: string;
       subject?: string;
-      technique?: string; //interested technique
-      message?: string;
-    },
-  ) {
-    return this.enqueueContactSubmission(req, body);
-  }
-
-  @Post('about')
-  aboutContact(
-    @Req() req: Request,
-    @Body()
-    body: {
-      firstName: string;
-      lastName: string;
-      email?: string;
-      subject?: string;
-      technique?: string;
       message?: string;
     },
   ) {
