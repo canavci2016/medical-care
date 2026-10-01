@@ -213,11 +213,7 @@ export class HospitalService {
       const details = await this.googlePlaceService.getPlaceDetails(
         updateHospitalDto.googlePlaceId,
       );
-      updateHospitalDto.rating = details.rating;
-      updateHospitalDto.reviewCount = details.userRatingCount;
       updateHospitalDto.address = details.formattedAddress;
-      updateHospitalDto.name = details.displayName?.text || '';
-      updateHospitalDto.website = details.websiteUri;
       updateHospitalDto.phone = details.internationalPhoneNumber;
       updateHospitalDto.weekDayOpenings =
         details.regularOpeningHours?.weekdayDescriptions || [];
