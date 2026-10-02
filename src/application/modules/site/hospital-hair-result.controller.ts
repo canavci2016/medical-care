@@ -44,8 +44,16 @@ export class HospitalHairResultController {
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
     let h1Title = 'Hair Transplant Results';
 
-    if (query.graftCount && query.technique) {
+    let canonical: string | null = null;
+    if (query.hospitalId && query.graftCount && query.technique) {
       h1Title = `${query.graftCount} Graft ${query.technique.toUpperCase()} Hair Transplant Result - 12 Months | HairResult`;
+      const hospital = await this.hospitalService.findOneBy({
+        id: query.hospitalId,
+      });
+      canonical = `${process.env.APP_URL}/results/${hospital.slug}-${this.roundDownToThousand(parseInt(query.graftCount, 10))}-grafts-${query.technique}-${12}-months`;
+    } else if (query.graftCount && query.technique) {
+      h1Title = `${query.graftCount} Graft ${query.technique.toUpperCase()} Hair Transplant Result - 12 Months | HairResult`;
+      canonical = `${process.env.APP_URL}/${query.technique.toLowerCase()}-${this.roundDownToThousand(parseInt(query.graftCount, 10))}-grafts-before-and-after`;
     } else if (query.graftCount) {
       h1Title = `${query.graftCount} Graft Hair Transplant Result - 12 Months | HairResult`;
     } else if (query.technique) {
@@ -54,10 +62,15 @@ export class HospitalHairResultController {
       );
       h1Title = `${res?.[0]} Hair Transplant Result - 12 Months | HairResult`;
     }
-
-    return this.renderResults(query, res, {
+    const seoParams: Record<string, string> = {
       h1Title: h1Title,
-    });
+    };
+
+    if (canonical) {
+      seoParams.canonical = canonical;
+    }
+
+    return this.renderResults(query, res, seoParams);
   }
 
   @Get('/hair-transplant/:citySlug/results')
