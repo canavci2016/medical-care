@@ -258,12 +258,14 @@
                 class='info-value'
               >{{{hospital.rating}}} / 5.0</span></div>
           </div>
+          {{#if doctors.pagination.total}}
           <div class='info-row'>
             <div class='icon-sm'>👨‍⚕️</div>
             <div><span class='info-label'>Medical Staff</span><span
                 class='info-value'
               >{{doctors.pagination.total}} professionals</span></div>
           </div>
+          {{/if}}
         </div>
       </div>
     </div>
