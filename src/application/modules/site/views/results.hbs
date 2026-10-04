@@ -76,6 +76,18 @@
       {{/each}}
     </select>
 
+    <select name="cityId">
+      <option value="" selected>City</option>
+      {{#each filters.cities}}
+        <option
+          value="{{this.value}}"
+          {{#if this.selected}}selected{{/if}}
+        >
+          {{this.label}}
+        </option>
+      {{/each}}
+    </select>
+
     <select
       class="hospital-list select2"
       name="hospitalId"

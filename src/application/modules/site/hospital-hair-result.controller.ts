@@ -202,6 +202,7 @@ export class HospitalHairResultController {
   ) {
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
+        cityId: { eq: query.cityId },
         hospitalId: query.hospitalId,
         page: {
           page: query.page ? parseInt(query.page, 10) : 1,
@@ -237,6 +238,7 @@ export class HospitalHairResultController {
         orderDirection: query.orderDirection || 'desc',
       });
 
+    const cities = await this.cityService.findAll();
     const ageRanges = await this.hospitalHairResultService.getAgeRanges();
 
     const results = latestHairResults.map((result) => {
@@ -260,6 +262,11 @@ export class HospitalHairResultController {
           selected: query.technique === value,
         }),
       ),
+      cities: cities.map((city) => ({
+        label: city.name,
+        value: city.id,
+        selected: query.cityId === city.id,
+      })),
       graftCounts: Object.entries({
         '[1,000] - [2,000]': GraftCountEnum.ONE_PLUS,
         '[2,000] - [3,000]': GraftCountEnum.TWO_PLUS,
@@ -304,24 +311,19 @@ export class HospitalHairResultController {
       selectedFilterCount: ((queryObj) => {
         let selectedFilterCount = 0;
 
-        if (queryObj.technique) {
-          selectedFilterCount = selectedFilterCount + 1;
-        }
+        const checkedKeys = [
+          'technique',
+          'graftCount',
+          'ageRange',
+          'hospitalId',
+          'monthAfter',
+          'cityId',
+        ];
 
-        if (queryObj?.graftCount) {
-          selectedFilterCount = selectedFilterCount + 1;
-        }
-
-        if (queryObj?.ageRange) {
-          selectedFilterCount = selectedFilterCount + 1;
-        }
-
-        if (queryObj.hospitalId) {
-          selectedFilterCount = selectedFilterCount + 1;
-        }
-
-        if (queryObj.monthAfter) {
-          selectedFilterCount = selectedFilterCount + 1;
+        for (const [key, value] of Object.entries(queryObj)) {
+          if (checkedKeys.includes(key) && value) {
+            selectedFilterCount = selectedFilterCount + 1;
+          }
         }
 
         return selectedFilterCount;
