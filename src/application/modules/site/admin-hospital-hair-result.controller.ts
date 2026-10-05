@@ -21,6 +21,7 @@ import { CreateHospitalHairResultDto } from '../hospital-hair-result/dto/create-
 import { UpdateHospitalHairResultDto } from '../hospital-hair-result/dto/update-hospital-hair-result.dto';
 import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import { buildPagination } from './pagination.util';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
 import { randomUUID } from 'node:crypto';
@@ -82,6 +83,7 @@ export class AdminHospitalHairResultController {
       hospitals,
       procedureTypes: Object.values(HairProcedureType),
       techniques: Object.values(HairTransplantTechnique),
+      treatmentAreas: Object.values(TreatmentArea),
       styles: ['create-blog.css'],
       layout: false,
     });
@@ -103,6 +105,7 @@ export class AdminHospitalHairResultController {
       availableMonthsText: (result.availableMonths || []).join(','),
       procedureTypes: Object.values(HairProcedureType),
       techniques: Object.values(HairTransplantTechnique),
+      treatmentAreas: Object.values(TreatmentArea),
       styles: ['create-blog.css'],
       layout: false,
     });
@@ -118,6 +121,7 @@ export class AdminHospitalHairResultController {
       hospitals,
       procedureTypes: Object.values(HairProcedureType),
       techniques: Object.values(HairTransplantTechnique),
+      treatmentAreas: Object.values(TreatmentArea),
       styles: ['create-blog.css'],
       layout: false,
     });

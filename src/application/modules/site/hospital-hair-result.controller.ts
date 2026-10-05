@@ -14,6 +14,7 @@ import {
   HairProcedureType,
 } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
 import { HospitalService } from '../hospital/hospital.service';
 import { Query as QueryBuilder } from 'src/application/shared/interfaces/query.interface';
@@ -230,6 +231,7 @@ export class HospitalHairResultController {
               ? false
               : undefined,
         ageRange: query.ageRange,
+        treatmentArea: query.treatmentArea,
         monthAfter: (() => {
           const parsedMonthAfter = query?.monthAfter?.split('-');
           const monthAfterQueryBuilder: QueryBuilder<number> | null = {};
@@ -272,6 +274,11 @@ export class HospitalHairResultController {
           selected: query.technique === value,
         }),
       ),
+      treatmentAreas: Object.values(TreatmentArea).map((value) => ({
+        label: value,
+        value,
+        selected: query.treatmentArea === value,
+      })),
       cities: cities.map((city) => ({
         label: city.name,
         value: city.id,
@@ -328,6 +335,7 @@ export class HospitalHairResultController {
           'hospitalId',
           'monthAfter',
           'cityId',
+          'treatmentArea',
         ];
 
         for (const [key, value] of Object.entries(queryObj)) {

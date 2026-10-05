@@ -6,6 +6,7 @@ import {
   Repository,
   Between,
   MoreThanOrEqual,
+  Raw,
 } from 'typeorm';
 import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
@@ -117,6 +118,7 @@ export class HospitalHairResultService {
       verified?: boolean;
       page: Required<Pagination>;
       ageRange: string;
+      treatmentArea: string;
       monthAfter: Query<number> | null;
       orderBy: string;
       orderDirection: 'asc' | 'desc';
@@ -158,6 +160,16 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         patientAgeRange: options.ageRange,
+      };
+    }
+
+    if (options.treatmentArea) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        treatmentAreas: Raw(
+          (alias) => `${alias} LIKE :treatmentArea`,
+          { treatmentArea: `%${options.treatmentArea}%` },
+        ),
       };
     }
 

@@ -102,6 +102,18 @@
                       <input type='text' class='form-control' id='availableMonths' value='{{availableMonthsText}}' />
                     </div>
 
+                    <div class='mb-3'>
+                      <label class='form-label'>Treatment Areas</label>
+                      <div id='treatmentAreasGroup'>
+                        {{#each treatmentAreas}}
+                          <div class='form-check form-check-inline'>
+                            <input class='form-check-input treatment-area-checkbox' type='checkbox' id='treatmentArea-{{@index}}' value='{{this}}' {{#if (includes ../result.treatmentAreas this)}}checked{{/if}} />
+                            <label class='form-check-label' for='treatmentArea-{{@index}}'>{{this}}</label>
+                          </div>
+                        {{/each}}
+                      </div>
+                    </div>
+
                     <div class='row'>
                       <div class='col-md-6 mb-3'>
                         <label for='operationDate' class='form-label'>Operation Date</label>
@@ -383,6 +395,7 @@
             graftCount: Number(document.getElementById('graftCount').value || 0),
             monthsAfter: Number(document.getElementById('monthsAfter').value || 0),
             availableMonths,
+            treatmentAreas: Array.from(document.querySelectorAll('.treatment-area-checkbox:checked')).map((el) => el.value),
             operationDate: String(document.getElementById('operationDate').value || '').trim() || undefined,
             patientAgeRange: String(document.getElementById('patientAgeRange').value || '').trim() || undefined,
             original_url: String(document.getElementById('original_url').value || '').trim() || undefined,

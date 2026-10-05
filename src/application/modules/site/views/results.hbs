@@ -2,7 +2,7 @@
 <section class='page-header'>
   <div class='container'>
     <h1>{{seo.h1Title}}</h1>
-    <p>Explore {{pagination.total}} documented hair transplant cases with before-and-after photos, graft counts, techniques and follow-up timelines.</p>
+    <p>Explore {{pagination.total}} documented hair transplant cases with before-and-after photos, graft counts, treatment areas, techniques and follow-up timelines.</p>
     <div class='breadcrumb'>
       <a href='/'>Home</a>
       <span class='sep'>›</span>
@@ -76,6 +76,18 @@
       {{/each}}
     </select>
 
+    <select name="treatmentArea">
+      <option value="">Treatment Area</option>
+      {{#each filters.treatmentAreas}}
+        <option
+          value="{{this.value}}"
+          {{#if this.selected}}selected{{/if}}
+        >
+          {{this.label}}
+        </option>
+      {{/each}}
+    </select>
+
     <select name="cityId">
       <option value="" selected>City</option>
       {{#each filters.cities}}
@@ -128,6 +140,11 @@ results
               <span>🏥 {{this.hospital.name}}</span>
               <span>📅 Result after {{this.monthsAfter}} months</span>
             </div>
+            {{#if this.treatmentAreas.length}}
+              <div class="ba-meta">
+                <span>🎯 Treatment Area: {{join this.treatmentAreas ", "}}</span>
+              </div>
+            {{/if}}
             <span class="view-detail-link">View Full Case →</span>
           </div>
         </a>

@@ -707,6 +707,10 @@ h5 {
   border-color: var(--secondary);
 }
 
+.filter-bar button[type='submit'] {
+  margin-left: auto;
+}
+
 /* ===== PAGE HEADER ===== */
 .page-header {
   background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);

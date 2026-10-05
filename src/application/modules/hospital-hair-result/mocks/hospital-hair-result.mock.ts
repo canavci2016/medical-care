@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import {
   HospitalHairResult,
   HairProcedureType,
@@ -7,6 +8,7 @@ import {
 
 const procedureTypes = Object.values(HairProcedureType);
 const techniques = Object.values(HairTransplantTechnique);
+const treatmentAreaOptions = Object.values(TreatmentArea);
 const ageRanges = ['20-25', '25-30', '30-35', '35-40', '40-45', '45-50', '50+'];
 const norwoodScales = ['NW1', 'NW2', 'NW3', 'NW3V', 'NW4', 'NW5', 'NW6', 'NW7'];
 const hairTypes = ['Straight', 'Wavy', 'Curly', 'Coily'];
@@ -31,6 +33,10 @@ const generateHospitalHairResult = (
     procedureType: faker.helpers.arrayElement(procedureTypes),
     technique: faker.helpers.arrayElement(techniques),
     graftCount: faker.number.int({ min: 1500, max: 5000 }),
+    treatmentAreas: faker.helpers.arrayElements(treatmentAreaOptions, {
+      min: 1,
+      max: 3,
+    }),
     operationDurationMinutes: faker.number.int({ min: 180, max: 480 }),
     operationDate: faker.date.past({ years: 2 }),
     monthsAfter,

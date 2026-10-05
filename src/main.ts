@@ -32,6 +32,12 @@ async function bootstrap() {
   hbs.registerHelper('eq', (a, b) => {
     return a == b;
   });
+  hbs.registerHelper('includes', (array, value) => {
+    return Array.isArray(array) && array.includes(value);
+  });
+  hbs.registerHelper('join', (array, separator) => {
+    return Array.isArray(array) ? array.join(typeof separator === 'string' ? separator : ', ') : '';
+  });
   hbs.registerHelper('querystring', (query, options) => {
     const overrides = options.hash;
 

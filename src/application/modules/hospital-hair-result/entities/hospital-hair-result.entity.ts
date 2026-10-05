@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { HospitalHairResultImage } from './hospital-hair-result-image.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import { Hospital } from '../../hospital/entities/hospital.entity';
 
 export enum HairProcedureType {
@@ -68,6 +69,12 @@ export class HospitalHairResult {
 
   @Column({ type: 'int' })
   graftCount: number;
+
+  @Column({
+    type: 'simple-array',
+    nullable: true,
+  })
+  treatmentAreas?: TreatmentArea[];
 
   @Column({ type: 'int', nullable: true })
   operationDurationMinutes?: number;

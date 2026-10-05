@@ -7,6 +7,7 @@ import {
   Matches,
 } from 'class-validator';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import { HairProcedureType } from '../../hospital-hair-result/entities/hospital-hair-result.entity';
 import { Transform } from 'class-transformer';
 
@@ -57,6 +58,11 @@ export class HairResultQueryDto {
   @IsOptional()
   @IsString()
   monthAfter?: string;
+
+  @IsOptional()
+  @ValidateIf((o: HairResultQueryDto) => o.treatmentArea !== '')
+  @IsIn(Object.values(TreatmentArea))
+  treatmentArea?: string;
 
   @IsOptional()
   @IsString()

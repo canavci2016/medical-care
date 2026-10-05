@@ -13,6 +13,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
+import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import { HairProcedureType } from '../entities/hospital-hair-result.entity';
 import { CreateImageDto } from './create-image.dto';
 
@@ -41,6 +42,11 @@ export class CreateHospitalHairResultDto {
   @IsInt()
   @Min(0)
   graftCount: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsEnum(TreatmentArea, { each: true })
+  treatmentAreas?: TreatmentArea[];
 
   @IsOptional()
   @IsInt()

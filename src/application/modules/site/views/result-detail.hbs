@@ -128,7 +128,7 @@
               <div class="icon-sm">🎯</div>
               <div>
                 <span class="info-label">Treatment Area</span>
-                <span class="info-value">Frontal Hairline & Temples</span>
+                <span class="info-value">{{#if result.treatmentAreas.length}}{{join result.treatmentAreas ", "}}{{else}}Unknown{{/if}}</span>
               </div>
             </div>
             <div class="info-row">
