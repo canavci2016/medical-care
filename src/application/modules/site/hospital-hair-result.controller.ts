@@ -74,6 +74,7 @@ export class HospitalHairResultController {
       ogTitle: `hair transplant results in  ${city.name} `,
       title: `hair transplant results in ${city.name} `,
       h1Title: `hair transplant results in ${city.name} `,
+      canonical: process.env.APP_URL + `/hair-transplant/${citySlug}/results`,
     });
   }
 
@@ -91,6 +92,7 @@ export class HospitalHairResultController {
       ogTitle: `${hospital.name} hair transplant results`,
       title: `${hospital.name} hair transplant results`,
       h1Title: `${hospital.name} hair transplant results`,
+      canonical: process.env.APP_URL + `/clinics/${hospitalSlug}/results`,
     });
   }
 
@@ -126,6 +128,9 @@ export class HospitalHairResultController {
       ogTitle: `${graftCount} Graft ${techniqueValue} Hair Transplant Result – ${months} Months`,
       title: `${graftCount} Graft ${techniqueValue} Hair Transplant Result – ${months} Months`,
       h1Title: `${graftCount} Graft ${techniqueValue} Hair Transplant Result`,
+      canonical:
+        process.env.APP_URL +
+        `/results/${hospitalSlug}-${graftCount}-grafts-${technique}-${months}-months`,
     });
   }
 
@@ -150,6 +155,7 @@ export class HospitalHairResultController {
       ogTitle: `${techniqueValue} Hair Transplant Result`,
       title: `${techniqueValue} Hair Transplant Result`,
       h1Title: `${techniqueValue} Hair Transplant Result`,
+      canonical: process.env.APP_URL + `/${technique}-hair-transplant-results`,
     });
   }
 
@@ -178,6 +184,9 @@ export class HospitalHairResultController {
       ogTitle: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
       title: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
       h1Title: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
+      canonical:
+        process.env.APP_URL +
+        `/${technique}-${graftCount}-grafts-before-and-after`,
     });
   }
 
@@ -192,6 +201,7 @@ export class HospitalHairResultController {
       ogTitle: `${graftCount} Graft Transplant Result`,
       title: `${graftCount} Graft Transplant Result`,
       h1Title: `${graftCount} Graft Transplant Result`,
+      canonical: process.env.APP_URL + `/results/${graftCount}-grafts`,
     });
   }
 
