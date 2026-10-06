@@ -27,7 +27,7 @@ export class HospitalHairResultService {
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
     @InjectRepository(HospitalHairResultImage)
     private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
-  ) { }
+  ) {}
 
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
@@ -166,10 +166,9 @@ export class HospitalHairResultService {
     if (options.treatmentArea) {
       optionsTyped.where = {
         ...optionsTyped.where,
-        treatmentAreas: Raw(
-          (alias) => `${alias} LIKE :treatmentArea`,
-          { treatmentArea: `%${options.treatmentArea}%` },
-        ),
+        treatmentAreas: Raw((alias) => `${alias} LIKE :treatmentArea`, {
+          treatmentArea: `%${options.treatmentArea}%`,
+        }),
       };
     }
 

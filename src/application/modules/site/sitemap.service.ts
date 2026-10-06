@@ -115,6 +115,16 @@ ${xmlEntries}
 
       for (const graft of listOfGraftCounts) {
         for (const technique of listOfTechniques) {
+          const results = await this.hospitalHairResultService.findAll({
+            hospitalId: hospital.id,
+            graftCount: { gte: parseInt(graft as unknown as string, 10) },
+            technique: technique,
+          });
+
+          if (results.pagination.total === 0) {
+            continue;
+          }
+
           resultUrls.push({
             loc: `/results/${hospital.slug}-${graft}-grafts-${technique}-12-months`,
             changefreq: 'weekly',
