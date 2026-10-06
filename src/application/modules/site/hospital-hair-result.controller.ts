@@ -224,12 +224,6 @@ export class HospitalHairResultController {
         graftCount: query.graftCount
           ? { gte: parseInt(query.graftCount, 10) }
           : undefined,
-        verified:
-          query.verified === 'on'
-            ? true
-            : query.verified === 'off'
-              ? false
-              : undefined,
         ageRange: query.ageRange,
         treatmentArea: query.treatmentArea,
         monthAfter: (() => {

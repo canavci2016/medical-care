@@ -115,7 +115,6 @@ export class HospitalHairResultService {
       procedureType: string | Query;
       technique: string | Query;
       graftCount: Pick<Query, 'gte'>;
-      verified?: boolean;
       page: Required<Pagination>;
       ageRange: string;
       treatmentArea: string;
@@ -138,13 +137,6 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         technique: options.technique as HairTransplantTechnique,
-      };
-    }
-
-    if (options.verified !== undefined) {
-      optionsTyped.where = {
-        ...optionsTyped.where,
-        verified: options.verified,
       };
     }
 

@@ -33,10 +33,6 @@ export class HairResultQueryDto {
   graftCount?: string;
 
   @IsOptional()
-  @IsIn(['on', 'off'])
-  verified?: string;
-
-  @IsOptional()
   @IsNumberString()
   page?: string;
 
