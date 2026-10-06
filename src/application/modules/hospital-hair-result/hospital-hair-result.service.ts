@@ -244,27 +244,6 @@ export class HospitalHairResultService {
     return result;
   }
 
-  async getProcedureTypes(conditios?: { hospitalId?: string | string[] }) {
-    let query = this.hospitalHairResultRepository
-      .createQueryBuilder('hr')
-      .select('hr.procedureType', 'procedureType')
-      .addSelect('COUNT(*)', 'count');
-
-    if (conditios?.hospitalId) {
-      const hospitalIds = Array.isArray(conditios.hospitalId)
-        ? conditios.hospitalId
-        : [conditios.hospitalId];
-      query = query.where('hr.hospitalId IN (:...hospitalIds)', {
-        hospitalIds,
-      });
-    }
-
-    const result: { procedureType: string; count: string }[] = await query
-      .groupBy('hr.procedureType')
-      .getRawMany();
-    return result;
-  }
-
   async findOne(id: string): Promise<HospitalHairResult> {
     const result = await this.hospitalHairResultRepository.findOne({
       where: { id },

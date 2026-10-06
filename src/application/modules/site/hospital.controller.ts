@@ -198,11 +198,6 @@ export class HospitalController {
       limit: 5,
     });
 
-    const procedureTypes =
-      await this.hospitalHairResultService.getProcedureTypes({
-        hospitalId: hospital.id,
-      });
-
     if (hospital.instagramUrl) {
       hospital.instagramUrl = StringHelper.attachUtmSource(
         hospital.instagramUrl,
@@ -217,16 +212,17 @@ export class HospitalController {
       );
     }
 
-    const { data: latestHairResults } =
-      await this.hospitalHairResultService.findAll({
-        hospitalId: hospital.id,
-        page: { limit: 3, page: 1 },
-      });
+    const {
+      data: latestHairResults,
+      pagination: { total: totalProcedures },
+    } = await this.hospitalHairResultService.findAll({
+      hospitalId: hospital.id,
+      page: { limit: 3, page: 1 },
+    });
 
     return res.render('hospital-detail', {
       currentPage: 'hospitals',
       hospital: hospital,
-      procedureTypes: procedureTypes,
       doctors: doctors,
       latestHairResults: latestHairResults.map((hr) => ({
         id: hr.id,
@@ -237,10 +233,7 @@ export class HospitalController {
         previewImageUrl: hr.previewImageUrl,
         monthsAfter: hr.monthsAfter,
       })),
-      totalProcedures: procedureTypes.reduce(
-        (total, pt) => total + parseInt(pt.count, 10),
-        0,
-      ),
+      totalProcedures: totalProcedures,
       seo: {
         h1Title: `${hospital.name} Transplant Results & Reviews | HairResult.`,
         title: `${hospital.name.replace(/hair transplant/gi, '')} Hair Transplant Results & Reviews | HairResult.`,
