@@ -52,7 +52,6 @@ export class CronjobService {
           reviewCount: data.userRatingCount,
           address: data.formattedAddress,
           website: data.websiteUri,
-          phone: data.internationalPhoneNumber,
         });
 
         this.logger.debug(
