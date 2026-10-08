@@ -21,7 +21,13 @@
       <div class='profile-actions'>
         <div class='stars' style='font-size: 18px;'>{{{stars hospital.rating}}}
           <strong style='margin-left: 4px;'>{{hospital.rating}}</strong></div>
-        <a href='/contact' class='btn btn-primary btn-sm'>Book Consultation</a>
+        <a href='{{hospital.instagramUrl}}' 
+    onclick="gtag('event', 'clinic_book_consultation_click', {
+    clinic_id: '{{hospital.id}}',
+    clinic_name: '{{hospital.name}}',
+    destination_url: this.href,   
+    button_name: 'Book Consultation'
+     });" class='btn btn-primary btn-sm'>Book Consultation</a>
       </div>
     </div>
 
@@ -221,7 +227,13 @@
               </span></div>
           </div>
           <a
-            href='/contact'
+            href='{{hospital.instagramUrl}}'
+              onclick="gtag('event', 'clinic_book_consultation_click', {
+    clinic_id: '{{hospital.id}}',
+    clinic_name: '{{hospital.name}}',
+    destination_url: this.href,   
+    button_name: 'Book Free Consultation'
+     });" 
             class='btn btn-primary'
             style='width: 100%; margin-top: 16px;'
           >Book Free Consultation</a>
