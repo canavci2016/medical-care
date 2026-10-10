@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>Hospital Dashboard</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes' />
+    <meta name='color-scheme' content='light dark' />
+    <meta name='theme-color' content='#007bff' media='(prefers-color-scheme: light)' />
+    <meta name='theme-color' content='#1a1a1a' media='(prefers-color-scheme: dark)' />
+    <meta name='supported-color-schemes' content='light dark' />
+    <link rel='preload' href='/css/admin/adminlte.css' as='style' />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css'
+      integrity='sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q='
+      crossorigin='anonymous'
+      media='print'
+      onload="this.media='all'"
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'
+      crossorigin='anonymous'
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'
+      crossorigin='anonymous'
+    />
+    <link rel='stylesheet' href='/css/admin/adminlte.css' />
+  </head>
+  <body class='layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary'>
+    <div class='app-wrapper'>
+      {{> adminheader}}
+      {{> hospitalsidebar}}
+
+      <main class='app-main'>
+        <div class='app-content-header'>
+          <div class='container-fluid'>
+            <div class='row align-items-center'>
+              <div class='col-sm-6'><h3 class='mb-0'>Hospital Dashboard</h3></div>
+            </div>
+          </div>
+        </div>
+
+        <div class='app-content'>
+          <div class='container-fluid'>
+            <div class='row'>
+              <div class='col-12'>
+                <div class='card card-primary card-outline mb-4'>
+                  <div class='card-header'><div class='card-title'>Hospital Properties</div></div>
+                  <div class='card-body'>
+                    <div class='mb-3'>
+                      <label class='form-label'>ID</label>
+                      <input type='text' class='form-control' id='hospitalId' value='{{hospital.id}}' readonly />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='name' class='form-label'>Name</label>
+                      <input type='text' class='form-control' id='name' value='{{hospital.name}}' />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='slug' class='form-label'>Slug</label>
+                      <input type='text' class='form-control' id='slug' value='{{hospital.slug}}' />
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-md-6 mb-3'>
+                        <label for='username' class='form-label'>Username</label>
+                        <input type='text' class='form-control' id='username' value='{{hospital.username}}' autocomplete='off' />
+                      </div>
+                      <div class='col-md-6 mb-3'>
+                        <label for='password' class='form-label'>Password</label>
+                        <input type='password' class='form-control' id='password' placeholder='Leave blank to keep current password' autocomplete='new-password' />
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-md-6 mb-3'>
+                        <label for='city' class='form-label'>City</label>
+                        <input type='text' class='form-control' id='city' value='{{hospital.city}}' />
+                      </div>
+                      <div class='col-md-6 mb-3'>
+                        <label for='country' class='form-label'>Country</label>
+                        <input type='text' class='form-control' id='country' value='{{hospital.country}}' />
+                      </div>
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='address' class='form-label'>Address</label>
+                      <input type='text' class='form-control' id='address' value='{{hospital.address}}' />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='description' class='form-label'>Description</label>
+                      <textarea class='form-control' id='description' rows='4'>{{hospital.description}}</textarea>
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='googlePlaceId' class='form-label'>Google Place ID</label>
+                      <input
+                        type='text'
+                        class='form-control'
+                        id='googlePlaceId'
+                        value='{{hospital.googlePlaceId}}'
+                      />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='phone' class='form-label'>Phone</label>
+                      <input type='text' class='form-control' id='phone' value='{{hospital.phone}}' />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='website' class='form-label'>Website</label>
+                      <input type='url' class='form-control' id='website' value='{{hospital.website}}' />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='instagramUrl' class='form-label'>Instagram URL</label>
+                      <input
+                        type='url'
+                        class='form-control'
+                        id='instagramUrl'
+                        value='{{hospital.instagramUrl}}'
+                      />
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='coverImageUrl' class='form-label'>Cover Image URL</label>
+                      <input
+                        type='text'
+                        class='form-control'
+                        id='coverImageUrl'
+                        value='{{hospital.coverImageUrl}}'
+                        
+                      />
+                      {{#if hospital.coverImageUrl}}
+                        <img
+                          src='{{hospital.coverImageUrl}}'
+                          alt='Cover image preview'
+                          id='coverImagePreview'
+                          class='img-thumbnail mt-2'
+                          style='max-width: 400px; max-height: 400px; object-fit: contain;'
+                        />
+                      {{else}}
+                        <img
+                          src=''
+                          alt='Cover image preview'
+                          id='coverImagePreview'
+                          class='img-thumbnail mt-2 d-none'
+                          style='max-width: 400px; max-height: 400px; object-fit: contain;'
+                        />
+                      {{/if}}
+
+                      <div class='mt-3'>
+                        <label for='coverImageFile' class='form-label'>Upload New Cover Image</label>
+                        <input
+                          type='file'
+                          class='form-control'
+                          id='coverImageFile'
+                          accept='image/*'
+                        />
+                        <button
+                          type='button'
+                          class='btn btn-primary mt-2'
+                          id='uploadCoverImageBtn'
+                        >Upload Cover Image</button>
+                      </div>
+                    </div>
+
+                    <div class='row'>
+                      <div class='col-md-6 mb-3'>
+                        <label for='rating' class='form-label'>Rating</label>
+                        <input type='number' min='0' max='5' step='0.1' class='form-control' id='rating' value='{{hospital.rating}}' readonly />
+                      </div>
+                      <div class='col-md-6 mb-3'>
+                        <label for='reviewCount' class='form-label'>Review Count</label>
+                        <input type='number' min='0' class='form-control' id='reviewCount' value='{{hospital.reviewCount}}' readonly />
+                      </div>
+                    </div>
+
+                    <div class='mb-3'>
+                      <label for='techniques' class='form-label'>Techniques</label>
+                      <select class='form-select' id='techniques' multiple>
+                        {{#each techniquesOptions}}
+                          <option value='{{this.value}}' {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+
+                    <div class='mb-3'>
+                      <label class='form-label d-block mb-2'>Facilities</label>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityMultilingualStaff'
+                          {{#if hospital.facility.multilingualStaff}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityMultilingualStaff'>Multilingual Staff</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityAirportTransferService'
+                          {{#if hospital.facility.airportTransferService}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityAirportTransferService'>Airport Transfer Service</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityDigitalHairAnalysis'
+                          {{#if hospital.facility.digitalHairAnalysis}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityDigitalHairAnalysis'>Digital Hair Analysis</label>
+                      </div>
+                      <div class='form-check mb-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityPrivateRecoveryRooms'
+                          {{#if hospital.facility.privateRecoveryRooms}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityPrivateRecoveryRooms'>Private Recovery Rooms</label>
+                      </div>
+                      <div class='form-check'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityHotelAccommodation'
+                          {{#if hospital.facility.hotelAccommodation}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityHotelAccommodation'>Hotel Accommodation</label>
+                      </div>
+                      <div class='form-check mt-2'>
+                        <input
+                          class='form-check-input'
+                          type='checkbox'
+                          id='facilityAcceptCreditCard'
+                          {{#if hospital.facility.acceptCreditCard}}checked{{/if}}
+                        />
+                        <label class='form-check-label' for='facilityAcceptCreditCard'>Accept Credit Card</label>
+                      </div>
+                    </div>
+
+                    <div class='form-check mb-2'>
+                      <input class='form-check-input' type='checkbox' id='isVerified' disabled {{#if hospital.isVerified}}checked{{/if}} />
+                      <label class='form-check-label' for='isVerified'>Verified</label>
+                    </div>
+                    <div class='form-check mb-3'>
+                      <input class='form-check-input' type='checkbox' id='instagramVerified' {{#if hospital.instagramVerified}}checked{{/if}} />
+                      <label class='form-check-label' for='instagramVerified'>Instagram Verified</label>
+                    </div>
+
+                    <div id='updateHospitalAlert' class='alert d-none' role='alert'></div>
+
+                    <div class='d-flex gap-2'>
+                      <button type='button' class='btn btn-success' id='updateHospitalBtn'>Update Hospital</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {{> adminfooter}}
+    </div>
+
+    <script
+      src='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script src='/scripts/admin/js/adminlte.js'></script>
+    <script>
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const uploadButton = document.getElementById('uploadCoverImageBtn');
+        const coverImageFileInput = document.getElementById('coverImageFile');
+        const coverImageUrlInput = document.getElementById('coverImageUrl');
+        const coverImagePreview = document.getElementById('coverImagePreview');
+        const updateButton = document.getElementById('updateHospitalBtn');
+        const alertBox = document.getElementById('updateHospitalAlert');
+        const hospitalIdInput = document.getElementById('hospitalId');
+
+        if (
+          !uploadButton ||
+          !coverImageFileInput ||
+          !coverImageUrlInput ||
+          !coverImagePreview ||
+          !updateButton ||
+          !alertBox ||
+          !hospitalIdInput
+        ) {
+          return;
+        }
+
+        const uploadFile = async (file) => {
+          const response = await fetch('/hospital/dashboard/upload-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contentType: file.type }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Could not get upload url.');
+          }
+
+          const { url } = await response.json();
+
+          const uploadResponse = await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': file.type,
+            },
+            body: file,
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('Could not upload cover image.');
+          }
+
+          return uploadResponse.url.split('?')[0];
+        };
+
+        const showAlert = (message, type) => {
+          alertBox.textContent = message;
+          alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+          alertBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
+        };
+
+        const buildPayload = () => ({
+          name: String(document.getElementById('name').value || '').trim(),
+          slug: String(document.getElementById('slug').value || '').trim() || undefined,
+          username: String(document.getElementById('username').value || '').trim() || undefined,
+          password: String(document.getElementById('password').value || '').trim() || undefined,
+          city: String(document.getElementById('city').value || '').trim() || undefined,
+          country: String(document.getElementById('country').value || '').trim() || undefined,
+          address: String(document.getElementById('address').value || '').trim() || undefined,
+          description: String(document.getElementById('description').value || '').trim() || undefined,
+          googlePlaceId: String(document.getElementById('googlePlaceId').value || '').trim() || undefined,
+          phone: String(document.getElementById('phone').value || '').trim() || undefined,
+          website: String(document.getElementById('website').value || '').trim() || undefined,
+          instagramUrl: String(document.getElementById('instagramUrl').value || '').trim() || undefined,
+          coverImageUrl: String(coverImageUrlInput.value || '').trim() || undefined,
+          instagramVerified: document.getElementById('instagramVerified').checked,
+          facility: {
+            multilingualStaff: document.getElementById('facilityMultilingualStaff').checked,
+            airportTransferService: document.getElementById('facilityAirportTransferService').checked,
+            digitalHairAnalysis: document.getElementById('facilityDigitalHairAnalysis').checked,
+            privateRecoveryRooms: document.getElementById('facilityPrivateRecoveryRooms').checked,
+            hotelAccommodation: document.getElementById('facilityHotelAccommodation').checked,
+            acceptCreditCard: document.getElementById('facilityAcceptCreditCard').checked,
+          },
+          techniques: Array.from(document.getElementById('techniques').selectedOptions).map(
+            (option) => option.value,
+          ),
+        });
+
+        const updateHospital = async (payload) => {
+          const response = await fetch('/hospital/dashboard', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const responseText = await response.text();
+            let responseBody = null;
+
+            if (responseText) {
+              try {
+                responseBody = JSON.parse(responseText);
+              } catch (error) {
+                responseBody = null;
+              }
+            }
+
+            const errorMessage =
+              responseBody?.message ||
+              responseBody?.error ||
+              response.statusText ||
+              'Hospital could not be updated.';
+
+            throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+          }
+        };
+
+        uploadButton.addEventListener('click', async function () {
+          const selectedFile = coverImageFileInput.files && coverImageFileInput.files[0];
+
+          if (!selectedFile) {
+            showAlert('Please select an image file first.', 'error');
+            return;
+          }
+
+          uploadButton.disabled = true;
+          updateButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            const uploadedImageUrl = await uploadFile(selectedFile);
+            coverImageUrlInput.value = uploadedImageUrl;
+            await updateHospital({ coverImageUrl: uploadedImageUrl });
+            coverImagePreview.setAttribute('src', uploadedImageUrl);
+            coverImagePreview.classList.remove('d-none');
+            coverImageFileInput.value = '';
+            showAlert('Cover image uploaded and saved successfully.', 'success');
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+          } finally {
+            uploadButton.disabled = false;
+            updateButton.disabled = false;
+          }
+        });
+
+        updateButton.addEventListener('click', async function () {
+          updateButton.disabled = true;
+          alertBox.classList.add('d-none');
+
+          try {
+            await updateHospital(buildPayload());
+
+            showAlert('Hospital updated successfully.', 'success');
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
+            showAlert(message, 'error');
+          } finally {
+            updateButton.disabled = false;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

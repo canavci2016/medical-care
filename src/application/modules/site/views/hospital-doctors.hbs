@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <title>Doctors</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes' />
+    <link rel='stylesheet' href='/css/admin/adminlte.css' />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'
+      crossorigin='anonymous'
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'
+      crossorigin='anonymous'
+    />
+  </head>
+  <body class='layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary'>
+    <div class='app-wrapper'>
+      {{> adminheader}}
+      {{> hospitalsidebar}}
+
+      <main class='app-main'>
+        <div class='app-content-header'>
+          <div class='container-fluid'>
+            <div class='row align-items-center'>
+              <div class='col-sm-6'><h3 class='mb-0'>Doctors</h3></div>
+              <div class='col-sm-6 text-sm-end mt-2 mt-sm-0'>
+                <a href='/hospital/dashboard/doctors/create' class='btn btn-primary btn-sm'>Add Doctor</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='app-content'>
+          <div class='container-fluid'>
+            <div class='card card-primary card-outline'>
+              <div class='card-body table-responsive'>
+                <table class='table table-striped'>
+                  <thead>
+                    <tr>
+                      <th>Full Name</th>
+                      <th>Title</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each doctors}}
+                      <tr>
+                        <td>{{this.fullName}}</td>
+                        <td>{{this.title}}</td>
+                      </tr>
+                    {{else}}
+                      <tr><td colspan='2' class='text-center text-muted'>No doctors yet.</td></tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+
+                {{#if pagination.totalPages}}
+                  <nav>
+                    <ul class='pagination justify-content-center mb-0'>
+                      {{#each pagination.pages}}
+                        <li class='page-item'>
+                          <a class='page-link' href='{{this.url}}'>{{this.page}}</a>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </nav>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {{> adminfooter}}
+    </div>
+
+    <script
+      src='https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script
+      src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js'
+      crossorigin='anonymous'
+    ></script>
+    <script src='/scripts/admin/js/adminlte.js'></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector('.sidebar-wrapper');
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: 'os-theme-light',
+              autoHide: 'leave',
+              clickScroll: true,
+            },
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

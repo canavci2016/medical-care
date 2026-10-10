@@ -16,6 +16,7 @@ import { AdminHospitalController } from './admin-hospital.controller';
 import { AdminDoctorController } from './admin-doctor.controller';
 import { AdminAuthController } from './admin-auth.controller';
 import { HospitalAuthController } from './hospital-auth.controller';
+import { HospitalDashboardController } from './hospital-dashboard.controller';
 import { SitemapController } from './sitemap.controller';
 import { SitemapService } from './sitemap.service';
 import { AppRateLimitModule } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.module';
@@ -46,6 +47,7 @@ import { AppQueueModule } from 'src/application/shared/modules/app-queue/app-que
     AdminDoctorController,
     AdminAuthController,
     HospitalAuthController,
+    HospitalDashboardController,
     OtherController,
     SitemapController,
   ],
