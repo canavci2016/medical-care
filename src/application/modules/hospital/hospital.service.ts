@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, IsNull, Not, Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { Hospital } from './entities/hospital.entity';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
@@ -40,6 +41,10 @@ export class HospitalService {
     hospital.slug = await this.generateUniqueSlug(
       createHospitalDto.slug ?? hospital.name,
     );
+
+    if (createHospitalDto.password) {
+      hospital.password = await this.hashPassword(createHospitalDto.password);
+    }
 
     if (hospital.country) {
       hospital.countryId = (
@@ -208,7 +213,47 @@ export class HospitalService {
     return hospital;
   }
 
+  async findByUsername(username: string): Promise<Hospital | null> {
+    return this.hospitalRepository
+      .createQueryBuilder('hospital')
+      .addSelect('hospital.password')
+      .where('hospital.username = :username', { username })
+      .getOne();
+  }
+
+  async validateCredentials(
+    username: string,
+    password: string,
+  ): Promise<Hospital | null> {
+    const hospital = await this.findByUsername(username);
+
+    if (!hospital || !hospital.password) {
+      return null;
+    }
+
+    const isMatch = await bcrypt.compare(password, hospital.password);
+
+    if (!isMatch) {
+      return null;
+    }
+
+    delete hospital.password;
+
+    return hospital;
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  }
+
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {
+    if (updateHospitalDto.password) {
+      updateHospitalDto.password = await this.hashPassword(
+        updateHospitalDto.password,
+      );
+    }
+
     if (updateHospitalDto.googlePlaceId) {
       const details = await this.googlePlaceService.getPlaceDetails(
         updateHospitalDto.googlePlaceId,

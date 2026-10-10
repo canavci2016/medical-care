@@ -6,6 +6,7 @@ import {
   IsInt,
   IsNumber,
   IsArray,
+  MinLength,
   Min,
   Max,
   MaxLength,
@@ -72,6 +73,20 @@ export class CreateHospitalDto {
   @IsString()
   @MaxLength(255)
   slug?: string;
+
+  /* ===============================
+     AUTH (HOSPITAL LOGIN)
+  =============================== */
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  username?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(6)
+  password?: string;
 
   @IsOptional()
   @IsUrl()
