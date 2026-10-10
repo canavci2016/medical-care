@@ -8,6 +8,13 @@ import {
 } from 'class-validator';
 import { RatingFilter } from '../../hospital/hospital.service';
 
+export enum HospitalQuerySortingOptions {
+  CREATED_AT_ASC = 'createdAt_asc',
+  CREATED_AT_DESC = 'createdAt_desc',
+  RATING_ASC = 'rating_asc',
+  RATING_DESC = 'rating_desc',
+}
+
 export class HospitalQueryDto {
   [key: string]: string | undefined;
 
@@ -34,8 +41,11 @@ export class HospitalQueryDto {
   rating?: RatingFilter | '';
 
   @IsOptional()
-  @IsString()
-  sorting?: string;
+  @IsEnum(HospitalQuerySortingOptions, {
+    message: `sorting must be one of the following values: ${Object.values(HospitalQuerySortingOptions).join(', ')}`,
+  })
+  sorting?: HospitalQuerySortingOptions =
+    HospitalQuerySortingOptions.RATING_DESC;
 
   @IsOptional()
   @IsString()

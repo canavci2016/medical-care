@@ -9,7 +9,10 @@ import {
 import { HospitalService, RatingFilter } from '../hospital/hospital.service';
 import type { Response } from 'express';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
-import { HospitalQueryDto } from './dto/hospital-query.dto';
+import {
+  HospitalQueryDto,
+  HospitalQuerySortingOptions,
+} from './dto/hospital-query.dto';
 import { DoctorService } from '../doctor/doctor.service';
 import { CountryService } from 'src/application/shared/modules/country/country.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
@@ -23,7 +26,7 @@ export class HospitalController {
     private readonly doctorService: DoctorService,
     private readonly countryService: CountryService,
     private readonly cityService: CityService,
-  ) { }
+  ) {}
 
   @Get(['/hospitals/api', '/clinics/api'])
   async apiFindPaginated(
@@ -94,9 +97,9 @@ export class HospitalController {
       cityId = cityInst?.id;
     }
 
-    const [orderCollumn, orderDirection] = query.sorting
-      ? query.sorting.split('_')
-      : ['rating', 'desc'];
+    const [orderCollumn, orderDirection] = (
+      query.sorting || HospitalQuerySortingOptions.RATING_DESC
+    ).split('_');
 
     const { data: hospitals, pagination } =
       await this.hospitalService.paginated({
