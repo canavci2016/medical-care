@@ -139,10 +139,19 @@
               </div>
             </div>
             <div class="info-row">
-              <div class="icon-sm">💉</div>
+              <div class="icon-sm">🌐</div>
               <div>
-                <span class="info-label">Anesthesia</span>
-                <span class="info-value">Local Anesthesia</span>
+                <span class="info-label">Post Url</span>
+                <span class="info-value"><a
+                  href='{{result.original_url}}'
+                  onclick="gtag('event', 'clinic_instagram_url_click', {
+    clinic_id: '{{hospital.id}}',
+    clinic_name: '{{hospital.name}}',
+    destination_url: this.href,
+    button_name: 'Visit Clinic Instagram Page'
+  });"
+                  target='_blank'
+                >{{result.original_url}}</a></span>
               </div>
             </div>
             <div class="info-row">
