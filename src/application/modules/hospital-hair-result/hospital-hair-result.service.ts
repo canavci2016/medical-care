@@ -28,7 +28,7 @@ export class HospitalHairResultService {
     private readonly hospitalHairResultRepository: Repository<HospitalHairResult>,
     @InjectRepository(HospitalHairResultImage)
     private readonly hospitalHairResultImageRepository: Repository<HospitalHairResultImage>,
-  ) {}
+  ) { }
 
   async create(
     createHospitalHairResultDto: CreateHospitalHairResultDto,
@@ -337,6 +337,11 @@ export class HospitalHairResultService {
 
   async remove(id: string): Promise<void> {
     const result = await this.findOne(id);
-    await this.hospitalHairResultRepository.remove(result);
+    if (!result) {
+      throw new NotFoundException(
+        `HospitalHairResult with ID "${id}" not found`,
+      );
+    }
+    await this.hospitalHairResultRepository.delete({ id });
   }
 }
