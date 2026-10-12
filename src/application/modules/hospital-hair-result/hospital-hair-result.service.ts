@@ -12,6 +12,7 @@ import { CreateHospitalHairResultDto } from './dto/create-hospital-hair-result.d
 import { UpdateHospitalHairResultDto } from './dto/update-hospital-hair-result.dto';
 import {
   HairProcedureType,
+  HairResultStatus,
   HospitalHairResult,
 } from './entities/hospital-hair-result.entity';
 import { HospitalHairResultImage } from './entities/hospital-hair-result-image.entity';
@@ -115,6 +116,7 @@ export class HospitalHairResultService {
       procedureType: string | Query;
       technique: string | Query;
       graftCount: Pick<Query, 'gte'>;
+      status: HairResultStatus;
       page: Required<Pagination>;
       ageRange: string;
       treatmentArea: string;
@@ -126,6 +128,13 @@ export class HospitalHairResultService {
     const optionsTyped: FindManyOptions<HospitalHairResult> = {
       where: {},
     };
+
+    if (options.status) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        status: options.status,
+      };
+    }
 
     if (options.procedureType) {
       optionsTyped.where = {
@@ -254,6 +263,16 @@ export class HospitalHairResultService {
         `HospitalHairResult with ID "${id}" not found`,
       );
     }
+    return result;
+  }
+
+  async updateStatus(
+    id: string,
+    status: HairResultStatus,
+  ): Promise<HospitalHairResult> {
+    const result = await this.findOne(id);
+    result.status = status;
+    await this.hospitalHairResultRepository.save(result);
     return result;
   }
 

@@ -28,6 +28,11 @@ export enum GraftCountEnum {
   'FIVE_PLUS' = '5000',
 }
 
+export enum HairResultStatus {
+  ACTIVE = 'active',
+  PASSIVE = 'passive',
+}
+
 @Entity('hospital_hair_results')
 @Index(['verified', 'monthsAfter'])
 export class HospitalHairResult {
@@ -129,6 +134,13 @@ export class HospitalHairResult {
   /* ===============================
      VISIBILITY & SOCIAL
   =============================== */
+
+  @Column({
+    type: 'enum',
+    enum: HairResultStatus,
+    default: HairResultStatus.ACTIVE,
+  })
+  status: HairResultStatus;
 
   @Column({ default: true })
   isPublic: boolean;

@@ -12,6 +12,7 @@ import type { Response } from 'express';
 import {
   GraftCountEnum,
   HairProcedureType,
+  HairResultStatus,
 } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
@@ -215,6 +216,7 @@ export class HospitalHairResultController {
       await this.hospitalHairResultService.findAll({
         cityId: { eq: query.cityId },
         hospitalId: query.hospitalId,
+        status: HairResultStatus.ACTIVE,
         page: {
           page: query.page ? parseInt(query.page, 10) : 1,
           limit: 9,

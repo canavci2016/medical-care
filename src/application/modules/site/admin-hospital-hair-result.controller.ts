@@ -19,7 +19,10 @@ import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair
 import { HospitalService } from '../hospital/hospital.service';
 import { CreateHospitalHairResultDto } from '../hospital-hair-result/dto/create-hospital-hair-result.dto';
 import { UpdateHospitalHairResultDto } from '../hospital-hair-result/dto/update-hospital-hair-result.dto';
-import { HairProcedureType } from '../hospital-hair-result/entities/hospital-hair-result.entity';
+import {
+  HairProcedureType,
+  HairResultStatus,
+} from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
 import { buildPagination } from './pagination.util';
@@ -170,6 +173,19 @@ export class AdminHospitalHairResultController {
     @Body() payload: UpdateHospitalHairResultDto,
   ) {
     return this.hospitalHairResultService.update(id, payload);
+  }
+
+  @Put(':id/status')
+  async updateStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body('status') status: HairResultStatus,
+  ) {
+    if (!Object.values(HairResultStatus).includes(status)) {
+      throw new BadRequestException(
+        `Invalid status. Allowed values: ${Object.values(HairResultStatus).join(', ')}`,
+      );
+    }
+    return this.hospitalHairResultService.updateStatus(id, status);
   }
 
   @Delete(':id')
