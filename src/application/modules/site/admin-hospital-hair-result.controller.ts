@@ -109,6 +109,7 @@ export class AdminHospitalHairResultController {
       procedureTypes: Object.values(HairProcedureType),
       techniques: Object.values(HairTransplantTechnique),
       treatmentAreas: Object.values(TreatmentArea),
+      statusOptions: Object.values(HairResultStatus),
       styles: ['create-blog.css'],
       layout: false,
     });

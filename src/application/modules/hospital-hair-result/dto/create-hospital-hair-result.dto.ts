@@ -14,7 +14,7 @@ import {
 import { Type } from 'class-transformer';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum';
-import { HairProcedureType } from '../entities/hospital-hair-result.entity';
+import { HairProcedureType, HairResultStatus } from '../entities/hospital-hair-result.entity';
 import { CreateImageDto } from './create-image.dto';
 
 export class CreateHospitalHairResultDto {
@@ -104,6 +104,10 @@ export class CreateHospitalHairResultDto {
   /* ===============================
      VISIBILITY & SOCIAL
   =============================== */
+
+  @IsOptional()
+  @IsEnum(HairResultStatus)
+  status?: HairResultStatus;
 
   @IsOptional()
   @IsBoolean()
