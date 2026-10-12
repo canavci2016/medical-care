@@ -12,6 +12,7 @@ import type { Response } from 'express';
 import { HospitalService } from '../hospital/hospital.service';
 import { LoginHospitalDto } from '../hospital/dto/login-hospital.dto';
 import { UpdateHospitalDto } from '../hospital/dto/update-hospital.dto';
+import { ChangePasswordHospitalDto } from '../hospital/dto/change-password-hospital.dto';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HospitalAuthGuard } from './guards/hospital-auth.guard';
 
@@ -92,7 +93,46 @@ export class HospitalAuthController {
     @Session() session: Record<string, any>,
     @Body() payload: UpdateHospitalDto,
   ) {
+    // Password changes go through the dedicated change-password flow.
+    delete payload.password;
+
     return this.hospitalService.update(session.hospitalId, payload);
+  }
+
+  @UseGuards(HospitalAuthGuard)
+  @Get('dashboard/password')
+  changePasswordPage(@Res() res: Response) {
+    return res.render('hospital-change-password', {
+      layout: false,
+    });
+  }
+
+  @UseGuards(HospitalAuthGuard)
+  @Post('dashboard/password')
+  async changePassword(
+    @Session() session: Record<string, any>,
+    @Body() payload: ChangePasswordHospitalDto,
+    @Res() res: Response,
+  ) {
+    try {
+      await this.hospitalService.changePassword(
+        session.hospitalId,
+        payload.currentPassword,
+        payload.newPassword,
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Password could not be changed.';
+      return res.render('hospital-change-password', {
+        layout: false,
+        error: message,
+      });
+    }
+
+    return res.render('hospital-change-password', {
+      layout: false,
+      success: 'Password updated successfully.',
+    });
   }
 
   @UseGuards(HospitalAuthGuard)

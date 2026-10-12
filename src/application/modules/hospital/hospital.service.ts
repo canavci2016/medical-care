@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, IsNull, Not, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -245,6 +249,34 @@ export class HospitalService {
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
+  }
+
+  async changePassword(
+    id: string,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const hospital = await this.hospitalRepository
+      .createQueryBuilder('hospital')
+      .addSelect('hospital.password')
+      .where('hospital.id = :id', { id })
+      .getOne();
+
+    if (!hospital) {
+      throw new NotFoundException(`Hospital with ID "${id}" not found`);
+    }
+
+    const isMatch = hospital.password
+      ? await bcrypt.compare(currentPassword, hospital.password)
+      : false;
+
+    if (!isMatch) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    await this.hospitalRepository.update(id, {
+      password: await this.hashPassword(newPassword),
+    });
   }
 
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {

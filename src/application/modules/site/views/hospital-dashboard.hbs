@@ -71,8 +71,8 @@
                         <input type='text' class='form-control' id='username' value='{{hospital.username}}' autocomplete='off' />
                       </div>
                       <div class='col-md-6 mb-3'>
-                        <label for='password' class='form-label'>Password</label>
-                        <input type='password' class='form-control' id='password' placeholder='Leave blank to keep current password' autocomplete='new-password' />
+                        <label class='form-label d-block'>Password</label>
+                        <a href='/hospital/dashboard/password' class='btn btn-outline-secondary btn-sm'>Change Password</a>
                       </div>
                     </div>
 
@@ -365,7 +365,6 @@
           name: String(document.getElementById('name').value || '').trim(),
           slug: String(document.getElementById('slug').value || '').trim() || undefined,
           username: String(document.getElementById('username').value || '').trim() || undefined,
-          password: String(document.getElementById('password').value || '').trim() || undefined,
           city: String(document.getElementById('city').value || '').trim() || undefined,
           country: String(document.getElementById('country').value || '').trim() || undefined,
           address: String(document.getElementById('address').value || '').trim() || undefined,
