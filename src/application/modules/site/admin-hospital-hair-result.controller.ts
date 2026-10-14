@@ -41,11 +41,26 @@ export class AdminHospitalHairResultController {
   ) {}
 
   @Get()
-  async findAll(@Res() res: Response, @Query('page') page?: string) {
+  async findAll(
+    @Res() res: Response,
+    @Query('page') page?: string,
+    @Query('id') id?: string,
+    @Query('hospitalId') hospitalId?: string,
+    @Query('status') status?: string,
+  ) {
     const pageNumber = page ? parseInt(page, 10) : 1;
+
+    const statusFilter = Object.values(HairResultStatus).includes(
+      status as HairResultStatus,
+    )
+      ? (status as HairResultStatus)
+      : undefined;
 
     const { data: results, pagination } =
       await this.hospitalHairResultService.findAll({
+        id: id?.trim() || undefined,
+        hospitalId: hospitalId || undefined,
+        status: statusFilter,
         page: {
           page: Number.isNaN(pageNumber) ? 1 : pageNumber,
           limit: 20,
@@ -59,6 +74,10 @@ export class AdminHospitalHairResultController {
       take: results.length || 10,
     });
 
+    const filterHospitals = await this.hospitalService.findAll({
+      take: 200,
+    });
+
     const mappedResults = results.map((result) => ({
       ...result,
       hospitalName:
@@ -66,11 +85,23 @@ export class AdminHospitalHairResultController {
         '-',
     }));
 
-    const newPagination = buildPagination(pagination, { page });
+    const newPagination = buildPagination(pagination, {
+      page,
+      id: id || undefined,
+      hospitalId: hospitalId || undefined,
+      status: statusFilter,
+    });
 
     return res.render('admin/hospital-hair-results', {
       results: mappedResults,
       pagination: newPagination,
+      hospitals: filterHospitals,
+      statusOptions: Object.values(HairResultStatus),
+      filters: {
+        id: id || '',
+        hospitalId: hospitalId || '',
+        status: statusFilter || '',
+      },
       styles: ['create-blog.css'],
       layout: false,
     });

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isUUID } from 'class-validator';
 import {
   FindManyOptions,
   In,
@@ -111,6 +112,7 @@ export class HospitalHairResultService {
 
   async findAll(
     options: Partial<{
+      id: string;
       hospitalId: string | string[];
       cityId: Query<string>;
       procedureType: string | Query;
@@ -128,6 +130,32 @@ export class HospitalHairResultService {
     const optionsTyped: FindManyOptions<HospitalHairResult> = {
       where: {},
     };
+
+    const page = options.page?.page || 1;
+    const limit = options.page?.limit || 10;
+
+    if (options.id) {
+      if (!isUUID(options.id)) {
+        return {
+          data: [],
+          pagination: {
+            total: 0,
+            length: 0,
+            page: page,
+            limit: limit,
+            totalPages: 0,
+            hasPrev: false,
+            hasNext: false,
+            prevPage: page - 1,
+            nextPage: page + 1,
+          },
+        };
+      }
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        id: options.id,
+      };
+    }
 
     if (options.status) {
       optionsTyped.where = {
@@ -204,9 +232,6 @@ export class HospitalHairResultService {
         monthsAfter: MoreThanOrEqual(options.monthAfter.gte),
       };
     }
-
-    const page = options.page?.page || 1;
-    const limit = options.page?.limit || 10;
 
     optionsTyped.skip = (page - 1) * limit;
     optionsTyped.take = limit;

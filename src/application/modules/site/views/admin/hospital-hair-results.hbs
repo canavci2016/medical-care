@@ -61,7 +61,7 @@
                         {{#if pagination.hasPrev}}
                           <li class='page-item'><a
                               class='page-link'
-                              href='?page={{pagination.prevPage}}'
+                              href='?{{querystring pagination.query page=pagination.prevPage}}'
                             >&laquo;</a></li>
                         {{else}}
                           <li class='page-item disabled'><a
@@ -80,7 +80,7 @@
                         {{#if pagination.hasNext}}
                           <li class='page-item'><a
                               class='page-link'
-                              href='?page={{pagination.nextPage}}'
+                              href='?{{querystring pagination.query page=pagination.nextPage}}'
                             >&raquo;</a></li>
                         {{else}}
                           <li class='page-item disabled'><a
@@ -90,6 +90,36 @@
                         {{/if}}
                       </ul>
                     </div>
+                  </div>
+                  <div class='card-body border-bottom'>
+                    <form method='get' action='/admin/hospital-hair-results' class='row g-2 align-items-end'>
+                      <div class='col-md-4'>
+                        <label for='filterHospitalId' class='form-label'>Hospital</label>
+                        <select id='filterHospitalId' name='hospitalId' class='form-select'>
+                          <option value=''>All Hospitals</option>
+                          {{#each hospitals}}
+                            <option value='{{this.id}}' {{#if (eq this.id ../filters.hospitalId)}}selected{{/if}}>{{this.name}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                      <div class='col-md-3'>
+                        <label for='filterId' class='form-label'>ID</label>
+                        <input type='text' id='filterId' name='id' class='form-control' value='{{filters.id}}' placeholder='Search by ID' />
+                      </div>
+                      <div class='col-md-2'>
+                        <label for='filterStatus' class='form-label'>Status</label>
+                        <select id='filterStatus' name='status' class='form-select'>
+                          <option value=''>All</option>
+                          {{#each statusOptions}}
+                            <option value='{{this}}' {{#if (eq this ../filters.status)}}selected{{/if}}>{{this}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                      <div class='col-md-3'>
+                        <button type='submit' class='btn btn-primary'>Filter</button>
+                        <a href='/admin/hospital-hair-results' class='btn btn-outline-secondary'>Reset</a>
+                      </div>
+                    </form>
                   </div>
                   <div class='card-body p-0'>
                     <table class='table'>
