@@ -13,4 +13,16 @@ describe('hospital-dashboard view', () => {
     expect(template).not.toMatch(/id=['"]rating['"]/i);
     expect(template).not.toMatch(/id=['"]reviewCount['"]/i);
   });
+
+  it('allows a hospital to edit its email address', () => {
+    const template = readFileSync(
+      join(__dirname, 'views', 'hospital-dashboard.hbs'),
+      'utf8',
+    );
+
+    expect(template).toMatch(/id=['"]email['"]/i);
+    expect(template).toMatch(
+      /email:\s*String\(document\.getElementById\('email'\)/,
+    );
+  });
 });
