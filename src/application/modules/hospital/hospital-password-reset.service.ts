@@ -40,6 +40,14 @@ export class HospitalPasswordResetService {
       return;
     }
 
+    const authVersion = await this.hospitalService.getPasswordVersion(
+      hospital.id,
+    );
+
+    if (!authVersion) {
+      return;
+    }
+
     const token = randomBytes(32).toString('hex');
     const key = this.getTokenKey(token);
     const appUrl = this.configService.get<string>(
@@ -51,7 +59,11 @@ export class HospitalPasswordResetService {
       appUrl,
     ).toString();
 
-    await this.redisService.set(key, hospital.id, TOKEN_TTL_SECONDS);
+    await this.redisService.set(
+      key,
+      { hospitalId: hospital.id, authVersion },
+      TOKEN_TTL_SECONDS,
+    );
 
     try {
       await this.appQueueService.add(
@@ -66,15 +78,30 @@ export class HospitalPasswordResetService {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<boolean> {
-    const hospitalId = await this.redisService.getAndDelete<string>(
-      this.getTokenKey(token),
-    );
+    const resetRequest = await this.redisService.getAndDelete<{
+      hospitalId: string;
+      authVersion: string;
+    }>(this.getTokenKey(token));
 
-    if (!hospitalId) {
+    if (!resetRequest) {
       return false;
     }
 
-    return this.hospitalService.resetPassword(hospitalId, newPassword);
+    const currentAuthVersion = await this.hospitalService.getPasswordVersion(
+      resetRequest.hospitalId,
+    );
+
+    if (
+      !currentAuthVersion ||
+      currentAuthVersion !== resetRequest.authVersion
+    ) {
+      return false;
+    }
+
+    return this.hospitalService.resetPassword(
+      resetRequest.hospitalId,
+      newPassword,
+    );
   }
 
   private getTokenKey(token: string): string {

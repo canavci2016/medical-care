@@ -11,6 +11,7 @@ describe('HospitalPasswordResetService', () => {
   let hospitalService: {
     findByEmail: jest.Mock;
     resetPassword: jest.Mock;
+    getPasswordVersion: jest.Mock;
   };
   let redisService: {
     set: jest.Mock;
@@ -25,6 +26,7 @@ describe('HospitalPasswordResetService', () => {
     hospitalService = {
       findByEmail: jest.fn(),
       resetPassword: jest.fn(),
+      getPasswordVersion: jest.fn().mockResolvedValue('password-version'),
     };
     redisService = {
       set: jest.fn(),
@@ -89,7 +91,7 @@ describe('HospitalPasswordResetService', () => {
     );
     expect(redisService.set).toHaveBeenCalledWith(
       `hospital-password-reset:${hashedToken}`,
-      'hospital-id',
+      { hospitalId: 'hospital-id', authVersion: 'password-version' },
       3600,
     );
     const [storedKey] = redisService.set.mock.calls[0] as [string];
@@ -99,7 +101,10 @@ describe('HospitalPasswordResetService', () => {
   it('consumes a valid token and resets the hospital password once', async () => {
     const token = 'reset-token';
     const hashedToken = createHash('sha256').update(token).digest('hex');
-    redisService.getAndDelete.mockResolvedValueOnce('hospital-id');
+    redisService.getAndDelete.mockResolvedValueOnce({
+      hospitalId: 'hospital-id',
+      authVersion: 'password-version',
+    });
     hospitalService.resetPassword.mockResolvedValue(true);
 
     await expect(service.resetPassword(token, 'new-password')).resolves.toBe(
@@ -113,6 +118,25 @@ describe('HospitalPasswordResetService', () => {
       'hospital-id',
       'new-password',
     );
+    expect(hospitalService.getPasswordVersion).toHaveBeenCalledWith(
+      'hospital-id',
+    );
+  });
+
+  it('rejects reset links issued for an older password version', async () => {
+    redisService.getAndDelete.mockResolvedValueOnce({
+      hospitalId: 'hospital-id',
+      authVersion: 'old-password-version',
+    });
+    hospitalService.getPasswordVersion.mockResolvedValue(
+      'new-password-version',
+    );
+
+    await expect(
+      service.resetPassword('older-token', 'new-password'),
+    ).resolves.toBe(false);
+
+    expect(hospitalService.resetPassword).not.toHaveBeenCalled();
   });
 
   it('rejects expired or already-used tokens', async () => {

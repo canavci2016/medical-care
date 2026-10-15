@@ -18,7 +18,7 @@ import { CountryService } from 'src/application/shared/modules/country/country.s
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
-import { createHash, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { StringHelper } from 'src/application/shared/helpers/String';
 
 export enum RatingFilter {
@@ -248,9 +248,7 @@ export class HospitalService {
       return null;
     }
 
-    const authVersion = createHash('sha256')
-      .update(hospital.password)
-      .digest('hex');
+    const authVersion = this.versionFromPasswordHash(hospital.password);
     delete hospital.password;
 
     return Object.assign(hospital, { authVersion });
@@ -267,7 +265,11 @@ export class HospitalService {
       return null;
     }
 
-    return createHash('sha256').update(hospital.password).digest('hex');
+    return this.versionFromPasswordHash(hospital.password);
+  }
+
+  private versionFromPasswordHash(passwordHash: string): string {
+    return passwordHash.slice(0, 29);
   }
 
   private async hashPassword(password: string): Promise<string> {
