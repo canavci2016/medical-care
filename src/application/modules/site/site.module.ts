@@ -16,6 +16,7 @@ import { AdminHospitalController } from './admin-hospital.controller';
 import { AdminDoctorController } from './admin-doctor.controller';
 import { AdminAuthController } from './admin-auth.controller';
 import { HospitalAuthController } from './hospital-auth.controller';
+import { HospitalAuthGuard } from './guards/hospital-auth.guard';
 import { HospitalDashboardController } from './hospital-dashboard.controller';
 import { SitemapController } from './sitemap.controller';
 import { SitemapService } from './sitemap.service';
@@ -51,7 +52,7 @@ import { AppQueueModule } from 'src/application/shared/modules/app-queue/app-que
     OtherController,
     SitemapController,
   ],
-  providers: [HomeService, SitemapService],
+  providers: [HomeService, SitemapService, HospitalAuthGuard],
   exports: [HomeService],
 })
 export class SiteModule { }

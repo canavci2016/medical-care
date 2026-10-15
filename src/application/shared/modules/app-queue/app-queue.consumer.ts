@@ -18,10 +18,13 @@ export class AppQueueConsumer extends WorkerHost {
   ) {
     this.logger.log(`Processing job: ${job.name} (${job.id})`);
 
+    const jobName = job.name as SupportedEventTypes;
     const payload = job.data;
-    this.logger.debug(`Job payload: ${JSON.stringify(payload)}`);
+    if (jobName !== SupportedEventTypes.HOSPITAL_PASSWORD_RESET) {
+      this.logger.debug(`Job payload: ${JSON.stringify(payload)}`);
+    }
 
-    if (job.name === SupportedEventTypes.CONTACT_FORM_SUBMISSION) {
+    if (jobName === SupportedEventTypes.CONTACT_FORM_SUBMISSION) {
       const contact = payload as {
         firstName?: string;
         lastName?: string;
@@ -48,6 +51,23 @@ export class AppQueueConsumer extends WorkerHost {
       this.logger.log(
         `Contact form email sent for ${contact.email ?? 'unknown email'}`,
       );
+    }
+
+    if (jobName === SupportedEventTypes.HOSPITAL_PASSWORD_RESET) {
+      const passwordReset = payload as unknown as {
+        email: string;
+        resetUrl: string;
+      };
+
+      await this.appEmailService.sendMail({
+        to: passwordReset.email,
+        subject: 'Reset your hospital password',
+        text: [
+          'We received a request to reset your hospital password.',
+          `Use this link within one hour to choose a new password: ${passwordReset.resetUrl}`,
+          'If you did not request this change, you can ignore this email.',
+        ].join('\n\n'),
+      });
     }
 
     return payload;

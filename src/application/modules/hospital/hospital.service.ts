@@ -225,10 +225,17 @@ export class HospitalService {
       .getOne();
   }
 
+  async findByEmail(email: string): Promise<Hospital | null> {
+    return this.hospitalRepository
+      .createQueryBuilder('hospital')
+      .where('LOWER(hospital.email) = LOWER(:email)', { email: email.trim() })
+      .getOne();
+  }
+
   async validateCredentials(
     username: string,
     password: string,
-  ): Promise<Hospital | null> {
+  ): Promise<(Hospital & { authVersion: string }) | null> {
     const hospital = await this.findByUsername(username);
 
     if (!hospital || !hospital.password) {
@@ -241,9 +248,28 @@ export class HospitalService {
       return null;
     }
 
+    const authVersion = this.versionFromPasswordHash(hospital.password);
     delete hospital.password;
 
-    return hospital;
+    return Object.assign(hospital, { authVersion });
+  }
+
+  async getPasswordVersion(id: string): Promise<string | null> {
+    const hospital = await this.hospitalRepository
+      .createQueryBuilder('hospital')
+      .addSelect('hospital.password')
+      .where('hospital.id = :id', { id })
+      .getOne();
+
+    if (!hospital?.password) {
+      return null;
+    }
+
+    return this.versionFromPasswordHash(hospital.password);
+  }
+
+  private versionFromPasswordHash(passwordHash: string): string {
+    return passwordHash.slice(0, 29);
   }
 
   private async hashPassword(password: string): Promise<string> {
@@ -277,6 +303,24 @@ export class HospitalService {
     await this.hospitalRepository.update(id, {
       password: await this.hashPassword(newPassword),
     });
+  }
+
+  async resetPassword(
+    id: string,
+    newPassword: string,
+    expectedPasswordVersion: string,
+  ): Promise<boolean> {
+    const result = await this.hospitalRepository
+      .createQueryBuilder()
+      .update(Hospital)
+      .set({ password: await this.hashPassword(newPassword) })
+      .where(
+        'id = :id AND SUBSTRING(password, 1, 29) = :expectedPasswordVersion',
+        { id, expectedPasswordVersion },
+      )
+      .execute();
+
+    return (result.affected ?? 0) > 0;
   }
 
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {
