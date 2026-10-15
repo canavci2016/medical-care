@@ -130,6 +130,7 @@ export class HospitalAuthController {
     }
 
     session.hospitalId = hospital.id;
+    session.hospitalAuthVersion = hospital.authVersion;
 
     return res.redirect('/hospital/dashboard');
   }

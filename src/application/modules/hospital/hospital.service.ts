@@ -18,7 +18,7 @@ import { CountryService } from 'src/application/shared/modules/country/country.s
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
 import { AwsS3Service } from 'src/application/shared/modules/aws/s3.service';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { StringHelper } from 'src/application/shared/helpers/String';
 
 export enum RatingFilter {
@@ -235,7 +235,7 @@ export class HospitalService {
   async validateCredentials(
     username: string,
     password: string,
-  ): Promise<Hospital | null> {
+  ): Promise<(Hospital & { authVersion: string }) | null> {
     const hospital = await this.findByUsername(username);
 
     if (!hospital || !hospital.password) {
@@ -248,9 +248,26 @@ export class HospitalService {
       return null;
     }
 
+    const authVersion = createHash('sha256')
+      .update(hospital.password)
+      .digest('hex');
     delete hospital.password;
 
-    return hospital;
+    return Object.assign(hospital, { authVersion });
+  }
+
+  async getPasswordVersion(id: string): Promise<string | null> {
+    const hospital = await this.hospitalRepository
+      .createQueryBuilder('hospital')
+      .addSelect('hospital.password')
+      .where('hospital.id = :id', { id })
+      .getOne();
+
+    if (!hospital?.password) {
+      return null;
+    }
+
+    return createHash('sha256').update(hospital.password).digest('hex');
   }
 
   private async hashPassword(password: string): Promise<string> {
