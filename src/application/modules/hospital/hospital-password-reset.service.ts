@@ -8,6 +8,8 @@ import { SupportedEventTypes } from '../../shared/modules/app-queue/supported-ev
 
 const TOKEN_TTL_SECONDS = 60 * 60;
 const TOKEN_KEY_PREFIX = 'hospital-password-reset:';
+const REQUEST_LIMIT = 5;
+const REQUEST_LIMIT_TTL_SECONDS = 10 * 60;
 
 @Injectable()
 export class HospitalPasswordResetService {
@@ -19,6 +21,19 @@ export class HospitalPasswordResetService {
   ) {}
 
   async requestPasswordReset(email: string): Promise<void> {
+    const normalizedEmail = email.trim().toLowerCase();
+    const requestKey = `${TOKEN_KEY_PREFIX}requests:${createHash('sha256')
+      .update(normalizedEmail)
+      .digest('hex')}`;
+    const requestCount = await this.redisService.incrementWithExpiry(
+      requestKey,
+      REQUEST_LIMIT_TTL_SECONDS,
+    );
+
+    if (requestCount > REQUEST_LIMIT) {
+      return;
+    }
+
     const hospital = await this.hospitalService.findByEmail(email);
 
     if (!hospital?.email) {
