@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -129,6 +130,21 @@ export class HospitalDashboardController {
     delete payload.hospitalId;
 
     return this.hospitalHairResultService.update(id, payload);
+  }
+
+  @Delete('hair-results/:id')
+  async deleteHairResult(
+    @Session() session: Record<string, any>,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    const result = await this.hospitalHairResultService.findOne(id);
+
+    if (result.hospitalId !== session.hospitalId) {
+      throw new ForbiddenException('You do not own this hair result');
+    }
+
+    await this.hospitalHairResultService.remove(id);
+    return { success: true };
   }
 
   @Post('hair-results/upload-url')
