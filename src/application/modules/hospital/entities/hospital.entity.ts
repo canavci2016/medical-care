@@ -49,6 +49,10 @@ export class Hospital {
   @Column({ nullable: true, length: 255 })
   username?: string;
 
+  @Index({ unique: true })
+  @Column({ nullable: true, length: 255 })
+  email?: string;
+
   @Column({ nullable: true, select: false })
   password?: string;
 

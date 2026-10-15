@@ -280,6 +280,17 @@ export class HospitalService {
   }
 
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {
+    if (updateHospitalDto.email) {
+      const existingHospital = await this.hospitalRepository.findOne({
+        where: { email: updateHospitalDto.email },
+        select: ['id'],
+      });
+
+      if (existingHospital && existingHospital.id !== id) {
+        throw new BadRequestException('Email is already in use');
+      }
+    }
+
     if (updateHospitalDto.password) {
       updateHospitalDto.password = await this.hashPassword(
         updateHospitalDto.password,

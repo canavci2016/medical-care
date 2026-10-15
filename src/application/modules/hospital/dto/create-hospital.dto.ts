@@ -1,5 +1,6 @@
 import {
   IsString,
+  IsEmail,
   IsOptional,
   IsBoolean,
   IsUrl,
@@ -82,6 +83,11 @@ export class CreateHospitalDto {
   @IsString()
   @MaxLength(255)
   username?: string;
+
+  @IsOptional()
+  @IsEmail()
+  @MaxLength(255)
+  email?: string;
 
   @IsOptional()
   @IsString()
