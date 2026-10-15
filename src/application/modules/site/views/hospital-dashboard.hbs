@@ -56,19 +56,8 @@
                     </div>
 
                     <div class='mb-3'>
-                      <label for='slug' class='form-label'>Slug</label>
-                      <input type='text' class='form-control' id='slug' value='{{hospital.slug}}' />
-                    </div>
-
-                    <div class='row'>
-                      <div class='col-md-6 mb-3'>
-                        <label for='username' class='form-label'>Username</label>
-                        <input type='text' class='form-control' id='username' value='{{hospital.username}}' autocomplete='off' />
-                      </div>
-                      <div class='col-md-6 mb-3'>
-                        <label class='form-label d-block'>Password</label>
-                        <a href='/hospital/dashboard/password' class='btn btn-outline-secondary btn-sm'>Change Password</a>
-                      </div>
+                      <label for='username' class='form-label'>Username</label>
+                      <input type='text' class='form-control' id='username' value='{{hospital.username}}' autocomplete='off' />
                     </div>
 
                     <div class='row'>
@@ -162,17 +151,6 @@
                           class='btn btn-primary mt-2'
                           id='uploadCoverImageBtn'
                         >Upload Cover Image</button>
-                      </div>
-                    </div>
-
-                    <div class='row'>
-                      <div class='col-md-6 mb-3'>
-                        <label for='rating' class='form-label'>Rating</label>
-                        <input type='number' min='0' max='5' step='0.1' class='form-control' id='rating' value='{{hospital.rating}}' readonly />
-                      </div>
-                      <div class='col-md-6 mb-3'>
-                        <label for='reviewCount' class='form-label'>Review Count</label>
-                        <input type='number' min='0' class='form-control' id='reviewCount' value='{{hospital.reviewCount}}' readonly />
                       </div>
                     </div>
 
@@ -356,7 +334,6 @@
 
         const buildPayload = () => ({
           name: String(document.getElementById('name').value || '').trim(),
-          slug: String(document.getElementById('slug').value || '').trim() || undefined,
           username: String(document.getElementById('username').value || '').trim() || undefined,
           city: String(document.getElementById('city').value || '').trim() || undefined,
           country: String(document.getElementById('country').value || '').trim() || undefined,
