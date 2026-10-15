@@ -1,0 +1,111 @@
+import { createHash } from 'node:crypto';
+import { HospitalPasswordResetService } from './hospital-password-reset.service';
+import { SupportedEventTypes } from '../../shared/modules/app-queue/supported-event-types.enum';
+
+jest.mock('./hospital.service', () => ({
+  HospitalService: class HospitalService {},
+}));
+
+describe('HospitalPasswordResetService', () => {
+  let service: HospitalPasswordResetService;
+  let hospitalService: {
+    findByEmail: jest.Mock;
+    resetPassword: jest.Mock;
+  };
+  let redisService: {
+    set: jest.Mock;
+    getAndDelete: jest.Mock;
+    del: jest.Mock;
+  };
+  let appQueueService: { add: jest.Mock };
+  let configService: { get: jest.Mock };
+
+  beforeEach(() => {
+    hospitalService = {
+      findByEmail: jest.fn(),
+      resetPassword: jest.fn(),
+    };
+    redisService = {
+      set: jest.fn(),
+      getAndDelete: jest.fn(),
+      del: jest.fn(),
+    };
+    appQueueService = { add: jest.fn() };
+    configService = {
+      get: jest.fn().mockReturnValue('https://example.com'),
+    };
+
+    service = new HospitalPasswordResetService(
+      hospitalService as never,
+      redisService as never,
+      appQueueService as never,
+      configService as never,
+    );
+  });
+
+  it('does not create a reset token or queue an email for an unknown email', async () => {
+    hospitalService.findByEmail.mockResolvedValue(null);
+
+    await service.requestPasswordReset('unknown@example.com');
+
+    expect(redisService.set).not.toHaveBeenCalled();
+    expect(appQueueService.add).not.toHaveBeenCalled();
+  });
+
+  it('queues a reset link and stores only its hashed token with an expiry', async () => {
+    hospitalService.findByEmail.mockResolvedValue({
+      id: 'hospital-id',
+      email: 'hospital@example.com',
+    });
+
+    await service.requestPasswordReset('hospital@example.com');
+
+    const [jobName, jobData] = appQueueService.add.mock.calls[0] as [
+      string,
+      { email: string; resetUrl: string },
+    ];
+    const token = new URL(jobData.resetUrl).searchParams.get('token')!;
+    const hashedToken = createHash('sha256').update(token).digest('hex');
+
+    expect(jobName).toBe(SupportedEventTypes.HOSPITAL_PASSWORD_RESET);
+    expect(jobData.email).toBe('hospital@example.com');
+    expect(jobData.resetUrl).toMatch(
+      /^https:\/\/example\.com\/hospital\/auth\/reset-password\?token=/,
+    );
+    expect(redisService.set).toHaveBeenCalledWith(
+      `hospital-password-reset:${hashedToken}`,
+      'hospital-id',
+      3600,
+    );
+    const [storedKey] = redisService.set.mock.calls[0] as [string];
+    expect(storedKey).not.toContain(token);
+  });
+
+  it('consumes a valid token and resets the hospital password once', async () => {
+    const token = 'reset-token';
+    const hashedToken = createHash('sha256').update(token).digest('hex');
+    redisService.getAndDelete.mockResolvedValueOnce('hospital-id');
+    hospitalService.resetPassword.mockResolvedValue(true);
+
+    await expect(service.resetPassword(token, 'new-password')).resolves.toBe(
+      true,
+    );
+
+    expect(redisService.getAndDelete).toHaveBeenCalledWith(
+      `hospital-password-reset:${hashedToken}`,
+    );
+    expect(hospitalService.resetPassword).toHaveBeenCalledWith(
+      'hospital-id',
+      'new-password',
+    );
+  });
+
+  it('rejects expired or already-used tokens', async () => {
+    redisService.getAndDelete.mockResolvedValue(null);
+
+    await expect(
+      service.resetPassword('expired-token', 'new-password'),
+    ).resolves.toBe(false);
+    expect(hospitalService.resetPassword).not.toHaveBeenCalled();
+  });
+});

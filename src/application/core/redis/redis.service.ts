@@ -48,6 +48,11 @@ export class RedisService {
     return data ? JSON.parse(data) : null;
   }
 
+  async getAndDelete<T = any>(key: string): Promise<T | null> {
+    const data = await this.client.getDel(key);
+    return data ? (JSON.parse(data) as T) : null;
+  }
+
   // 🔹 HGETALL
   async hgetall<T = { [x: string]: string }>(key: string): Promise<T | null> {
     const data: Record<string, string> = await this.client.hGetAll(key);

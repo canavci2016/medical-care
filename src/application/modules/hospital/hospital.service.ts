@@ -225,6 +225,13 @@ export class HospitalService {
       .getOne();
   }
 
+  async findByEmail(email: string): Promise<Hospital | null> {
+    return this.hospitalRepository
+      .createQueryBuilder('hospital')
+      .where('LOWER(hospital.email) = LOWER(:email)', { email: email.trim() })
+      .getOne();
+  }
+
   async validateCredentials(
     username: string,
     password: string,
@@ -277,6 +284,14 @@ export class HospitalService {
     await this.hospitalRepository.update(id, {
       password: await this.hashPassword(newPassword),
     });
+  }
+
+  async resetPassword(id: string, newPassword: string): Promise<boolean> {
+    const result = await this.hospitalRepository.update(id, {
+      password: await this.hashPassword(newPassword),
+    });
+
+    return (result.affected ?? 0) > 0;
   }
 
   async update(id: string, updateHospitalDto: UpdateHospitalDto) {

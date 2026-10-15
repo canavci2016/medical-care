@@ -4,7 +4,9 @@ import {
   Get,
   Post,
   Put,
+  Query,
   Res,
+  SetMetadata,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -13,18 +15,100 @@ import { HospitalService } from '../hospital/hospital.service';
 import { LoginHospitalDto } from '../hospital/dto/login-hospital.dto';
 import { UpdateHospitalDto } from '../hospital/dto/update-hospital.dto';
 import { ChangePasswordHospitalDto } from '../hospital/dto/change-password-hospital.dto';
+import { ForgotPasswordHospitalDto } from '../hospital/dto/forgot-password-hospital.dto';
+import { ResetPasswordHospitalDto } from '../hospital/dto/reset-password-hospital.dto';
+import { HospitalPasswordResetService } from '../hospital/hospital-password-reset.service';
 import { HairTransplantTechnique } from 'src/application/shared/enums/hairtransplant-techniques.enum';
 import { HospitalAuthGuard } from './guards/hospital-auth.guard';
+import { APP_RATE_LIMIT_METADATA } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.constants';
+import { AppRateLimitGuard } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.guard';
 
 @Controller('hospital')
 export class HospitalAuthController {
-  constructor(private readonly hospitalService: HospitalService) {}
+  constructor(
+    private readonly hospitalService: HospitalService,
+    private readonly hospitalPasswordResetService: HospitalPasswordResetService,
+  ) {}
 
   @Get('auth/login')
   loginPage(@Res() res: Response) {
     return res.render('hospital-login', {
       layout: false,
     });
+  }
+
+  @Get('auth/forgot-password')
+  forgotPasswordPage(@Res() res: Response) {
+    return res.render('hospital-forgot-password', {
+      layout: false,
+    });
+  }
+
+  @UseGuards(AppRateLimitGuard)
+  @SetMetadata(APP_RATE_LIMIT_METADATA, {
+    keyPrefix: 'hospital-password-reset',
+    ttlSeconds: 600,
+    message: 'Too many password reset requests. Please try again later.',
+    maxAttempts: 5,
+  })
+  @Post('auth/forgot-password')
+  async forgotPassword(
+    @Body() payload: ForgotPasswordHospitalDto,
+    @Res() res: Response,
+  ) {
+    try {
+      await this.hospitalPasswordResetService.requestPasswordReset(
+        payload.email,
+      );
+    } catch {
+      return res.render('hospital-forgot-password', {
+        layout: false,
+        success:
+          'If an account exists for that email, a password reset link will be sent shortly.',
+      });
+    }
+
+    return res.render('hospital-forgot-password', {
+      layout: false,
+      success:
+        'If an account exists for that email, a password reset link will be sent shortly.',
+    });
+  }
+
+  @Get('auth/reset-password')
+  resetPasswordPage(@Query('token') token: string, @Res() res: Response) {
+    return res.render('hospital-reset-password', {
+      layout: false,
+      token,
+    });
+  }
+
+  @Post('auth/reset-password')
+  async resetPassword(
+    @Body() payload: ResetPasswordHospitalDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const reset = await this.hospitalPasswordResetService.resetPassword(
+        payload.token,
+        payload.newPassword,
+      );
+
+      return res.render('hospital-reset-password', {
+        layout: false,
+        token: reset ? undefined : payload.token,
+        success: reset ? 'Your password has been reset.' : undefined,
+        error: reset
+          ? undefined
+          : 'This password reset link is invalid or has expired.',
+      });
+    } catch {
+      return res.render('hospital-reset-password', {
+        layout: false,
+        token: payload.token,
+        error: 'Your password could not be reset. Please request a new link.',
+      });
+    }
   }
 
   @Post('auth/login')
@@ -141,4 +225,3 @@ export class HospitalAuthController {
     return this.hospitalService.getSignedUrlForImageUpload(contentType);
   }
 }
-
