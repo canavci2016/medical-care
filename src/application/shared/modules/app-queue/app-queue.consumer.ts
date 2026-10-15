@@ -20,9 +20,6 @@ export class AppQueueConsumer extends WorkerHost {
 
     const jobName = job.name as SupportedEventTypes;
     const payload = job.data;
-    if (jobName !== SupportedEventTypes.HOSPITAL_PASSWORD_RESET) {
-      this.logger.debug(`Job payload: ${JSON.stringify(payload)}`);
-    }
 
     if (jobName === SupportedEventTypes.CONTACT_FORM_SUBMISSION) {
       const contact = payload as {

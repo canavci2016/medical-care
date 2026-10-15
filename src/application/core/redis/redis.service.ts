@@ -32,15 +32,6 @@ export class RedisService {
     return res;
   }
 
-  async incrementWithExpiry(key: string, ttl: number) {
-    const [count] = await this.client
-      .multi()
-      .incr(key)
-      .expire(key, ttl)
-      .exec();
-    return Number(count);
-  }
-
   async zrange(key: string, startIndex: number = 0, endIndex: number = -1) {
     const res = await this.client.zRange(key, startIndex, endIndex);
     return res;

@@ -17,7 +17,6 @@ describe('HospitalPasswordResetService', () => {
     set: jest.Mock;
     getAndDelete: jest.Mock;
     del: jest.Mock;
-    incrementWithExpiry: jest.Mock;
   };
   let appQueueService: { add: jest.Mock };
   let configService: { get: jest.Mock };
@@ -32,7 +31,6 @@ describe('HospitalPasswordResetService', () => {
       set: jest.fn(),
       getAndDelete: jest.fn(),
       del: jest.fn(),
-      incrementWithExpiry: jest.fn().mockResolvedValue(1),
     };
     appQueueService = { add: jest.fn() };
     configService = {
@@ -53,19 +51,6 @@ describe('HospitalPasswordResetService', () => {
     await service.requestPasswordReset('unknown@example.com');
 
     expect(redisService.set).not.toHaveBeenCalled();
-    expect(appQueueService.add).not.toHaveBeenCalled();
-  });
-
-  it('limits password reset requests for the same email', async () => {
-    redisService.incrementWithExpiry.mockResolvedValue(6);
-
-    await service.requestPasswordReset('hospital@example.com');
-
-    expect(redisService.incrementWithExpiry).toHaveBeenCalledWith(
-      expect.stringMatching(/^hospital-password-reset:requests:/),
-      600,
-    );
-    expect(hospitalService.findByEmail).not.toHaveBeenCalled();
     expect(appQueueService.add).not.toHaveBeenCalled();
   });
 
