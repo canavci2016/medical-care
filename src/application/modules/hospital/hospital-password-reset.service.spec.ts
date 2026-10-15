@@ -117,9 +117,7 @@ describe('HospitalPasswordResetService', () => {
     expect(hospitalService.resetPassword).toHaveBeenCalledWith(
       'hospital-id',
       'new-password',
-    );
-    expect(hospitalService.getPasswordVersion).toHaveBeenCalledWith(
-      'hospital-id',
+      'password-version',
     );
   });
 
@@ -128,15 +126,17 @@ describe('HospitalPasswordResetService', () => {
       hospitalId: 'hospital-id',
       authVersion: 'old-password-version',
     });
-    hospitalService.getPasswordVersion.mockResolvedValue(
-      'new-password-version',
-    );
+    hospitalService.resetPassword.mockResolvedValue(false);
 
     await expect(
       service.resetPassword('older-token', 'new-password'),
     ).resolves.toBe(false);
 
-    expect(hospitalService.resetPassword).not.toHaveBeenCalled();
+    expect(hospitalService.resetPassword).toHaveBeenCalledWith(
+      'hospital-id',
+      'new-password',
+      'old-password-version',
+    );
   });
 
   it('rejects expired or already-used tokens', async () => {

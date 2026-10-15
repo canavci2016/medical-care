@@ -87,20 +87,10 @@ export class HospitalPasswordResetService {
       return false;
     }
 
-    const currentAuthVersion = await this.hospitalService.getPasswordVersion(
-      resetRequest.hospitalId,
-    );
-
-    if (
-      !currentAuthVersion ||
-      currentAuthVersion !== resetRequest.authVersion
-    ) {
-      return false;
-    }
-
     return this.hospitalService.resetPassword(
       resetRequest.hospitalId,
       newPassword,
+      resetRequest.authVersion,
     );
   }
 

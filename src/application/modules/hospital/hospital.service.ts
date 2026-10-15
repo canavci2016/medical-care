@@ -305,10 +305,20 @@ export class HospitalService {
     });
   }
 
-  async resetPassword(id: string, newPassword: string): Promise<boolean> {
-    const result = await this.hospitalRepository.update(id, {
-      password: await this.hashPassword(newPassword),
-    });
+  async resetPassword(
+    id: string,
+    newPassword: string,
+    expectedPasswordVersion: string,
+  ): Promise<boolean> {
+    const result = await this.hospitalRepository
+      .createQueryBuilder()
+      .update(Hospital)
+      .set({ password: await this.hashPassword(newPassword) })
+      .where(
+        'id = :id AND SUBSTRING(password, 1, 29) = :expectedPasswordVersion',
+        { id, expectedPasswordVersion },
+      )
+      .execute();
 
     return (result.affected ?? 0) > 0;
   }
