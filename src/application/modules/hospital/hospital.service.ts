@@ -345,7 +345,6 @@ export class HospitalService {
       const details = await this.googlePlaceService.getPlaceDetails(
         updateHospitalDto.googlePlaceId,
       );
-      updateHospitalDto.address = details.formattedAddress;
       updateHospitalDto.weekDayOpenings =
         details.regularOpeningHours?.weekdayDescriptions || [];
       updateHospitalDto.directionsUri =
