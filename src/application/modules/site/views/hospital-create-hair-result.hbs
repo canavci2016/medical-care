@@ -86,14 +86,9 @@
                 </div>
 
                 <div class='mb-3'>
-                  <label for='imageUrls' class='form-label'>Image URLs (comma separated)</label>
-                  <input type='text' class='form-control' id='imageUrls' placeholder='https://...' />
-                </div>
-
-                <div class='mb-3'>
                   <label for='imageFile' class='form-label'>Upload Image</label>
                   <input type='file' class='form-control' id='imageFile' accept='image/*' />
-                  <button type='button' class='btn btn-secondary mt-2' id='uploadImageBtn'>Upload &amp; Add URL</button>
+                  <button type='button' class='btn btn-secondary mt-2' id='uploadImageBtn'>Upload Image</button>
                 </div>
 
                 <div class='mb-3'>
@@ -146,11 +141,11 @@
       });
 
       document.addEventListener('DOMContentLoaded', function () {
-        const imageUrlsInput = document.getElementById('imageUrls');
         const imageFileInput = document.getElementById('imageFile');
         const uploadImageBtn = document.getElementById('uploadImageBtn');
         const submitBtn = document.getElementById('submitResultBtn');
         const alertBox = document.getElementById('createResultAlert');
+        const uploadedImageUrls = [];
 
         const showAlert = (message, type) => {
           alertBox.textContent = message;
@@ -191,10 +186,9 @@
             }
 
             const finalUrl = uploadResponse.url.split('?')[0];
-            const existing = imageUrlsInput.value.trim();
-            imageUrlsInput.value = existing ? `${existing},${finalUrl}` : finalUrl;
+            uploadedImageUrls.push(finalUrl);
             imageFileInput.value = '';
-            showAlert('Image uploaded and added to list.', 'success');
+            showAlert('Image uploaded successfully.', 'success');
           } catch (error) {
             const message = error instanceof Error ? error.message : 'Unexpected error occurred.';
             showAlert(message, 'error');
@@ -212,11 +206,6 @@
             .map((value) => parseInt(value.trim(), 10))
             .filter((value) => !Number.isNaN(value));
 
-          const imageUrls = String(imageUrlsInput.value || '')
-            .split(',')
-            .map((value) => value.trim())
-            .filter(Boolean);
-
           const treatmentAreas = Array.from(
             document.querySelectorAll('input[name="treatmentAreas"]:checked'),
           ).map((input) => input.value);
@@ -231,7 +220,7 @@
             availableMonths,
             treatmentAreas: treatmentAreas.length ? treatmentAreas : undefined,
             operationDate: operationDateValue || undefined,
-            imageUrls: imageUrls.length ? imageUrls : undefined,
+            imageUrls: uploadedImageUrls.length ? uploadedImageUrls : undefined,
             patientStory: String(document.getElementById('patientStory').value || '').trim() || undefined,
             isPublic: document.getElementById('isPublic').checked,
           };
