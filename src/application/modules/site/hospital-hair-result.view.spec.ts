@@ -18,4 +18,10 @@ describe('hospital hair-result creation view', () => {
       /<div class='row'>\s*<div class='col-md-6 mb-3'>[\s\S]*?id='monthsAfter'[\s\S]*?<\/div>\s*<div class='col-md-6 mb-3'>[\s\S]*?id='availableMonths'[\s\S]*?<\/div>\s*<\/div>/,
     );
   });
+
+  it('accepts images through file uploads instead of manual image URLs', () => {
+    expect(template).not.toMatch(/Image URLs|id='imageUrls'/i);
+    expect(template).toMatch(/id='imageFile'/);
+    expect(template).toMatch(/imageUrls: uploadedImageUrls/);
+  });
 });
