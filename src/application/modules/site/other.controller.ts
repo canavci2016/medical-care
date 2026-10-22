@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { CityService } from 'src/application/shared/modules/city/city.service';
+import { CountryService } from 'src/application/shared/modules/country/country.service';
 import { APP_RATE_LIMIT_METADATA } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.constants';
 import { AppRateLimitGuard } from 'src/application/shared/modules/app-rate-limit/app-rate-limit.guard';
 import { AppQueueService } from 'src/application/shared/modules/app-queue/app-queue.service';
@@ -18,15 +19,17 @@ import { SupportedEventTypes } from 'src/application/shared/modules/app-queue/su
 import { HospitalService } from '../hospital/hospital.service';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { StringHelper } from 'src/application/shared/helpers/String';
+import { HairResultStatus } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 
 @Controller()
 export class OtherController {
   constructor(
     private readonly appQueueService: AppQueueService,
     private readonly cityService: CityService,
+    private readonly countryService: CountryService,
     private readonly hospitalService: HospitalService,
     private readonly hairResultService: HospitalHairResultService,
-  ) { }
+  ) {}
 
   @Get(['/contact', '/about'])
   about(@Req() req, @Res() res: Response) {
@@ -101,6 +104,50 @@ export class OtherController {
       message:
         'Your message has been received. We will get back to you shortly.',
     };
+  }
+
+  @Get('/hair-transplant/turkey')
+  async countryDetail(@Req() req, @Res() res: Response) {
+    const countryModel =
+      await this.countryService.findCountryOrCreate('türkiye');
+    const hospitals = await this.hospitalService.paginated({
+      countryId: { eq: countryModel.id },
+      page: { page: 1, limit: 3 },
+    });
+    const results = await this.hairResultService.findAll({
+      countryId: { eq: countryModel.id },
+      page: { page: 1, limit: 3 },
+      status: HairResultStatus.ACTIVE,
+    });
+
+    const doctors = {
+      pagination: { total: 0 },
+    };
+
+    const country = {
+      ...countryModel,
+      slug: 'turkey',
+    };
+
+    return res.render('country', {
+      results,
+      doctors,
+      country,
+      hospitals: hospitals,
+      seo: {
+        title: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(country.name)}: Clinics, Costs & Real Results | HairResult.`,
+        keywords:
+          'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
+        description: `Compare hair transplant clinics in ${StringHelper.capitalizeFirstLetter(country.name)},real before-and-after results, DHI and FUE procedures, graft counts, costs and patient outcomes.`,
+        canonical: '/hair-transplant/' + country.slug,
+        ogType: 'website',
+        ogTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(country.name)}: Clinics, Costs & Real Results`,
+        ogDescription: `Explore documented hair transplant results, clinics, costs, DHI and FUE procedures in ${StringHelper.capitalizeFirstLetter(country.name)}.`,
+        ogUrl: '/hair-transplant/' + country.slug,
+        twitterTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(country.name)}: Clinics, Costs & Real Results`,
+        twitterDescription: `Compare documented hair transplant results, clinics and costs in ${StringHelper.capitalizeFirstLetter(country.name)}.`,
+      },
+    });
   }
 
   @Get('/hair-transplant/:citySlug')

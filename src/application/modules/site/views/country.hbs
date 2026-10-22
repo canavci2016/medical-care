@@ -1,0 +1,405 @@
+
+  <!-- PAGE HEADER -->
+  <section class="page-header">
+    <div class="container">
+      <span class="city-eyebrow">🇹🇷 {{ucwords country.name}}</span>
+      <h1>Hair Transplant in {{ucwords country.name}}</h1>
+      <p>One of the world's leading hair restoration destinations — documented, compared and verified. Every number below is backed by a real case in our gallery.</p>
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">›</span>
+        <span>Hair Transplant in {{ucwords country.name}}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CITY STATS -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stat-item fade-in">
+        <span class="stat-number" data-count="{{results.pagination.total}}">{{results.pagination.total}}</span>
+        <span class="stat-label">Documented Results</span>
+      </div>
+      <div class="stat-item fade-in">
+        <span class="stat-number" data-count="{{hospitals.pagination.total}}">{{hospitals.pagination.total}}</span>
+        <span class="stat-label">Clinics</span>
+      </div>
+      <div class="stat-item fade-in">
+        <span class="stat-number" data-count="{{doctors.pagination.total}}">{{doctors.pagination.total}}</span>
+        <span class="stat-label">Doctors</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="city-cta-strip">
+    <div class="container">
+      <div class="city-cta-inner fade-in">
+        <div>
+          <h2>Start with the photos, not the promises</h2>
+          <p>Browse every documented {{ucwords country.name}} case with graft counts, techniques and post-op timelines.</p>
+        </div>
+        <a href="/hair-transplant/{{country.slug}}/results" class="btn btn-primary">Explore {{ucwords country.name}} Results</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REAL RESULTS -->
+  <section class="section" id="{{country.slug}}-results">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">Real Transformations</span>
+        <h2>Real Hair Transplant Results in {{ucwords country.name}}</h2>
+        <p>Before and after photos from verified patients treated in {{ucwords country.name}} clinics, each with the technique, graft count and time since surgery.</p>
+      </div>
+
+      <div class="grid-3">
+        {{#each results.data as |result|}}
+        <a href="/results/{{result.id}}" class="ba-card fade-in">
+          <div class="ba-images">
+            <div class="ba-img"><img src="{{result.previewImageUrl}}" alt="{{result.graftCount}} graft {{result.technique}} hair transplant result at {{result.hospital.name}} in {{ucwords ../country.name}}"><span class="ba-label after">Before - After</span></div>
+          </div>
+          <div class="ba-info">
+            <h3>{{result.technique}} — {{result.graftCount}} Grafts</h3>
+            <div class="ba-meta">
+              <span>👨‍⚕️ Unknown doctor </span>
+              <span>🏥 {{result.hospital.name}}</span>
+              <span>📅 Result after {{result.monthsAfter}} months</span>
+            </div>
+            <span class="view-detail-link">View Full Case →</span>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="/hair-transplant/{{country.slug}}/results" class="btn btn-outline">View all {{ucwords country.name}} results →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COST -->
+  <section class="section" id="{{country.slug}}-cost" style="background: #fff;">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">Budget Planning</span>
+        <h2>Hair Transplant Cost in {{ucwords country.name}}</h2>
+        <p>{{ucwords country.name}} packages are usually quoted as a flat all-in price rather than per graft. Pricing data based on {{results.pagination.total}} documented {{ucwords country.name}} cases with reported costs. Last updated September 2026.</p>
+      </div>
+
+      <div class="cost-grid">
+        <div class="detail-card fade-in">
+          <h3>Typical price ranges</h3>
+          <p class="cost-note">All-inclusive packages quoted in {{ucwords country.name}}, 2026.</p>
+          <table class="pricing-table">
+            <thead>
+              <tr><th>Package tier</th><th>Price range</th><th>Usually includes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Standard clinic</td><td class="price">$1,800 – $2,600</td><td>Surgery, 2 nights hotel, transfers</td></tr>
+              <tr><td>Mid-range clinic</td><td class="price">$2,600 – $4,000</td><td>Surgeon-led planning, 3 nights, aftercare kit</td></tr>
+              <tr><td>Premium clinic</td><td class="price">$4,000 – $7,500</td><td>Full surgeon execution, PRP, 12-month follow-up</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="detail-card fade-in">
+          <h3>Cost by graft count</h3>
+          <p class="cost-note">Guide prices at a mid-range {{ucwords country.name}} clinic.</p>
+          <table class="pricing-table">
+            <thead>
+              <tr><th>Grafts</th><th>Typical cost</th><th>Best suited for</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1,500 – 2,000</td><td class="price">$1,900 – $2,700</td><td>Temple points, early recession</td></tr>
+              <tr><td>2,000 – 3,000</td><td class="price">$2,400 – $3,400</td><td>Full frontal hairline</td></tr>
+              <tr><td>3,000 – 4,000</td><td class="price">$3,000 – $4,400</td><td>Hairline plus mid-scalp</td></tr>
+              <tr><td>4,000+</td><td class="price">$3,800 – $5,600</td><td>Advanced loss, crown included</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="detail-card fade-in">
+          <h3>DHI vs FUE pricing</h3>
+          <p class="cost-note">Why the same graft count can carry two different prices.</p>
+          <table class="pricing-table">
+            <thead>
+              <tr><th>Factor</th><th>FUE / Sapphire FUE</th><th>DHI</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Price for 3,000 grafts</td><td class="price">$2,400 – $3,600</td><td class="price">$3,200 – $4,800</td></tr>
+              <tr><td>Session length</td><td>6 – 8 hours</td><td>7 – 9 hours</td></tr>
+              <tr><td>Max grafts per session</td><td>Up to 4,500+</td><td>Usually up to 2,500 – 3,000</td></tr>
+              <tr><td>Shaving</td><td>Full shave typical</td><td>Partial / unshaven possible</td></tr>
+              <tr><td>Premium reason</td><td>Baseline technique</td><td>Slower, more staff, denser placement</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="cost-callout fade-in">
+        <strong>Watch the quote structure.</strong> A price that drops sharply when you hesitate, or a package quoted only as "unlimited grafts", is a signal to ask who performs the extractions and implantations — the surgeon or a technician.
+      </div>
+    </div>
+  </section>
+
+  <!-- CLINICS -->
+  <section class="section" id="{{country.slug}}-clinics">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">{{hospitals.pagination.total}} Clinics Tracked</span>
+        <h2>Hair Transplant Clinics in {{ucwords country.name}}</h2>
+        <p>Ranked by the number of documented cases in our gallery — not by advertising spend.</p>
+      </div>
+
+      <div class="grid-3">
+        {{#each hospitals.data as |hospital|}}
+        <a href="/clinics/{{hospital.slug}}" class="card fade-in">
+          <div class="card-image">
+            <img src="{{hospital.coverImageUrl}}" alt="{{hospital.name}}">
+            <div class="overlay">
+              <span class="badge badge-green">Verified</span>
+              <span class="badge badge-gold">Most Documented</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>{{hospital.name}}</h3>
+            <div class="location">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              -, {{ucwords hospital.cityName}}
+            </div>
+            <div class="tags">
+              {{#each  (split hospital.techniques ",")}}
+                <span class="badge badge-blue">{{this}}</span>
+              {{/each}}
+            </div>
+            <div class="meta">
+              <div class="rating">
+                <div class="stars">{{stars hospital.rating}}</div>
+                <span class="score">{{hospital.rating}}</span>
+              </div>
+              <span class="procedures">{{hospital.procedureCount}} documented results</span>
+            </div>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="/hair-transplant/{{country.slug}}/clinics" class="btn btn-outline">View {{ucwords country.name}} clinics →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNIQUES -->
+  <section class="section" id="{{country.slug}}-techniques">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">By Technique</span>
+        <h2>DHI and FUE in {{ucwords country.name}}</h2>
+        <p>Both techniques are offered by almost every {{ucwords country.name}} clinic. The difference shows up in density, session limits and price.</p>
+      </div>
+
+      <div class="technique-grid">
+        <div class="technique-card fade-in">
+          <span class="badge badge-blue">DHI</span>
+          <h3>DHI Hair Transplant in {{ucwords country.name}}</h3>
+          <p>Follicles are extracted and implanted in one step with a Choi implanter pen, giving tight control over angle and depth. {{ucwords country.name}} clinics use it most often for hairlines, temple points and unshaven sessions where the graft count stays under about 3,000.</p>
+          <ul class="technique-list">
+            <li><strong>Typical range:</strong> 1,500 – 3,000 grafts</li>
+            <li><strong>Cost for 3,000:</strong> $3,200 – $4,800</li>
+            <li><strong>Shaving:</strong> partial or unshaven available</li>
+            <li><strong>Strength:</strong> very high density in small areas</li>
+          </ul>
+          <a href="/hair-transplant/{{country.slug}}/results?technique=DHI" class="btn btn-outline btn-sm">Actual DHI results →</a>
+        </div>
+
+        <div class="technique-card fade-in">
+          <span class="badge badge-blue">FUE</span>
+          <h3>FUE Hair Transplant in {{ucwords country.name}}</h3>
+          <p>Grafts are harvested individually, channels are opened — often with a sapphire blade — and then implanted. It remains the workhorse technique in {{ucwords country.name}} because it handles large sessions covering the hairline, mid-scalp and crown in a single day.</p>
+          <ul class="technique-list">
+            <li><strong>Typical range:</strong> 2,000 – 4,500+ grafts</li>
+            <li><strong>Cost for 3,000:</strong> $2,400 – $3,600</li>
+            <li><strong>Shaving:</strong> full shave in most cases</li>
+            <li><strong>Strength:</strong> broad coverage per session</li>
+          </ul>
+          <a href="/hair-transplant/{{country.slug}}/results?technique=FUE" class="btn btn-outline btn-sm">Actual FUE results →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT TO KNOW -->
+  <section class="section" id="{{country.slug}}-checklist" style="background: #fff;">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">Before You Book</span>
+        <h2>What to Know Before Choosing a Clinic</h2>
+        <p>{{ucwords country.name}} has excellent surgeons and aggressive resellers in the same neighbourhood. These are the questions that separate them.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="detail-card checklist-card fade-in">
+          <span class="checklist-number">01</span>
+          <h3>Surgeon vs technician execution</h3>
+          <p>The single largest cost variable. A session where the surgeon opens every channel and places grafts costs more than one run mostly by technicians — and the difference shows up in density and hairline design.</p>
+        </div>
+        <div class="detail-card checklist-card fade-in">
+          <span class="checklist-number">02</span>
+          <h3>Is the graft number realistic?</h3>
+          <p>Price is driven by the number of follicular units extracted, how long the team is occupied and how many staff are needed per graft. "Unlimited grafts" quotes hide this by counting hairs, not units.</p>
+        </div>
+        <div class="detail-card checklist-card fade-in">
+          <span class="checklist-number">03</span>
+          <h3>Technique and tools</h3>
+          <p>DHI uses Choi implanter pens and a slower, denser placement, so it costs roughly 25–40% more than FUE for the same graft count. Sapphire blades sit between standard FUE and DHI.</p>
+        </div>
+        <div class="detail-card checklist-card fade-in">
+          <span class="checklist-number">04</span>
+          <h3>City and facility</h3>
+          <p>Istanbul is the cheapest large market because of volume. Ankara, Izmir and Antalya are close behind. Academic or university hospitals charge the most, and operate in fully licensed medical facilities.</p>
+        </div>
+        <div class="detail-card checklist-card fade-in">
+          <span class="checklist-number">05</span>
+          <h3>Hotel, transfers and aftercare</h3>
+          <p>A genuine all-in package covers 2–4 hotel nights, airport transfers, medication, first wash and an aftercare kit. Stripping these out is the most common way a headline price is made to look lower.</p>
+        </div>
+        <div class="detail-card checklist-card fade-in">
+          <span class="checklist-number">06</span>
+          <h3>How is follow-up handled?</h3>
+          <p>Twelve-month monitoring, progress-photo reviews and a written touch-up policy cost the clinic money. Their absence is a saving you may pay for later at full price.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" id="{{country.slug}}-process">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">Step by Step</span>
+        <h2>Hair Transplant Process in {{ucwords country.name}}</h2>
+        <p>A typical {{ucwords country.name}} trip runs three to four days from landing to flying home, followed by a year of monitored growth.</p>
+      </div>
+
+      <div class="detail-card fade-in" style="max-width: 860px; margin: 0 auto;">
+        <div class="blog-timeline">
+          <div class="blog-timeline-item">
+            <div class="blog-timeline-marker"></div>
+            <div class="blog-timeline-content">
+              <h4>1. Consultation — remote, 2 to 6 weeks before</h4>
+              <p>You send photos of the front, top, crown and donor area. The clinic returns a hairline plan, an estimated graft range, a price and a list of blood tests. Compare at least three clinics on the plan itself, not only the price.</p>
+            </div>
+          </div>
+          <div class="blog-timeline-item">
+            <div class="blog-timeline-marker"></div>
+            <div class="blog-timeline-content">
+              <h4>2. Arrival — day one</h4>
+              <p>Airport transfer, hotel check-in, then an in-person examination. Donor density is measured, the hairline is drawn on your scalp and blood tests are run. This is the moment to adjust the design — after shaving it is too late.</p>
+            </div>
+          </div>
+          <div class="blog-timeline-item">
+            <div class="blog-timeline-marker"></div>
+            <div class="blog-timeline-content">
+              <h4>3. Procedure — day two, 6 to 9 hours</h4>
+              <p>Shaving, local anaesthesia, extraction, channel opening and implantation, with breaks for lunch. You stay awake throughout. Ask to see the graft count recorded at the end of the session.</p>
+            </div>
+          </div>
+          <div class="blog-timeline-item">
+            <div class="blog-timeline-marker"></div>
+            <div class="blog-timeline-content">
+              <h4>4. Recovery — day three onward</h4>
+              <p>First wash is demonstrated at the clinic, bandages are removed and PRP may be applied. Swelling peaks around days two to four, scabs clear within 10 to 14 days, and most patients are back at work inside a week.</p>
+            </div>
+          </div>
+          <div class="blog-timeline-item">
+            <div class="blog-timeline-marker"></div>
+            <div class="blog-timeline-content">
+              <h4>5. Follow-up — month 3 to month 18</h4>
+              <p>Shedding at weeks two to eight is expected. Real growth starts around month four, becomes convincing by month eight, and final density is judged at 12 to 18 months. Send progress photos on schedule so any shortfall is documented early.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="{{country.slug}}-faq" style="background: #fff;">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="label">FAQ</span>
+        <h2>{{ucwords country.name}} Hair Transplant Questions</h2>
+        <p>The questions patients ask most often before booking a trip to {{ucwords country.name}}.</p>
+      </div>
+
+      <div class="detail-card fade-in" style="max-width: 860px; margin: 0 auto;">
+        <div class="faq-item active">
+          <div class="faq-question">
+            <span>What is the average cost of a hair transplant in {{ucwords country.name}}?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Most patients pay between $1,700 and $4,200 for a single all-inclusive session. Standard clinics start around $1,600, mid-range clinics sit between $2,400 and $3,800, premium clinics and academic hospitals run from $3,800 up to about $9,500. Graft count and technique move you within those bands.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Why is a hair transplant in Turkey so much cheaper?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Lower staff and facility costs, a favourable exchange rate and very high procedure volume let Turkish clinics charge a fraction of US or UK prices. The saving comes from the local cost base, not from cutting the number of grafts — but it also means the market is crowded, so verifying the surgeon matters more than in a smaller market.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is the price per graft or a flat package?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Almost always a flat package price that bundles a graft range, hotel nights, transfers and aftercare. Per-graft pricing exists but is less common outside premium clinics. Ask which graft count the flat price assumes, because packages for 2,000 grafts and 4,000 grafts are not interchangeable.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is DHI more expensive than FUE?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes. DHI for 3,000 grafts typically costs $3,100 – $4,700 versus $2,200 – $3,400 for FUE, because placement is slower, needs more staff and is limited to roughly 2,500–3,000 grafts per session. Sapphire FUE sits in between at $2,600 – $3,900.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Are there hidden costs after I arrive?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Reputable clinics do not raise the agreed price after the in-person examination unless the graft range changes. The items most often excluded from a quote are blood tests, medication, extra PRP sessions, additional hotel nights and future touch-ups. Ask for the exclusions in writing before you travel.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>When will I see the final result?</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Transplanted hairs shed within the first two months, regrowth becomes visible around month four, and density builds through month eight. Judge the outcome at 12 months for the hairline and up to 18 months for the crown. That is why every case in our gallery is labelled with its post-op timeline.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Compare {{ucwords country.name}} Clinics on Evidence, Not Ads</h2>
+      <p>Tell us your hair loss pattern and budget, and we will point you to the {{ucwords country.name}} clinics and surgeons with documented cases that match.</p>
+      <div class="cta-actions">
+        <a href="/contact" class="btn btn-primary">Get Free Consultation</a>
+        <a href="/hair-transplant/{{country.slug}}/results" class="btn btn-outline" style="border-color: #fff; color: #fff;">Explore {{ucwords country.name}} Results</a>
+      </div>
+    </div>
+  </section>

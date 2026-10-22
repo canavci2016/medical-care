@@ -26,7 +26,7 @@ export class HospitalController {
     private readonly doctorService: DoctorService,
     private readonly countryService: CountryService,
     private readonly cityService: CityService,
-  ) {}
+  ) { }
 
   @Get(['/hospitals/api', '/clinics/api'])
   async apiFindPaginated(
@@ -58,6 +58,26 @@ export class HospitalController {
     const hospital = await this.hospitalService.findOne(id);
 
     return res.json({ data: hospital });
+  }
+
+  @Get(['/hair-transplant/turkey/clinics', '/hair-result/turkey/hospitals'])
+  async clinicsOfTurkey(
+    @Res() res: Response,
+    @Query() query: HospitalQueryDto,
+  ) {
+    const countryInst =
+      await this.countryService.findCountryOrCreate('türkiye');
+    query.country = countryInst?.id;
+    return this.renderResults(res, query, {
+      h1Title: `Hair Transplant Clinics in ${countryInst?.name}`,
+      title: `Hair Transplant Clinics in ${countryInst?.name}`,
+      keywords: `hair transplant clinics in ${countryInst?.name}, best hair clinics in ${countryInst?.name}, clinic ratings, hair restoration hospitals, hospital directory`,
+      canonical: `/hair-transplant/turkey/clinics`,
+      description: `Browse verified hospitals and clinics for hair transplant procedures in ${countryInst?.name}. Filter by city, rating, and sorting options.`,
+      ogTitle: `Hair Transplant Clinics in ${countryInst?.name}`,
+      ogDescription: `Discover and compare hair transplant clinics in ${countryInst?.name} by rating and location.`,
+      twitterTitle: `Hair Transplant Clinics in ${countryInst?.name}`,
+    });
   }
 
   @Get(['/hair-transplant/:citySlug/clinics', '/hair-result/:cityId/hospitals'])

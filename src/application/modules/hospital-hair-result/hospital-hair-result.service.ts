@@ -115,6 +115,7 @@ export class HospitalHairResultService {
       id: string;
       hospitalId: string | string[];
       cityId: Query<string>;
+      countryId: Query<string>;
       procedureType: string | Query;
       technique: string | Query;
       graftCount: Pick<Query, 'gte'>;
@@ -215,6 +216,13 @@ export class HospitalHairResultService {
       optionsTyped.where = {
         ...optionsTyped.where,
         hospital: { cityId: options.cityId.eq },
+      };
+    }
+
+    if (options.countryId?.eq) {
+      optionsTyped.where = {
+        ...optionsTyped.where,
+        hospital: { countryId: options.countryId.eq },
       };
     }
 

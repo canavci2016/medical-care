@@ -6,6 +6,7 @@ import {
   Res,
   Query,
 } from '@nestjs/common';
+import { CountryService } from 'src/application/shared/modules/country/country.service';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import type { Response } from 'express';
@@ -40,6 +41,7 @@ export class HospitalHairResultController {
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly hospitalService: HospitalService,
     private readonly cityService: CityService,
+    private readonly countryService: CountryService,
   ) { }
 
   @Get('/results')
@@ -59,6 +61,23 @@ export class HospitalHairResultController {
 
     return this.renderResults(query, res, {
       h1Title: h1Title,
+    });
+  }
+
+  @Get('/hair-transplant/turkey/results')
+  async findAllForTurkey(
+    @Res() res: Response,
+    @Query() query: HairResultQueryDto,
+  ) {
+    const country = await this.countryService.findCountryOrCreate('türkiye');
+
+    const slug = 'turkey';
+    query.countryId = country.id;
+    return this.renderResults(query, res, {
+      ogTitle: `hair transplant results in  ${country.name} `,
+      title: `hair transplant results in ${country.name} `,
+      h1Title: `hair transplant results in ${country.name} `,
+      canonical: process.env.APP_URL + `/hair-transplant/${slug}/results`,
     });
   }
 
@@ -214,6 +233,7 @@ export class HospitalHairResultController {
   ) {
     const { data: latestHairResults, pagination } =
       await this.hospitalHairResultService.findAll({
+        countryId: { eq: query.countryId },
         cityId: { eq: query.cityId },
         hospitalId: query.hospitalId,
         status: HairResultStatus.ACTIVE,
