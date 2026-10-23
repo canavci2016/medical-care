@@ -46,6 +46,12 @@ export class SitemapController {
     return this.sitemapService.getHospitalOfCitySitemapXml();
   }
 
+  @Get('sitemaps/entities-of-country.xml')
+  @Header('Content-Type', 'application/xml')
+  entitiesOfCountrySitemap() {
+    return this.sitemapService.getEntitiesOfCountrySitemapXml();
+  }
+
   @Get('sitemaps/blog.xml')
   @Header('Content-Type', 'application/xml')
   blogSitemap() {

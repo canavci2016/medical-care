@@ -7,6 +7,7 @@ import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair
 import { GraftCountEnum } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { HospitalService } from '../hospital/hospital.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
+import { CountryService } from 'src/application/shared/modules/country/country.service';
 
 interface XmlUrl {
   loc: string;
@@ -25,6 +26,7 @@ export class SitemapService {
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
     private readonly cityService: CityService,
+    private readonly countryService: CountryService,
   ) { }
 
   async getSitemapIndexXml(): Promise<string> {
@@ -38,6 +40,7 @@ export class SitemapService {
       '/sitemaps/blog.xml',
       '/sitemaps/results-for-hospitals.xml',
       '/sitemaps/hospital-of-city.xml',
+      '/sitemaps/entities-of-country.xml',
       ...Array.from(
         Array(hairResults.pagination.totalPages),
         (_, x) => `/sitemaps/results-${x + 1}.xml`,
@@ -171,6 +174,11 @@ ${xmlEntries}
     const cities = await this.cityService.findAll({ take: 10000 });
     for (const city of cities) {
       urls.push({
+        loc: `/hair-transplant/${city.slug}`,
+        changefreq: 'daily',
+        priority: '0.9',
+      });
+      urls.push({
         loc: `/hair-transplant/${city.slug}/clinics`,
         changefreq: 'daily',
         priority: '0.9',
@@ -181,6 +189,27 @@ ${xmlEntries}
         priority: '0.9',
       });
     }
+
+    const today = new Date().toISOString().split('T')[0];
+    return this.toUrlsetXml(urls, today);
+  }
+  getEntitiesOfCountrySitemapXml() {
+    const urls: Array<XmlUrl> = [];
+    urls.push({
+      loc: `/hair-transplant/turkey`,
+      changefreq: 'daily',
+      priority: '0.9',
+    });
+    urls.push({
+      loc: `/hair-transplant/turkey/clinics`,
+      changefreq: 'daily',
+      priority: '0.9',
+    });
+    urls.push({
+      loc: `/hair-transplant/turkey/results`,
+      changefreq: 'daily',
+      priority: '0.9',
+    });
 
     const today = new Date().toISOString().split('T')[0];
     return this.toUrlsetXml(urls, today);
