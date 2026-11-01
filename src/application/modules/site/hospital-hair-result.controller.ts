@@ -20,6 +20,7 @@ import { TreatmentArea } from 'src/application/shared/enums/treatment-area.enum'
 import { HairResultQueryDto } from './dto/hair-result-query.dto';
 import { HospitalService } from '../hospital/hospital.service';
 import { Query as QueryBuilder } from 'src/application/shared/interfaces/query.interface';
+import { UrlHelper } from 'src/application/shared/helpers/Url';
 
 interface SeoParamsInterface {
   title: string;
@@ -42,7 +43,7 @@ export class HospitalHairResultController {
     private readonly hospitalService: HospitalService,
     private readonly cityService: CityService,
     private readonly countryService: CountryService,
-  ) { }
+  ) {}
 
   @Get('/results')
   async findAll(@Res() res: Response, @Query() query: HairResultQueryDto) {
@@ -77,7 +78,7 @@ export class HospitalHairResultController {
       ogTitle: `hair transplant results in  ${country.name} `,
       title: `hair transplant results in ${country.name} `,
       h1Title: `hair transplant results in ${country.name} `,
-      canonical: process.env.APP_URL + `/hair-transplant/${slug}/results`,
+      canonical: UrlHelper.canonicalUrl(`/hair-transplant/${slug}/results`),
     });
   }
 
@@ -95,7 +96,7 @@ export class HospitalHairResultController {
       ogTitle: `hair transplant results in  ${city.name} `,
       title: `hair transplant results in ${city.name} `,
       h1Title: `hair transplant results in ${city.name} `,
-      canonical: process.env.APP_URL + `/hair-transplant/${citySlug}/results`,
+      canonical: UrlHelper.canonicalUrl(`/hair-transplant/${citySlug}/results`),
     });
   }
 
@@ -113,7 +114,7 @@ export class HospitalHairResultController {
       ogTitle: `${hospital.name} hair transplant results`,
       title: `${hospital.name} hair transplant results`,
       h1Title: `${hospital.name} hair transplant results`,
-      canonical: process.env.APP_URL + `/clinics/${hospitalSlug}/results`,
+      canonical: UrlHelper.canonicalUrl(`/clinics/${hospitalSlug}/results`),
     });
   }
 
@@ -149,9 +150,9 @@ export class HospitalHairResultController {
       ogTitle: `${graftCount} Graft ${techniqueValue} Hair Transplant Result – ${months} Months`,
       title: `${graftCount} Graft ${techniqueValue} Hair Transplant Result – ${months} Months`,
       h1Title: `${graftCount} Graft ${techniqueValue} Hair Transplant Result`,
-      canonical:
-        process.env.APP_URL +
+      canonical: UrlHelper.canonicalUrl(
         `/results/${hospitalSlug}-${graftCount}-grafts-${technique}-${months}-months`,
+      ),
     });
   }
 
@@ -176,7 +177,9 @@ export class HospitalHairResultController {
       ogTitle: `${techniqueValue} Hair Transplant Result`,
       title: `${techniqueValue} Hair Transplant Result`,
       h1Title: `${techniqueValue} Hair Transplant Result`,
-      canonical: process.env.APP_URL + `/${technique}-hair-transplant-results`,
+      canonical: UrlHelper.canonicalUrl(
+        `/${technique}-hair-transplant-results`,
+      ),
     });
   }
 
@@ -205,9 +208,9 @@ export class HospitalHairResultController {
       ogTitle: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
       title: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
       h1Title: `${graftCount} Graft ${techniqueValue} Before and After Hair Transplant Result`,
-      canonical:
-        process.env.APP_URL +
+      canonical: UrlHelper.canonicalUrl(
         `/${technique}-${graftCount}-grafts-before-and-after`,
+      ),
     });
   }
 
@@ -222,7 +225,7 @@ export class HospitalHairResultController {
       ogTitle: `${graftCount} Graft Transplant Result`,
       title: `${graftCount} Graft Transplant Result`,
       h1Title: `${graftCount} Graft Transplant Result`,
-      canonical: process.env.APP_URL + `/results/${graftCount}-grafts`,
+      canonical: UrlHelper.canonicalUrl(`/results/${graftCount}-grafts`),
     });
   }
 
@@ -374,7 +377,7 @@ export class HospitalHairResultController {
         ogTitle: 'Hair Transplant Results | HairResult',
         ogDescription:
           'Explore real hair transplant outcomes with filters for technique, graft count, and timeline.',
-        ogUrl: '/results',
+        ogUrl: UrlHelper.canonicalUrl('/results'),
         twitterTitle: 'Hair Transplant Results | HairResult',
         twitterDescription:
           'See verified before-and-after hair transplant cases and compare outcomes.',
@@ -430,7 +433,6 @@ export class HospitalHairResultController {
   }
 
   getCanonicalUrl(query: HairResultQueryDto): string {
-    const baseUrl = process.env.APP_URL || '';
-    return `${baseUrl}/results`;
+    return UrlHelper.canonicalUrl('/results');
   }
 }

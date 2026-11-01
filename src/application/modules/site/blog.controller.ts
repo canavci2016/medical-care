@@ -5,13 +5,14 @@ import type { Response } from 'express';
 import { BlogCategoryService } from '../blog/blog-category.service';
 import { buildPagination } from './pagination.util';
 import { BlogQueryDto } from './dto/blog-query.dto';
+import { UrlHelper } from 'src/application/shared/helpers/Url';
 
 @Controller('blogs')
 export class BlogController {
   constructor(
     private readonly blogService: BlogService,
     private readonly categoryService: BlogCategoryService,
-  ) { }
+  ) {}
 
   @Get()
   async findAll(@Res() res: Response, @Query() query: BlogQueryDto) {
@@ -55,12 +56,12 @@ export class BlogController {
           'hair transplant blog, hair restoration guides, FUE tips, DHI articles, post transplant care',
         description:
           'Read expert blog articles on hair transplant techniques, recovery, and clinic guidance.',
-        canonical: '/blogs',
+        canonical: UrlHelper.canonicalUrl('/blogs'),
         ogType: 'website',
         ogTitle: 'Hair Transplant Blog | HairResult',
         ogDescription:
           'Educational content on hair transplant planning, procedures, and aftercare.',
-        ogUrl: '/blogs',
+        ogUrl: UrlHelper.canonicalUrl('/blogs'),
         twitterTitle: 'Hair Transplant Blog | HairResult',
         twitterDescription:
           'Discover practical hair transplant guides and expert insights.',

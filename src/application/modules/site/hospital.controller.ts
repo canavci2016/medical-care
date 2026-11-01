@@ -17,6 +17,7 @@ import { DoctorService } from '../doctor/doctor.service';
 import { CountryService } from 'src/application/shared/modules/country/country.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import { StringHelper } from 'src/application/shared/helpers/String';
+import { UrlHelper } from 'src/application/shared/helpers/Url';
 
 @Controller()
 export class HospitalController {
@@ -26,7 +27,7 @@ export class HospitalController {
     private readonly doctorService: DoctorService,
     private readonly countryService: CountryService,
     private readonly cityService: CityService,
-  ) { }
+  ) {}
 
   @Get(['/hospitals/api', '/clinics/api'])
   async apiFindPaginated(
@@ -72,7 +73,7 @@ export class HospitalController {
       h1Title: `Hair Transplant Clinics in ${countryInst?.name}`,
       title: `Hair Transplant Clinics in ${countryInst?.name}`,
       keywords: `hair transplant clinics in ${countryInst?.name}, best hair clinics in ${countryInst?.name}, clinic ratings, hair restoration hospitals, hospital directory`,
-      canonical: `/hair-transplant/turkey/clinics`,
+      canonical: UrlHelper.canonicalUrl(`/hair-transplant/turkey/clinics`),
       description: `Browse verified hospitals and clinics for hair transplant procedures in ${countryInst?.name}. Filter by city, rating, and sorting options.`,
       ogTitle: `Hair Transplant Clinics in ${countryInst?.name}`,
       ogDescription: `Discover and compare hair transplant clinics in ${countryInst?.name} by rating and location.`,
@@ -92,7 +93,7 @@ export class HospitalController {
       h1Title: `Hair Transplant Clinics in ${cityInst?.name}`,
       title: `Hair Transplant Clinics in ${cityInst?.name}`,
       keywords: `hair transplant clinics in ${cityInst?.name}, best hair clinics in ${cityInst?.name}, clinic ratings, hair restoration hospitals, hospital directory`,
-      canonical: `/hair-transplant/${citySlug}/clinics`,
+      canonical: UrlHelper.canonicalUrl(`/hair-transplant/${citySlug}/clinics`),
       description: `Browse verified hospitals and clinics for hair transplant procedures in ${cityInst?.name}. Filter by city, rating, and sorting options.`,
       ogTitle: `Hair Transplant Clinics in ${cityInst?.name}`,
       ogDescription: `Discover and compare hair transplant clinics in ${cityInst?.name} by rating and location.`,
@@ -194,12 +195,12 @@ export class HospitalController {
           'hair transplant clinics, best hair clinics, clinic ratings, hair restoration hospitals, hospital directory',
         description:
           'Browse verified hospitals and clinics for hair transplant procedures. Filter by city, rating, and sorting options.',
-        canonical: '/clinics',
+        canonical: UrlHelper.canonicalUrl('/clinics'),
         ogType: 'website',
         ogTitle: 'Clinics | HairResult',
         ogDescription:
           'Discover and compare hair transplant clinics by rating and location.',
-        ogUrl: '/clinics',
+        ogUrl: UrlHelper.canonicalUrl('/clinics'),
         twitterTitle: 'Clinics | HairResult',
         twitterDescription:
           'Compare top hair transplant clinics and clinics in one place.',

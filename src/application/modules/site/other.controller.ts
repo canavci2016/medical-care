@@ -20,6 +20,7 @@ import { HospitalService } from '../hospital/hospital.service';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
 import { StringHelper } from 'src/application/shared/helpers/String';
 import { HairResultStatus } from '../hospital-hair-result/entities/hospital-hair-result.entity';
+import { UrlHelper } from 'src/application/shared/helpers/Url';
 
 @Controller()
 export class OtherController {
@@ -41,12 +42,12 @@ export class OtherController {
           'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
         description:
           'Learn about HairResult, our mission, and how we help users discover trusted clinics and real treatment outcomes.',
-        canonical: '/about',
+        canonical: UrlHelper.canonicalUrl('/about'),
         ogType: 'website',
         ogTitle: 'About Us | HairResult',
         ogDescription:
           'Meet the HairResult platform and our mission to improve patient decision-making.',
-        ogUrl: '/about',
+        ogUrl: UrlHelper.canonicalUrl('/about'),
         twitterTitle: 'About Us | HairResult',
         twitterDescription:
           'Learn more about the HairResult platform and our mission.',
@@ -139,11 +140,11 @@ export class OtherController {
         keywords:
           'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
         description: `Compare hair transplant clinics in ${StringHelper.capitalizeFirstLetter(country.name)},real before-and-after results, DHI and FUE procedures, graft counts, costs and patient outcomes.`,
-        canonical: '/hair-transplant/' + country.slug,
+        canonical: UrlHelper.canonicalUrl('/hair-transplant/' + country.slug),
         ogType: 'website',
         ogTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(country.name)}: Clinics, Costs & Real Results`,
         ogDescription: `Explore documented hair transplant results, clinics, costs, DHI and FUE procedures in ${StringHelper.capitalizeFirstLetter(country.name)}.`,
-        ogUrl: '/hair-transplant/' + country.slug,
+        ogUrl: UrlHelper.canonicalUrl('/hair-transplant/' + country.slug),
         twitterTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(country.name)}: Clinics, Costs & Real Results`,
         twitterDescription: `Compare documented hair transplant results, clinics and costs in ${StringHelper.capitalizeFirstLetter(country.name)}.`,
       },
@@ -180,11 +181,11 @@ export class OtherController {
         keywords:
           'about HairResult, hair transplant platform, healthcare marketplace, clinic transparency',
         description: `Compare hair transplant clinics in ${StringHelper.capitalizeFirstLetter(city.name)},real before-and-after results, DHI and FUE procedures, graft counts, costs and patient outcomes.`,
-        canonical: '/hair-transplant/' + city.slug,
+        canonical: UrlHelper.canonicalUrl('/hair-transplant/' + city.slug),
         ogType: 'website',
         ogTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results`,
         ogDescription: `Explore documented hair transplant results, clinics, costs, DHI and FUE procedures in ${StringHelper.capitalizeFirstLetter(city.name)}.`,
-        ogUrl: '/hair-transplant/' + city.slug,
+        ogUrl: UrlHelper.canonicalUrl('/hair-transplant/' + city.slug),
         twitterTitle: `Hair Transplant in ${StringHelper.capitalizeFirstLetter(city.name)}: Clinics, Costs & Real Results`,
         twitterDescription: `Compare documented hair transplant results, clinics and costs in ${StringHelper.capitalizeFirstLetter(city.name)}.`,
       },

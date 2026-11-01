@@ -2,13 +2,14 @@ import { Controller, Get, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import { HospitalService } from '../hospital/hospital.service';
 import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
+import { UrlHelper } from 'src/application/shared/helpers/Url';
 
 @Controller('/')
 export class HomeController {
   constructor(
     private readonly hospitalService: HospitalService,
     private readonly hospitalHairResultService: HospitalHairResultService,
-  ) { }
+  ) {}
 
   @Get()
   async getHomeData(@Res() res: Response) {
@@ -44,12 +45,12 @@ export class HomeController {
           'hair transplant in turkey, hair transplant results, before after hair transplant, FUE results, DHI results, verified clinic outcomes',
         description:
           'Find real hair transplant before-and-after results from trusted clinics. Search by hospital, technique, and treatment timeline.',
-        canonical: '/',
+        canonical: UrlHelper.canonicalUrl('/'),
         ogType: 'website',
         ogTitle: 'Real Hair Transplant Results | HairResult',
         ogDescription:
           'Explore authentic hair transplant outcomes and compare results by clinic and technique.',
-        ogUrl: '/',
+        ogUrl: UrlHelper.canonicalUrl('/'),
         twitterTitle: 'Real Hair Transplant Results | HairResult',
         twitterDescription:
           'Discover real before-and-after hair transplant cases from trusted clinics.',
