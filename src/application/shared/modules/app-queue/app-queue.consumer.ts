@@ -23,17 +23,15 @@ export class AppQueueConsumer extends WorkerHost {
 
     if (jobName === SupportedEventTypes.CONTACT_FORM_SUBMISSION) {
       const contact = payload as {
-        firstName?: string;
-        lastName?: string;
+        fullName?: string;
         email?: string;
-        subject?: string;
         message?: string;
       };
 
       const to = process.env.SMTP_REPLY_TO ?? 'admin@example.com';
-      const subject = contact.subject ?? 'New contact form submission';
+      const subject = 'New contact form submission';
       const text = [
-        `Name: ${contact.firstName ?? ''} ${contact.lastName ?? ''}`.trim(),
+        `Name: ${contact.fullName ?? ''}`,
         `Email: ${contact.email ?? 'N/A'}`,
         'Message:',
         contact.message ?? 'No message provided',
@@ -45,9 +43,7 @@ export class AppQueueConsumer extends WorkerHost {
         text,
       });
 
-      this.logger.log(
-        `Contact form email sent for ${contact.email ?? 'unknown email'}`,
-      );
+      this.logger.log(`Contact form email sent for job ${job.id}`);
     }
 
     if (jobName === SupportedEventTypes.HOSPITAL_PASSWORD_RESET) {

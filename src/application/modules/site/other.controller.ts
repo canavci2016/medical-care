@@ -21,6 +21,7 @@ import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair
 import { StringHelper } from 'src/application/shared/helpers/String';
 import { HairResultStatus } from '../hospital-hair-result/entities/hospital-hair-result.entity';
 import { UrlHelper } from 'src/application/shared/helpers/Url';
+import { ContactDto } from './dto/contact.dto';
 
 @Controller()
 export class OtherController {
@@ -63,31 +64,11 @@ export class OtherController {
     maxAttempts: 5,
   })
   @Post(['contact', 'about'])
-  contact(
-    @Req() req: Request,
-    @Body()
-    body: {
-      firstName: string;
-      lastName: string;
-      email?: string;
-      subject?: string;
-      message?: string;
-    },
-  ) {
+  contact(@Req() req: Request, @Body() body: ContactDto) {
     return this.enqueueContactSubmission(req, body);
   }
 
-  private enqueueContactSubmission(
-    req: Request,
-    body: {
-      firstName: string;
-      lastName: string;
-      email?: string;
-      subject?: string;
-      technique?: string;
-      message?: string;
-    },
-  ) {
+  private enqueueContactSubmission(req: Request, body: ContactDto) {
     void this.appQueueService.add(
       SupportedEventTypes.CONTACT_FORM_SUBMISSION,
       {
