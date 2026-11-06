@@ -119,7 +119,7 @@ export class HospitalController {
     }
 
     const [orderCollumn, orderDirection] = (
-      query.sorting || HospitalQuerySortingOptions.RATING_DESC
+      query.sorting || HospitalQuerySortingOptions.CREATED_AT_DESC
     ).split('_');
 
     const { data: hospitals, pagination } =

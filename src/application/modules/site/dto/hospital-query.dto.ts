@@ -45,7 +45,7 @@ export class HospitalQueryDto {
     message: `sorting must be one of the following values: ${Object.values(HospitalQuerySortingOptions).join(', ')}`,
   })
   sorting?: HospitalQuerySortingOptions =
-    HospitalQuerySortingOptions.RATING_DESC;
+    HospitalQuerySortingOptions.CREATED_AT_DESC;
 
   @IsOptional()
   @IsString()

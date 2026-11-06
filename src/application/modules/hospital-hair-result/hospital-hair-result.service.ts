@@ -22,6 +22,8 @@ import { instagramGetUrl } from 'instagram-url-direct';
 import { Query } from 'src/application/shared/interfaces/query.interface';
 import { Pagination } from 'src/application/shared/interfaces/pagination.interface';
 
+export const HOSPITAL_ROTATION_ORDER = 'hospitalRotation';
+
 @Injectable()
 export class HospitalHairResultService {
   constructor(
@@ -244,18 +246,19 @@ export class HospitalHairResultService {
     optionsTyped.skip = (page - 1) * limit;
     optionsTyped.take = limit;
 
-    if (options.orderBy) {
+    if (options.orderBy && options.orderBy !== HOSPITAL_ROTATION_ORDER) {
       optionsTyped.order = {
         [options.orderBy]: options.orderDirection || 'ASC',
       };
     }
 
-    const [items, total] = await this.hospitalHairResultRepository.findAndCount(
-      {
-        ...optionsTyped,
-        relations: ['images', 'hospital'],
-      },
-    );
+    const [items, total] =
+      options.orderBy === HOSPITAL_ROTATION_ORDER
+        ? await this.findAndCountRotatingHospitals(optionsTyped)
+        : await this.hospitalHairResultRepository.findAndCount({
+            ...optionsTyped,
+            relations: ['images', 'hospital'],
+          });
 
     const totalPages = Math.ceil(total / limit);
 
@@ -273,6 +276,55 @@ export class HospitalHairResultService {
         nextPage: page + 1,
       },
     };
+  }
+
+  /**
+   * All results, rotating through hospitals: first every hospital's newest
+   * result, then every hospital's second newest, and so on. Within each round
+   * results are ordered newest first, so a hospital never repeats before every
+   * other hospital has had a turn.
+   */
+  private async findAndCountRotatingHospitals(
+    options: FindManyOptions<HospitalHairResult>,
+  ): Promise<[HospitalHairResult[], number]> {
+    const ranked = this.hospitalHairResultRepository
+      .createQueryBuilder('hr')
+      .setFindOptions({ where: options.where })
+      .select('hr.id', 'id')
+      .addSelect('hr.createdAt', 'created_at')
+      .addSelect(
+        'ROW_NUMBER() OVER (PARTITION BY "hr"."hospitalId" ORDER BY "hr"."createdAt" DESC, "hr"."id" ASC)',
+        'rn',
+      );
+
+    const total = await ranked.clone().getCount();
+
+    const rows: { id: string }[] =
+      await this.hospitalHairResultRepository.manager
+        .createQueryBuilder()
+        .from(`(${ranked.getQuery()})`, 't')
+        .setParameters(ranked.getParameters())
+        .select('t.id', 'id')
+        .orderBy('t.rn', 'ASC')
+        .addOrderBy('t.created_at', 'DESC')
+        .addOrderBy('t.id', 'ASC')
+        .offset(options.skip)
+        .limit(options.take)
+        .getRawMany();
+
+    const ids = rows.map((row) => row.id);
+    if (ids.length === 0) {
+      return [[], total];
+    }
+
+    const items = await this.hospitalHairResultRepository.find({
+      where: { id: In(ids) },
+      relations: ['images', 'hospital'],
+    });
+    const position = new Map(ids.map((id, index) => [id, index]));
+    items.sort((a, b) => position.get(a.id)! - position.get(b.id)!);
+
+    return [items, total];
   }
 
   async getAgeRanges() {

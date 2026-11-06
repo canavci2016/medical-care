@@ -7,7 +7,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { CountryService } from 'src/application/shared/modules/country/country.service';
-import { HospitalHairResultService } from '../hospital-hair-result/hospital-hair-result.service';
+import {
+  HOSPITAL_ROTATION_ORDER,
+  HospitalHairResultService,
+} from '../hospital-hair-result/hospital-hair-result.service';
 import { CityService } from 'src/application/shared/modules/city/city.service';
 import type { Response } from 'express';
 import {
@@ -265,7 +268,10 @@ export class HospitalHairResultController {
           }
           return monthAfterQueryBuilder;
         })(),
-        orderBy: query.orderBy || 'createdAt',
+        // Rotate through hospitals, except on a single hospital's own page.
+        orderBy:
+          query.orderBy ||
+          (query.hospitalId ? 'createdAt' : HOSPITAL_ROTATION_ORDER),
         orderDirection: query.orderDirection || 'desc',
       });
 
